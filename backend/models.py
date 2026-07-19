@@ -260,6 +260,10 @@ class Resource(db.Model):
     file_size = db.Column(db.String(20), nullable=False)
     download_count = db.Column(db.Integer, default=0)
     added_by = db.Column(db.String(100), nullable=False)
+    department = db.Column(db.String(100), nullable=True)
+    description = db.Column(db.Text, nullable=True)
+    tags = db.Column(db.String(200), nullable=True)
+    file_url = db.Column(db.String(500), nullable=True)
 
     def to_dict(self):
         return {
@@ -271,7 +275,11 @@ class Resource(db.Model):
             'semester': self.semester,
             'fileSize': self.file_size,
             'downloadCount': self.download_count,
-            'addedBy': self.added_by
+            'addedBy': self.added_by,
+            'department': self.department,
+            'description': self.description,
+            'tags': self.tags,
+            'fileUrl': self.file_url
         }
 
 

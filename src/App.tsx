@@ -30,7 +30,8 @@ import {
   AlertTriangle,
   Moon,
   Sun,
-  MoreVertical
+  MoreVertical,
+  Database
 } from 'lucide-react';
 
 import LandingPage from './pages/LandingPage';
@@ -38,14 +39,13 @@ import LoginPage from './pages/LoginPage';
 import DashboardView from './pages/DashboardView';
 import AIAssistantView from './pages/AIAssistantView';
 import AcademicsView from './pages/AcademicsView';
-import FacultyView from './pages/FacultyView';
 import EventsView from './pages/EventsView';
-import ClubsView from './pages/ClubsView';
 import CampusMapView from './pages/CampusMapView';
 import ResourceCenterView from './pages/ResourceCenterView';
 import HostelView from './pages/HostelView';
 import ProfileView from './pages/ProfileView';
 import SettingsView from './pages/SettingsView';
+import AdminView from './pages/AdminView';
 
 
 import { mockStudent, syncWithBackend } from './data/mockData';
@@ -62,7 +62,8 @@ type TabView =
   | 'resources' 
   | 'hostel' 
   | 'profile' 
-  | 'settings';
+  | 'settings'
+  | 'admin-panel';
 
 export default function App() {
   const [state, setState] = useState<AppState>('LANDING');
@@ -84,6 +85,13 @@ export default function App() {
       return next;
     });
   };
+  const [userRole, setUserRole] = useState<'STUDENT' | 'ADMIN'>(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('userRole');
+      return (saved === 'ADMIN' ? 'ADMIN' : 'STUDENT');
+    }
+    return 'STUDENT';
+  });
   const [activeTab, setActiveTab] = useState<TabView>('dashboard');
   const [searchQuery, setSearchQuery] = useState('');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -116,13 +124,21 @@ export default function App() {
     setState('LOGIN');
   };
 
-  const handleLoginSuccess = (_role: string) => {
+  const handleLoginSuccess = (role: 'STUDENT' | 'ADMIN') => {
+    setUserRole(role);
+    localStorage.setItem('userRole', role);
     setState('APP');
-    setActiveTab('dashboard');
+    if (role === 'ADMIN') {
+      setActiveTab('admin-panel');
+    } else {
+      setActiveTab('dashboard');
+    }
   };
 
   const handleLogout = () => {
     setState('LANDING');
+    setUserRole('STUDENT');
+    localStorage.removeItem('userRole');
     setProfileDropdownOpen(false);
   };
 
@@ -168,22 +184,28 @@ export default function App() {
 
   const searchResults = getSearchResults();
 
-  // Sidebar list configurations
-  const sidebarItems = [
-    { id: 'dashboard', label: 'Dashboard', icon: <Home className="w-4 h-4" />, section: 'portal' },
-    { id: 'ai', label: 'AI Assistant', icon: <Sparkles className="w-4 h-4 text-indigo-500" />, section: 'portal' },
-    { id: 'academics', label: 'Academics', icon: <BookOpen className="w-4 h-4" />, section: 'portal' },
-    { id: 'faculty', label: 'Faculty Directory', icon: <Users className="w-4 h-4" />, section: 'portal' },
-    { id: 'map', label: 'Campus Map', icon: <Compass className="w-4 h-4" />, section: 'portal' },
-    { id: 'resources', label: 'Resource Center', icon: <FileText className="w-4 h-4" />, section: 'portal' },
-    
-    { id: 'events', label: 'Events', icon: <Calendar className="w-4 h-4" />, section: 'life' },
-    { id: 'clubs', label: 'Clubs Hub', icon: <Users className="w-4 h-4" />, section: 'life' },
-    { id: 'hostel', label: 'Hostel & Mess', icon: <Home className="w-4 h-4" />, section: 'life' },
+  // Sidebar list configurations based on user role
+  const sidebarItems = userRole === 'ADMIN'
+    ? [
+        { id: 'admin-panel', label: 'Admin panel', icon: <Database className="w-4 h-4" />, section: 'portal' },
+        { id: 'resources', label: 'Resource Center', icon: <FileText className="w-4 h-4" />, section: 'portal' },
+        { id: 'ai', label: 'AI Assistant', icon: <Sparkles className="w-4 h-4 text-indigo-500" />, section: 'portal' },
+        { id: 'map', label: 'Campus Map', icon: <Compass className="w-4 h-4" />, section: 'portal' },
+        { id: 'settings', label: 'Settings', icon: <Settings className="w-4 h-4" />, section: 'safety' }
+      ]
+    : [
+        { id: 'dashboard', label: 'Dashboard', icon: <Home className="w-4 h-4" />, section: 'portal' },
+        { id: 'ai', label: 'AI Assistant', icon: <Sparkles className="w-4 h-4 text-indigo-500" />, section: 'portal' },
+        { id: 'academics', label: 'Academics', icon: <BookOpen className="w-4 h-4" />, section: 'portal' },
+        { id: 'map', label: 'Campus Map', icon: <Compass className="w-4 h-4" />, section: 'portal' },
+        { id: 'resources', label: 'Resource Center', icon: <FileText className="w-4 h-4" />, section: 'portal' },
+        
+        { id: 'events', label: 'Events', icon: <Calendar className="w-4 h-4" />, section: 'life' },
+        { id: 'hostel', label: 'Hostel & Mess', icon: <Home className="w-4 h-4" />, section: 'life' },
 
-    { id: 'profile', label: 'My Profile', icon: <User className="w-4 h-4" />, section: 'safety' },
-    { id: 'settings', label: 'Settings', icon: <Settings className="w-4 h-4" />, section: 'safety' }
-  ];
+        { id: 'profile', label: 'My Profile', icon: <User className="w-4 h-4" />, section: 'safety' },
+        { id: 'settings', label: 'Settings', icon: <Settings className="w-4 h-4" />, section: 'safety' }
+      ];
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 selection:bg-blue-100 selection:text-blue-800">
@@ -640,13 +662,12 @@ export default function App() {
                       )}
                       {activeTab === 'ai' && <AIAssistantView isDark={isDark} />}
                       {activeTab === 'academics' && <AcademicsView isDark={isDark} />}
-                      {activeTab === 'faculty' && <FacultyView isDark={isDark} />}
                       {activeTab === 'events' && <EventsView isDark={isDark} />}
-                      {activeTab === 'clubs' && <ClubsView isDark={isDark} />}
                       {activeTab === 'map' && <CampusMapView isDark={isDark} />}
-                      {activeTab === 'resources' && <ResourceCenterView isDark={isDark} />}
+                      {activeTab === 'resources' && <ResourceCenterView isDark={isDark} userRole={userRole} />}
                       {activeTab === 'hostel' && <HostelView isDark={isDark} />}
                       {activeTab === 'profile' && <ProfileView isDark={isDark} />}
+                      {activeTab === 'admin-panel' && <AdminView isDark={isDark} />}
                       {activeTab === 'settings' && (
                         <SettingsView 
                           isDark={isDark} 

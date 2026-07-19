@@ -17,12 +17,12 @@ declare global {
 const GOOGLE_CLIENT_ID = (import.meta as any).env?.VITE_GOOGLE_CLIENT_ID;
 
 interface LoginPageProps {
-  onLoginSuccess: (role: 'STUDENT' | 'FACULTY' | 'ADMIN') => void;
+  onLoginSuccess: (role: 'STUDENT' | 'ADMIN') => void;
   onBack: () => void;
 }
 
 export default function LoginPage({ onLoginSuccess, onBack }: LoginPageProps) {
-  const [role, setRole] = useState<'STUDENT' | 'FACULTY' | 'ADMIN'>('STUDENT');
+  const [role, setRole] = useState<'STUDENT' | 'ADMIN'>('STUDENT');
   const [email, setEmail] = useState('2023@saranathan.ac.in');
   const [password, setPassword] = useState('password123');
   const [error, setError] = useState('');
@@ -108,7 +108,7 @@ export default function LoginPage({ onLoginSuccess, onBack }: LoginPageProps) {
       const googleEmail = decoded.email;
       
       // Determine role based on selected state to allow any email
-      let detectedRole: 'STUDENT' | 'FACULTY' | 'ADMIN' = role;
+      let detectedRole: 'STUDENT' | 'ADMIN' = role;
 
       setLoading(true);
       setError('');
@@ -193,14 +193,11 @@ export default function LoginPage({ onLoginSuccess, onBack }: LoginPageProps) {
     });
   };
 
-  const handlePreFill = (selectedRole: 'STUDENT' | 'FACULTY' | 'ADMIN') => {
+  const handlePreFill = (selectedRole: 'STUDENT' | 'ADMIN') => {
     setRole(selectedRole);
     setError('');
     if (selectedRole === 'STUDENT') {
       setEmail('2023@saranathan.ac.in');
-      setPassword('••••••••••••');
-    } else if (selectedRole === 'FACULTY') {
-      setEmail('clara.mendonca@university.edu');
       setPassword('••••••••••••');
     } else {
       setEmail('admin.operations@university.edu');
@@ -208,7 +205,7 @@ export default function LoginPage({ onLoginSuccess, onBack }: LoginPageProps) {
     }
   };
 
-  const handleGoogleAccountSelect = (selectedEmail: string, selectedRole: 'STUDENT' | 'FACULTY' | 'ADMIN') => {
+  const handleGoogleAccountSelect = (selectedEmail: string, selectedRole: 'STUDENT' | 'ADMIN') => {
     setLoading(true);
     setError('');
     setGoogleError('');
@@ -253,7 +250,7 @@ export default function LoginPage({ onLoginSuccess, onBack }: LoginPageProps) {
       return;
     }
 
-    let detectedRole: 'STUDENT' | 'FACULTY' | 'ADMIN' = role;
+    let detectedRole: 'STUDENT' | 'ADMIN' = role;
 
     handleGoogleAccountSelect(emailStr, detectedRole);
   };
@@ -302,8 +299,8 @@ export default function LoginPage({ onLoginSuccess, onBack }: LoginPageProps) {
             <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider block">
               Identify Your Access Level
             </label>
-            <div className="grid grid-cols-3 gap-2 bg-slate-100 p-1.5 rounded-2xl border border-slate-200/50">
-              {(['STUDENT', 'FACULTY', 'ADMIN'] as const).map((r) => (
+            <div className="grid grid-cols-2 gap-2 bg-slate-100 p-1.5 rounded-2xl border border-slate-200/50">
+              {(['STUDENT', 'ADMIN'] as const).map((r) => (
                 <button
                   key={r}
                   type="button"
@@ -495,21 +492,6 @@ export default function LoginPage({ onLoginSuccess, onBack }: LoginPageProps) {
                       <span className="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full uppercase shrink-0">Student</span>
                     </button>
 
-                    {/* Faculty Account */}
-                    <button
-                      type="button"
-                      onClick={() => handleGoogleAccountSelect('clara.mendonca@university.edu', 'FACULTY')}
-                      className="w-full py-3.5 px-2 hover:bg-slate-50 flex items-center gap-3 transition-colors text-left border-none outline-none cursor-pointer text-slate-800"
-                    >
-                      <div className="w-8 h-8 rounded-full bg-blue-600 text-white font-semibold text-sm flex items-center justify-center shadow-inner shrink-0">
-                        CM
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="text-xs font-semibold text-slate-900 truncate">Prof. Clara Mendonca</p>
-                        <p className="text-xs text-slate-500 truncate">clara.mendonca@university.edu</p>
-                      </div>
-                      <span className="text-[10px] font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full uppercase shrink-0">Faculty</span>
-                    </button>
 
                     {/* Admin Account */}
                     <button

@@ -36,18 +36,7 @@ def login():
             'student': student.to_dict()
         })
 
-    elif role == 'FACULTY':
-        faculty = Faculty.query.filter_by(email=email).first()
-
-        student = Student.query.first()
-        return jsonify({
-            'success': True,
-            'role': 'FACULTY',
-            'student': student.to_dict() if student else None
-        })
-
     elif role == 'ADMIN':
-
         student = Student.query.first()
         return jsonify({
             'success': True,

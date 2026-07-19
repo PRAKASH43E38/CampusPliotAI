@@ -300,14 +300,7 @@ export const mockLocations: CampusLocation[] = [
   { id: 'loc-04', name: 'University Medical Centre', type: 'facility', block: 'Emergency Wing', floor: 'Ground Floor', nearestParking: 'Medical Ample bay', description: 'Fully operational 24/7 medical room with full-time resident physician and qualified nurse practitioners. Fully stocked ambulance on standby.' },
   { id: 'loc-05', name: 'Aryabhata Hostels Block C', type: 'hostel', block: 'Hostel Sector B', floor: '5 Storeys', nearestParking: 'Hostel Compound Parking', description: 'Boys hostel with modern amenities, study rooms, gym facility, and attached cafeteria. House of freshers and 2nd years.' }
 ];
-
-export const mockResources: ResourceItem[] = [
-  { id: 'res-01', title: 'Relational Algebra & Normalization Master Notes', type: 'notes', subjectCode: 'CS301', subjectName: 'Database Management Systems', semester: 5, fileSize: '4.8 MB', downloadCount: 342, addedBy: 'Dr. Ramesh Iyer' },
-  { id: 'res-02', title: 'CSE Sem 5 PYQs (2022 - 2025 examinations)', type: 'pyq', subjectCode: 'CS301', subjectName: 'Database Management Systems', semester: 5, fileSize: '12.4 MB', downloadCount: 789, addedBy: 'Exam Cell Admin' },
-  { id: 'res-03', title: 'TOC Chomsky Normal Form Conversion Guide', type: 'notes', subjectCode: 'CS302', subjectName: 'Theory of Computation', semester: 5, fileSize: '1.2 MB', downloadCount: 198, addedBy: 'Dr. Ananya Sen' },
-  { id: 'res-04', title: 'Machine Learning Lab Manual - All Py Notebooks', type: 'manual', subjectCode: 'CS303', subjectName: 'Machine Learning', semester: 5, fileSize: '8.1 MB', downloadCount: 522, addedBy: 'Prof. Clara Mendonca' },
-  { id: 'res-05', title: 'Modern Operating System (Tanenbaum) - PDF Reference Book', type: 'book', subjectCode: 'CS309', subjectName: 'Operating Systems', semester: 4, fileSize: '34.6 MB', downloadCount: 1105, addedBy: 'Dept Library' }
-];
+export const mockResources: ResourceItem[] = [];
 
 export const mockAnnouncements: AnnouncementItem[] = [
   { id: 'ann-01', title: 'CIA-2 Internal Assessment Schedule & Syllabus Allocation', category: 'academic', date: 'July 18, 2026', content: 'The CIA-2 Assessments will commence from August 3, 2026. Hall tickets, seating arrangements, and exact timings will be published on the portal shortly. The syllabus coverage includes everything up to Unit III of respectively allocated subject models.', author: 'Prof. J. Mathew (Dean Academics)', priority: 'high' },

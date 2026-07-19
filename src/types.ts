@@ -109,6 +109,10 @@ export interface ResourceItem {
   fileSize: string;
   downloadCount: number;
   addedBy: string;
+  department?: string;
+  description?: string;
+  tags?: string;
+  fileUrl?: string;
 }
 
 export interface AnnouncementItem {

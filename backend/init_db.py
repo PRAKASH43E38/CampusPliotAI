@@ -319,14 +319,8 @@ def seed_database():
         for loc in locations:
             db.session.add(loc)
 
-        # 8. Seed Resources
-        resources = [
-            Resource(id='res-01', title='Relational Algebra & Normalization Master Notes', type='notes', subject_code='CS301', subject_name='Database Management Systems', semester=5, file_size='4.8 MB', download_count=342, added_by='Dr. Ramesh Iyer'),
-            Resource(id='res-02', title='CSE Sem 5 PYQs (2022 - 2025 examinations)', type='pyq', subject_code='CS301', subject_name='Database Management Systems', semester=5, file_size='12.4 MB', download_count=789, added_by='Exam Cell Admin'),
-            Resource(id='res-03', title='TOC Chomsky Normal Form Conversion Guide', type='notes', subject_code='CS302', subject_name='Theory of Computation', semester=5, file_size='1.2 MB', download_count=198, added_by='Dr. Ananya Sen'),
-            Resource(id='res-04', title='Machine Learning Lab Manual - All Py Notebooks', type='manual', subject_code='CS303', subject_name='Machine Learning', semester=5, file_size='8.1 MB', download_count=522, added_by='Prof. Clara Mendonca'),
-            Resource(id='res-05', title='Modern Operating System (Tanenbaum) - PDF Reference Book', type='book', subject_code='CS309', subject_name='Operating Systems', semester=4, file_size='34.6 MB', download_count=1105, added_by='Dept Library')
-        ]
+        # 8. Seed Resources (Initially empty)
+        resources = []
         for res in resources:
             db.session.add(res)
 
@@ -374,7 +368,6 @@ def seed_database():
         # 13. Seed many-to-many associations for Devashish
         devashish.registered_events.append(Event.query.get('ev-01'))
         devashish.joined_clubs.extend([Club.query.get('cl-01'), Club.query.get('cl-03')])
-        devashish.saved_resources.extend([Resource.query.get('res-02'), Resource.query.get('res-05')])
         devashish.applied_placements.append(Placement.query.get('pl-02'))
         
         db.session.commit()

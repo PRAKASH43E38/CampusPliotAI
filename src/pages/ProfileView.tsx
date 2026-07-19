@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import React, { useState, useEffect } from 'react';
 import { mockStudent, mockResources, mockClubs } from '../data/mockData';
 import { User, Award, BookOpen, Users, Bookmark, FileText } from 'lucide-react';
 
@@ -11,7 +12,20 @@ interface ProfileViewProps {
 }
 
 export default function ProfileView({ isDark = false }: ProfileViewProps) {
-  const savedDocs = mockResources.filter(res => mockStudent.savedResources.includes(res.id));
+  const [resources, setResources] = useState<any[]>([]);
+  
+  useEffect(() => {
+    fetch('/api/resources')
+      .then(res => res.json())
+      .then(data => {
+        if (Array.isArray(data)) {
+          setResources(data);
+        }
+      })
+      .catch(err => console.error(err));
+  }, []);
+
+  const savedDocs = resources.filter(res => mockStudent.savedResources.includes(res.id));
   const memberClubs = mockClubs.filter(cl => mockStudent.joinedClubs.includes(cl.id));
 
   const achievementsList = [

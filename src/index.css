@@ -1,1 +1,261 @@
+/**
+ * @license
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 @import "tailwindcss";
+
+@theme {
+  /* Override default slate values to match custom theme palette */
+  --color-slate-50: #DEDCDC;
+  --color-slate-100: #191D23;
+  --color-slate-150: #57707A;
+  --color-slate-200: #57707A;
+  --color-slate-250: #57707A;
+  --color-slate-300: #57707A;
+  --color-slate-400: #DEDCDC;
+  --color-slate-500: #DEDCDC;
+  --color-slate-600: #DEDCDC;
+  --color-slate-700: #191D23;
+  --color-slate-800: #191D23;
+  --color-slate-900: #191D23;
+  --color-slate-950: #191D23;
+
+  /* Button overrides */
+  --color-blue-50: #191D23;
+  --color-blue-100: #191D23;
+  --color-blue-200: #57707A;
+  --color-blue-300: #C5BAC4;
+  --color-blue-400: #C5BAC4;
+  --color-blue-500: #DEDCDC;
+  --color-blue-600: #C5BAC4;
+  --color-blue-700: #57707A;
+  --color-blue-800: #DEDCDC;
+  --color-blue-900: #191D23;
+
+  /* Neutral overrides */
+  --color-neutral-50: #DEDCDC;
+  --color-neutral-100: #191D23;
+  --color-neutral-200: #57707A;
+  --color-neutral-300: #C5BAC4;
+  --color-neutral-800: #191D23;
+  --color-neutral-900: #191D23;
+}
+
+/* ====================================================
+   GLOBAL PALETTE CSS OVERRIDES (DARK GREEN MATRIX SLEEK)
+   ==================================================== */
+html, body {
+  background-color: #191D23 !important;
+  color: #DEDCDC !important;
+}
+
+/* ----------------------------------------------------
+   BACKGROUND MAPPING
+   ---------------------------------------------------- */
+/* Primary Background: #191D23 (Primary Dark) */
+.bg-slate-50, 
+.bg-[#090a0c], 
+.bg-[#050608], 
+.bg-slate-950, 
+.bg-slate-900 {
+  background-color: #191D23 !important;
+}
+
+/* Sidebar Background: #191D23 (Secondary Dark) */
+.bg-[#0d0e11] {
+  background-color: #191D23 !important;
+}
+
+/* Secondary Backgrounds: #191D23 (Secondary Dark) */
+.bg-[#1e2023], 
+.bg-slate-905, 
+.bg-slate-100, 
+.bg-slate-950\/40, 
+.bg-slate-900\/50,
+.bg-slate-50\/30,
+.bg-slate-50\/50 {
+  background-color: #191D23 !important;
+}
+
+/* Card Backgrounds: #191D23 (Secondary Dark) with #DEDCDC text (AAA 14.8:1 contrast) */
+.bg-white {
+  background-color: #191D23 !important;
+  color: #DEDCDC !important;
+  border: 1px solid #7E919F !important;
+}
+
+/* Ensure child items in cards have light text */
+.bg-white h1, 
+.bg-white h2, 
+.bg-white h3, 
+.bg-white h4, 
+.bg-white h5, 
+.bg-white h6, 
+.bg-white p, 
+.bg-white span, 
+.bg-white label, 
+.bg-white li, 
+.bg-white td, 
+.bg-white th,
+.bg-white a {
+  color: #DEDCDC !important;
+}
+
+/* Secondary cards inside panels or lists */
+.bg-slate-905 {
+  background-color: #191D23 !important;
+  border-color: #7E919F !important;
+}
+
+/* ----------------------------------------------------
+   TYPOGRAPHY CONTRAST
+   ---------------------------------------------------- */
+h1, h2, h3, h4, h5, h6, p, span, a, label, li, td, th {
+  color: #DEDCDC !important;
+}
+
+/* Subtitles / auxiliary labels on dark backgrounds */
+.text-slate-400, 
+.text-slate-500, 
+.text-gray-400, 
+.text-slate-450 {
+  color: #979DAB !important;
+  opacity: 0.8 !important;
+}
+.text-slate-350, 
+.text-slate-300, 
+.text-slate-200 {
+  color: #DEDCDC !important;
+  opacity: 0.95 !important;
+}
+
+/* Global Lucide icons color */
+svg {
+  stroke: #DEDCDC !important;
+}
+
+/* ----------------------------------------------------
+   ACTIVE ACCENTS
+   ---------------------------------------------------- */
+/* Active nav items/links: #57707A background with #DEDCDC text */
+.bg-blue-600\/10, 
+.bg-blue-50,
+.bg-blue-600\/15 {
+  background-color: #57707A !important;
+  color: #DEDCDC !important;
+}
+.bg-blue-600\/10 span, 
+.bg-blue-50 span,
+.bg-blue-600\/10 p, 
+.bg-blue-50 p,
+.bg-blue-600\/10 svg, 
+.bg-blue-50 svg {
+  color: #DEDCDC !important;
+  stroke: #DEDCDC !important;
+}
+
+/* ----------------------------------------------------
+   BUTTON STYLING (HIGH ACCENT CONTRAST)
+   ---------------------------------------------------- */
+/* Primary buttons: #C5BAC4 (Primary Accent) background with #191D23 text */
+button.bg-blue-600, 
+button.bg-blue-700, 
+button.bg-emerald-600, 
+button.bg-emerald-500,
+.bg-blue-600,
+.bg-blue-700 {
+  background-color: #C5BAC4 !important;
+  color: #191D23 !important;
+  border: 1px solid #C5BAC4 !important;
+}
+button.bg-blue-600:hover, 
+button.bg-blue-700:hover, 
+button.bg-emerald-600:hover, 
+button.bg-emerald-500:hover,
+.hover\:bg-blue-700:hover, 
+.hover\:bg-blue-800:hover {
+  background-color: #57707A !important;
+  color: #DEDCDC !important;
+  border-color: #57707A !important;
+}
+/* Ensure button icons match button text color */
+button.bg-blue-600 svg, 
+button.bg-blue-700 svg, 
+button.bg-emerald-600 svg, 
+button.bg-emerald-500 svg,
+.bg-blue-600 svg,
+.bg-blue-700 svg {
+  stroke: #191D23 !important;
+}
+button.bg-blue-600:hover svg, 
+button.bg-blue-700:hover svg, 
+button.bg-emerald-600:hover svg, 
+button.bg-emerald-500:hover svg {
+  stroke: #DEDCDC !important;
+}
+
+/* ----------------------------------------------------
+   FORMS & INPUTS
+   ---------------------------------------------------- */
+input, select, textarea {
+  background-color: #191D23 !important;
+  color: #DEDCDC !important;
+  border: 1px solid #7E919F !important;
+}
+input:focus, select:focus, textarea:focus {
+  border-color: #C5BAC4 !important;
+  outline: none !important;
+}
+input::placeholder, textarea::placeholder {
+  color: #DEDCDC !important;
+  opacity: 0.5 !important;
+}
+
+/* ----------------------------------------------------
+   BORDERS & DIVIDERS
+   ---------------------------------------------------- */
+.border, .border-r, .border-b, .border-t, .border-l,
+.border-slate-200, .border-slate-800, .border-slate-700, .border-slate-150, .border-slate-850,
+.divide-slate-800, .divide-slate-100 {
+  border-color: #7E919F !important;
+  divide-color: #7E919F !important;
+}
+
+/* ----------------------------------------------------
+   BADGES & BEACONS
+   ---------------------------------------------------- */
+.bg-blue-600\/15 {
+  background-color: #57707A !important;
+  color: #DEDCDC !important;
+}
+.bg-rose-500\/10, .bg-rose-500\/20, .bg-rose-500 {
+  background-color: #57707A !important;
+  color: #DEDCDC !important;
+  border-color: #7E919F !important;
+}
+
+/* ----------------------------------------------------
+   LEAFLET MAP INTEGRATION
+   ---------------------------------------------------- */
+.leaflet-container {
+  background: #191D23 !important;
+}
+
+/* ----------------------------------------------------
+   CUSTOM SCROLLBARS
+   ---------------------------------------------------- */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #191D23;
+}
+::-webkit-scrollbar-thumb {
+  background: #57707A;
+  border-radius: 6px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #C5BAC4;
+}
