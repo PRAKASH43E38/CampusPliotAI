@@ -1,0 +1,6 @@
+{
+  "name": "CampusPilot AI",
+  "description": "Your Complete AI Campus Companion – centralizing and simplifying academic life, campus navigation, event tracking, and resource management with intelligent assistance.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
