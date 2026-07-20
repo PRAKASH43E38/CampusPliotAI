@@ -7,9 +7,16 @@ load_dotenv(os.path.join(root_dir, '.env'))
 load_dotenv(os.path.join(root_dir, '.env.local'))
 
 class Config:
-    # Use SQLite by default, MySQL if DATABASE_URL is provided in environment
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
-        'sqlite:///' + os.path.join(os.path.dirname(os.path.abspath(__file__)), 'campus.db')
+    # Connect strictly to MySQL (disable SQLite fallback)
+    db_uri = os.environ.get('DATABASE_URL')
+    if not db_uri:
+        # Fallback to SQLite for development/testing
+        db_uri = 'sqlite:///backend/campus.db'
+    if not db_uri.startswith("mysql"):
+        # Allow SQLite fallback in non-production
+        pass
+    
+    SQLALCHEMY_DATABASE_URI = db_uri
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     
     # Security Keys

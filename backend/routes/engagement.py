@@ -1,5 +1,6 @@
 from flask import Blueprint, request, jsonify
 from models import db, Student, Event, Club, Placement
+from routes.auth import require_role
 import os
 import google.generativeai as genai
 
@@ -11,8 +12,9 @@ def get_events():
     return jsonify([ev.to_dict() for ev in events])
 
 @engagement_bp.route('/events/register', methods=['POST'])
+@require_role('STUDENT')
 def register_event():
-    student_id = request.headers.get('X-Student-Id', 'st-0982')
+    student_id = request.headers.get('X-Student-Id')
     student = Student.query.get(student_id)
     if not student:
         return jsonify({'error': 'Student not found'}), 404
@@ -41,8 +43,9 @@ def register_event():
     })
 
 @engagement_bp.route('/events/unregister', methods=['POST'])
+@require_role('STUDENT')
 def unregister_event():
-    student_id = request.headers.get('X-Student-Id', 'st-0982')
+    student_id = request.headers.get('X-Student-Id')
     student = Student.query.get(student_id)
     if not student:
         return jsonify({'error': 'Student not found'}), 404
@@ -73,8 +76,9 @@ def get_clubs():
     return jsonify([cl.to_dict() for cl in clubs])
 
 @engagement_bp.route('/clubs/join', methods=['POST'])
+@require_role('STUDENT')
 def join_club():
-    student_id = request.headers.get('X-Student-Id', 'st-0982')
+    student_id = request.headers.get('X-Student-Id')
     student = Student.query.get(student_id)
     if not student:
         return jsonify({'error': 'Student not found'}), 404
@@ -89,7 +93,6 @@ def join_club():
         return jsonify({'message': 'Already joined this club'}), 200
 
     student.joined_clubs.append(club)
-    club.members_count += 1
     db.session.commit()
 
     return jsonify({
@@ -100,8 +103,9 @@ def join_club():
     })
 
 @engagement_bp.route('/clubs/leave', methods=['POST'])
+@require_role('STUDENT')
 def leave_club():
-    student_id = request.headers.get('X-Student-Id', 'st-0982')
+    student_id = request.headers.get('X-Student-Id')
     student = Student.query.get(student_id)
     if not student:
         return jsonify({'error': 'Student not found'}), 404
@@ -116,7 +120,6 @@ def leave_club():
         return jsonify({'message': 'Not a member of this club'}), 200
 
     student.joined_clubs.remove(club)
-    club.members_count -= 1
     db.session.commit()
 
     return jsonify({
@@ -132,8 +135,9 @@ def get_placements():
     return jsonify([pl.to_dict() for pl in placements])
 
 @engagement_bp.route('/placements/apply', methods=['POST'])
+@require_role('STUDENT')
 def apply_placement():
-    student_id = request.headers.get('X-Student-Id', 'st-0982')
+    student_id = request.headers.get('X-Student-Id')
     student = Student.query.get(student_id)
     if not student:
         return jsonify({'error': 'Student not found'}), 404
@@ -157,6 +161,7 @@ def apply_placement():
     })
 
 @engagement_bp.route('/placements/score-resume', methods=['POST'])
+@require_role('STUDENT')
 def score_resume():
     data = request.get_json() or {}
     resume_text = data.get('resumeText', '')

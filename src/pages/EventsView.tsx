@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { useState } from 'react';
-import { mockEvents, mockStudent } from '../data/mockData';
-import { Calendar, MapPin, Users, CheckCircle, Ticket, Info } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { mockStudent } from '../data/mockData';
+import { Calendar, MapPin, Users, CheckCircle, Ticket, Info, RefreshCw, AlertTriangle } from 'lucide-react';
 
 interface EventsViewProps {
   isDark?: boolean;
@@ -13,8 +13,35 @@ interface EventsViewProps {
 
 export default function EventsView({ isDark = false }: EventsViewProps) {
   const [activeCategory, setActiveCategory] = useState<string>('All');
-  const [registeredIds, setRegisteredIds] = useState<string[]>(mockStudent.registeredEvents || []);
-  const [eventList, setEventList] = useState(mockEvents);
+  const [registeredIds, setRegisteredIds] = useState<string[]>([]);
+  const [eventList, setEventList] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchEvents = () => {
+    setLoading(true);
+    setError(null);
+    fetch('/api/events')
+      .then(res => {
+        if (!res.ok) throw new Error("Could not load events.");
+        return res.json();
+      })
+      .then(data => {
+        if (Array.isArray(data)) {
+          setEventList(data);
+        }
+        setRegisteredIds(mockStudent.registeredEvents || []);
+        setLoading(false);
+      })
+      .catch(err => {
+        setError(err.message);
+        setLoading(false);
+      });
+  };
+
+  useEffect(() => {
+    fetchEvents();
+  }, []);
 
   const handleRegister = (id: string) => {
     if (registeredIds.includes(id)) return;
@@ -53,6 +80,26 @@ export default function EventsView({ isDark = false }: EventsViewProps) {
 
   const categories = ['All', 'technical', 'academic', 'cultural', 'career'];
 
+  if (loading) {
+    return (
+      <div className="p-8 text-center text-xs text-slate-500">
+        <RefreshCw className="w-6 h-6 animate-spin mx-auto mb-2 text-blue-500" />
+        Loading dynamic campus symposiums & events...
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="p-8 text-center text-xs text-rose-500 font-semibold">
+        <AlertTriangle className="w-6 h-6 mx-auto mb-2 text-rose-500" />
+        {error}
+        <button onClick={fetchEvents} className="mt-3 block mx-auto px-4 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-[10px] font-bold">
+          Retry Loading
+        </button>
+      </div>
+    );
+  }
   return (
     <div className="space-y-8 pb-12 font-sans transition-colors duration-300">
       {/* Banner Introduction */}
@@ -102,6 +149,11 @@ export default function EventsView({ isDark = false }: EventsViewProps) {
 
       {/* Grid view */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        {filteredEvents.length === 0 && (
+          <div className={`col-span-1 md:col-span-2 p-8 text-center text-xs text-slate-500 font-semibold border rounded-3xl border-dashed ${isDark ? 'border-slate-800' : 'border-slate-200'}`}>
+            No upcoming events registered under the "{activeCategory}" category.
+          </div>
+        )}
         {filteredEvents.map(ev => {
           const isRegistered = registeredIds.includes(ev.id);
           return (

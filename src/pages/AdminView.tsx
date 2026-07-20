@@ -75,7 +75,7 @@ interface AdminViewProps {
 }
 
 export default function AdminView({ isDark = false }: AdminViewProps) {
-  const [activeSubTab, setActiveSubTab] = useState<'students' | 'faculty' | 'announcements' | 'events'>('students');
+  const [activeSubTab, setActiveSubTab] = useState<'students' | 'faculty' | 'announcements' | 'events' | 'subjects'>('students');
   const [loading, setLoading] = useState(false);
   const [actionSuccess, setActionSuccess] = useState<string | null>(null);
 
@@ -84,9 +84,29 @@ export default function AdminView({ isDark = false }: AdminViewProps) {
   const [faculty, setFaculty] = useState<FacultyData[]>([]);
   const [announcements, setAnnouncements] = useState<AnnouncementData[]>([]);
   const [events, setEvents] = useState<EventData[]>([]);
-  
+  const [allSubjects, setAllSubjects] = useState<any[]>([]);
+  const [stats, setStats] = useState({
+    students: 0,
+    faculty: 0,
+    outpasses: 0,
+    resources: 0
+  });
+
   // Search queries
   const [searchQuery, setSearchQuery] = useState('');
+
+  // Form states - Subject Manager
+  const [subjectForm, setSubjectForm] = useState({
+    id: '',
+    code: '',
+    name: '',
+    credits: 3,
+    department: 'Computer Science & Engineering',
+    semester: 5,
+    description: '',
+    learningOutcomes: '',
+    referenceBooks: ''
+  });
 
   // Form states - Student
   const [studentForm, setStudentForm] = useState({
@@ -144,7 +164,81 @@ export default function AdminView({ isDark = false }: AdminViewProps) {
     loadFaculty();
     loadAnnouncements();
     loadEvents();
+    loadStats();
+    loadAllSubjects();
   }, []);
+
+  const loadStats = () => {
+    fetch('/api/admin/stats')
+      .then(res => res.json())
+      .then(data => {
+        if (data && !data.error) {
+          setStats(data);
+        }
+      })
+      .catch(err => console.error("Error loading stats:", err));
+  };
+
+  const loadAllSubjects = () => {
+    fetch('/api/academics/subjects')
+      .then(res => res.json())
+      .then(data => {
+        if (Array.isArray(data)) {
+          setAllSubjects(data);
+        }
+      })
+      .catch(err => console.error("Error loading subjects:", err));
+  };
+
+  const handleSubjectSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const endpoint = subjectForm.id 
+      ? `/api/admin/subjects/${subjectForm.id}` 
+      : '/api/admin/subjects';
+    const method = subjectForm.id ? 'PUT' : 'POST';
+
+    fetch(endpoint, {
+      method,
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(subjectForm)
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          triggerAlert(`Subject code ${subjectForm.code} has been successfully saved.`);
+          setSubjectForm({
+            id: '', code: '', name: '', credits: 3,
+            department: 'Computer Science & Engineering', semester: 5,
+            description: '', learningOutcomes: '', referenceBooks: ''
+          });
+          loadAllSubjects();
+          loadStats();
+        } else {
+          alert(data.message || "Failed to process subject request.");
+        }
+      })
+      .catch(err => console.error("Error updating subject:", err));
+  };
+
+  const handleSubjectDelete = (id: string) => {
+    if (!confirm("Are you sure you want to delete this subject profile? This will break dependent student evaluation cards.")) return;
+    fetch(`/api/admin/subjects/${id}`, {
+      method: 'DELETE'
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          triggerAlert("Subject has been removed from database registry.");
+          loadAllSubjects();
+          loadStats();
+        } else {
+          alert(data.message || "Failed to delete subject.");
+        }
+      })
+      .catch(err => console.error("Error deleting subject:", err));
+  };
 
   const loadStudents = () => {
     setLoading(true);
@@ -212,6 +306,7 @@ export default function AdminView({ isDark = false }: AdminViewProps) {
             cgpa: 8.5, hostelBlock: 'Aryabhata Block C', hostelRoom: '304-A'
           });
           loadStudents();
+          loadStats();
         }
       })
       .catch(err => alert(err.message));
@@ -225,6 +320,7 @@ export default function AdminView({ isDark = false }: AdminViewProps) {
         if (data.success) {
           triggerAlert('Student profile deleted from database.');
           loadStudents();
+          loadStats();
         }
       })
       .catch(err => console.error(err));
@@ -250,6 +346,7 @@ export default function AdminView({ isDark = false }: AdminViewProps) {
             email: '', cabin: 'CSE Cabin 10, JS Block', officeHours: '09:00 AM - 04:30 PM', interestsInput: ''
           });
           loadFaculty();
+          loadStats();
         }
       })
       .catch(err => alert(err.message));
@@ -263,6 +360,7 @@ export default function AdminView({ isDark = false }: AdminViewProps) {
         if (data.success) {
           triggerAlert('Faculty record removed.');
           loadFaculty();
+          loadStats();
         }
       })
       .catch(err => console.error(err));
@@ -391,6 +489,41 @@ export default function AdminView({ isDark = false }: AdminViewProps) {
         </div>
       )}
 
+      {/* Dynamic Admin Stats Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className={`border p-5 rounded-2xl shadow-sm transition-colors duration-300 ${
+          isDark ? 'bg-[#0d0e11] border-slate-800 text-slate-100' : 'bg-white border-slate-200/80 text-slate-905'
+        }`}>
+          <span className="text-[10px] font-mono uppercase tracking-widest text-slate-500 font-bold block">Total Enrolled Students</span>
+          <p className={`text-2xl font-black mt-1 ${isDark ? 'text-slate-100' : 'text-slate-900'}`}>{stats.students}</p>
+          <span className="text-xs text-slate-400 font-semibold block mt-1">Student Registry</span>
+        </div>
+
+        <div className={`border p-5 rounded-2xl shadow-sm transition-colors duration-300 ${
+          isDark ? 'bg-[#0d0e11] border-slate-800 text-slate-100' : 'bg-white border-slate-200/80 text-slate-905'
+        }`}>
+          <span className="text-[10px] font-mono uppercase tracking-widest text-slate-500 font-bold block">Active Faculty Members</span>
+          <p className={`text-2xl font-black mt-1 ${isDark ? 'text-slate-100' : 'text-slate-900'}`}>{stats.faculty}</p>
+          <span className="text-xs text-slate-400 font-semibold block mt-1">Faculty Directory</span>
+        </div>
+
+        <div className={`border p-5 rounded-2xl shadow-sm transition-colors duration-300 ${
+          isDark ? 'bg-[#0d0e11] border-slate-800 text-slate-100' : 'bg-white border-slate-200/80 text-slate-905'
+        }`}>
+          <span className="text-[10px] font-mono uppercase tracking-widest text-slate-500 font-bold block">Approved Hostel Outpasses</span>
+          <p className={`text-2xl font-black mt-1 ${isDark ? 'text-slate-100' : 'text-slate-900'}`}>{stats.outpasses}</p>
+          <span className="text-xs text-slate-400 font-semibold block mt-1">Hostel Management</span>
+        </div>
+
+        <div className={`border p-5 rounded-2xl shadow-sm transition-colors duration-300 ${
+          isDark ? 'bg-[#0d0e11] border-[#337418] text-slate-100' : 'bg-white border-slate-200/80 text-slate-905'
+        }`}>
+          <span className="text-[10px] font-mono uppercase tracking-widest text-slate-500 font-bold block">Uploaded Resources</span>
+          <p className={`text-2xl font-black mt-1 ${isDark ? 'text-[#5DD62C]' : 'text-slate-900'}`}>{stats.resources}</p>
+          <span className="text-xs text-slate-400 font-semibold block mt-1">Resource Center</span>
+        </div>
+      </div>
+
       {/* ----------------------------------------------------
           SUB-TAB NAVIGATION BAR
           ---------------------------------------------------- */}
@@ -399,7 +532,8 @@ export default function AdminView({ isDark = false }: AdminViewProps) {
           { id: 'students', label: 'Student Records', icon: <GraduationCap className="w-4 h-4" /> },
           { id: 'faculty', label: 'Faculty Directory', icon: <Users className="w-4 h-4" /> },
           { id: 'announcements', label: 'Broadcaster Alerts', icon: <Megaphone className="w-4 h-4" /> },
-          { id: 'events', label: 'Campus Event Listings', icon: <Calendar className="w-4 h-4" /> }
+          { id: 'events', label: 'Campus Event Listings', icon: <Calendar className="w-4 h-4" /> },
+          { id: 'subjects', label: 'Subject Manager', icon: <BookOpen className="w-4 h-4" /> }
         ].map(tab => (
           <button
             key={tab.id}
@@ -1234,7 +1368,227 @@ export default function AdminView({ isDark = false }: AdminViewProps) {
           </div>
         )}
 
-      </div>
+        {activeSubTab === 'subjects' && (
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 animate-fade-in">
+            {/* Left: Create/Edit Subject Form */}
+            <div className={`lg:col-span-5 border rounded-3xl p-6 shadow-sm space-y-6 transition-colors duration-300 ${
+              isDark ? 'bg-[#0d0e11] border-slate-800' : 'bg-white border-slate-200'
+            }`}>
+              <div className="border-b border-slate-100 dark:border-slate-850 pb-4">
+                <h3 className={`text-base font-extrabold ${isDark ? 'text-slate-100' : 'text-slate-900'}`}>
+                  {subjectForm.id ? 'Edit Course Subject' : 'Register New Subject'}
+                </h3>
+                <p className="text-xs text-slate-500">Configure global academic core courses catalog</p>
+              </div>
+
+              <form onSubmit={handleSubjectSubmit} className="space-y-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-1">
+                    <label className="text-[10px] font-bold text-slate-500 uppercase">Subject Code</label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="e.g. CS3401"
+                      value={subjectForm.code}
+                      onChange={(e) => setSubjectForm({ ...subjectForm, code: e.target.value })}
+                      className={`w-full py-2 px-3 border rounded-xl text-xs font-semibold outline-none transition-colors duration-200 ${
+                        isDark ? 'bg-slate-905 border-slate-800 text-slate-205 focus:border-blue-500' : 'bg-slate-50 border-slate-200 text-slate-800 focus:border-blue-500'
+                      }`}
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <label className="text-[10px] font-bold text-slate-500 uppercase">Credits</label>
+                    <input
+                      type="number"
+                      required
+                      min={1}
+                      max={6}
+                      value={subjectForm.credits}
+                      onChange={(e) => setSubjectForm({ ...subjectForm, credits: parseInt(e.target.value) || 3 })}
+                      className={`w-full py-2 px-3 border rounded-xl text-xs font-semibold outline-none transition-colors duration-200 ${
+                        isDark ? 'bg-slate-905 border-slate-800 text-slate-205 focus:border-blue-500' : 'bg-slate-50 border-slate-200 text-slate-800 focus:border-blue-500'
+                      }`}
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-1">
+                  <label className="text-[10px] font-bold text-slate-500 uppercase">Subject Title Name</label>
+                  <input
+                    type="text"
+                    required
+                    placeholder="e.g. Theory of Computation"
+                    value={subjectForm.name}
+                    onChange={(e) => setSubjectForm({ ...subjectForm, name: e.target.value })}
+                    className={`w-full py-2.5 px-3 border rounded-xl text-xs font-semibold outline-none transition-colors duration-200 ${
+                      isDark ? 'bg-slate-905 border-slate-800 text-slate-205 focus:border-blue-500' : 'bg-slate-50 border-slate-200 text-slate-800 focus:border-blue-500'
+                    }`}
+                  />
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-1">
+                    <label className="text-[10px] font-bold text-slate-500 uppercase">Department</label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="Computer Science & Engineering"
+                      value={subjectForm.department}
+                      onChange={(e) => setSubjectForm({ ...subjectForm, department: e.target.value })}
+                      className={`w-full py-2 px-3 border rounded-xl text-xs font-semibold outline-none transition-colors duration-200 ${
+                        isDark ? 'bg-slate-905 border-slate-800 text-slate-205 focus:border-blue-500' : 'bg-slate-50 border-slate-200 text-slate-800 focus:border-blue-500'
+                      }`}
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <label className="text-[10px] font-bold text-slate-500 uppercase">Semester</label>
+                    <input
+                      type="number"
+                      required
+                      min={1}
+                      max={8}
+                      value={subjectForm.semester}
+                      onChange={(e) => setSubjectForm({ ...subjectForm, semester: parseInt(e.target.value) || 5 })}
+                      className={`w-full py-2 px-3 border rounded-xl text-xs font-semibold outline-none transition-colors duration-200 ${
+                        isDark ? 'bg-slate-905 border-slate-800 text-slate-205 focus:border-blue-500' : 'bg-slate-50 border-slate-200 text-slate-800 focus:border-blue-500'
+                      }`}
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-1">
+                  <label className="text-[10px] font-bold text-slate-500 uppercase">Description / Syllabus Overview</label>
+                  <textarea
+                    rows={2}
+                    placeholder="Provide overview of learning outcomes, units..."
+                    value={subjectForm.description}
+                    onChange={(e) => setSubjectForm({ ...subjectForm, description: e.target.value })}
+                    className={`w-full py-2 px-3 border rounded-xl text-xs font-semibold outline-none transition-colors duration-200 ${
+                      isDark ? 'bg-slate-905 border-slate-800 text-slate-205 focus:border-blue-500' : 'bg-slate-50 border-slate-200 text-slate-800 focus:border-blue-500'
+                    }`}
+                  />
+                </div>
+
+                <div className="space-y-1">
+                  <label className="text-[10px] font-bold text-slate-500 uppercase">Reference Textbooks (Newlines)</label>
+                  <textarea
+                    rows={2}
+                    placeholder="1. Herbert Schildt, Java The Complete Reference..."
+                    value={subjectForm.referenceBooks}
+                    onChange={(e) => setSubjectForm({ ...subjectForm, referenceBooks: e.target.value })}
+                    className={`w-full py-2 px-3 border rounded-xl text-xs font-semibold outline-none transition-colors duration-200 ${
+                      isDark ? 'bg-slate-905 border-slate-800 text-slate-205 focus:border-blue-500' : 'bg-slate-50 border-slate-200 text-slate-800 focus:border-blue-500'
+                    }`}
+                  />
+                </div>
+
+                <div className="flex gap-3">
+                  {subjectForm.id && (
+                    <button
+                      type="button"
+                      onClick={() => setSubjectForm({
+                        id: '', code: '', name: '', credits: 3,
+                        department: 'Computer Science & Engineering', semester: 5,
+                        description: '', learningOutcomes: '', referenceBooks: ''
+                      })}
+                      className={`flex-1 py-2 px-3 border rounded-xl text-xs font-bold transition-all hover:bg-slate-800/10 cursor-pointer active:scale-95 ${
+                        isDark ? 'border-slate-850 text-slate-400' : 'border-slate-200 text-slate-600'
+                      }`}
+                    >
+                      Cancel Edit
+                    </button>
+                  )}
+                  <button
+                    type="submit"
+                    className="flex-1 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl transition-all shadow-md shadow-blue-500/10 flex items-center justify-center gap-1.5 cursor-pointer active:scale-95"
+                  >
+                    <PlusCircle className="w-3.5 h-3.5" />
+                    {subjectForm.id ? 'Save Subject' : 'Add Subject'}
+                  </button>
+                </div>
+              </form>
+            </div>
+
+            {/* Right: Listed Subjects Table/Registry */}
+            <div className={`lg:col-span-7 border rounded-3xl p-6 shadow-sm space-y-6 transition-colors duration-300 ${
+              isDark ? 'bg-[#0d0e11] border-slate-800' : 'bg-white border-slate-200'
+            }`}>
+              <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4 border-b border-slate-100 dark:border-slate-850 pb-4">
+                <div>
+                  <h3 className={`text-base font-extrabold ${isDark ? 'text-slate-100' : 'text-slate-900'}`}>
+                    Active Curriculum Catalog
+                  </h3>
+                  <p className="text-xs text-slate-500">Track, modify, or retire active department subjects</p>
+                </div>
+
+                <div className={`flex items-center gap-2 px-3 py-1.5 rounded-xl border max-w-sm ${
+                  isDark ? 'bg-slate-950 border-slate-800' : 'bg-slate-50 border-slate-200'
+                }`}>
+                  <Search className="w-3.5 h-3.5 text-slate-400" />
+                  <input
+                    type="text"
+                    placeholder="Search code, name..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="bg-transparent border-none outline-none text-xs font-semibold placeholder-slate-450"
+                  />
+                </div>
+              </div>
+
+              {allSubjects.length === 0 ? (
+                <p className="text-xs text-slate-555 text-center py-8">No subjects listed in the active catalog.</p>
+              ) : (
+                <div className="space-y-3 max-h-[500px] overflow-y-auto pr-1 font-semibold">
+                  {allSubjects.filter(sub => 
+                    sub.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                    sub.code.toLowerCase().includes(searchQuery.toLowerCase())
+                  ).map(sub => (
+                    <div key={sub.id} className={`p-4 border rounded-2xl flex flex-col sm:flex-row justify-between sm:items-center gap-4 ${
+                      isDark ? 'bg-slate-905 border-slate-850' : 'bg-slate-50/50 border-slate-150'
+                    }`}>
+                      <div className="space-y-1">
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <span className="text-[10px] font-black font-mono leading-none bg-blue-600/15 text-blue-500 border border-blue-500/10 px-2 py-0.5 rounded">
+                            {sub.code}
+                          </span>
+                          <span className="text-[10px] text-slate-400 font-mono">Sem {sub.semester} • Credits: {sub.credits}</span>
+                        </div>
+                        <h4 className={`text-xs font-black leading-tight ${isDark ? 'text-slate-200' : 'text-slate-800'}`}>
+                          {sub.name}
+                        </h4>
+                        <p className="text-[10px] text-slate-450">Department: {sub.department || 'General'}</p>
+                      </div>
+
+                      <div className="flex gap-2 shrink-0">
+                        <button
+                          onClick={() => {
+                            setSubjectForm({
+                              id: sub.id, code: sub.code, name: sub.name, credits: sub.credits || 3,
+                              department: sub.department || 'Computer Science & Engineering', semester: sub.semester || 5,
+                              description: sub.description || '', learningOutcomes: sub.learningOutcomes || '',
+                              referenceBooks: sub.referenceBooks || ''
+                            });
+                          }}
+                          className="p-2 border rounded-xl hover:bg-blue-600/10 hover:border-blue-500 hover:text-blue-500 text-slate-450 transition-colors cursor-pointer"
+                        >
+                          <Edit className="w-3.5 h-3.5 text-blue-500" />
+                        </button>
+                        <button
+                          onClick={() => handleSubjectDelete(sub.id)}
+                          className="p-2 border rounded-xl hover:bg-rose-500/15 hover:border-rose-500 hover:text-rose-500 text-slate-455 transition-colors cursor-pointer"
+                        >
+                          <Trash2 className="w-3.5 h-3.5 text-rose-500" />
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        </div>
 
     </div>
   );

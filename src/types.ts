@@ -21,6 +21,13 @@ export interface StudentProfile {
   hostelRoom: string;
   hostelBlock: string;
   appliedPlacements?: string[];
+  phoneNumber?: string;
+  linkedinUrl?: string;
+  githubUrl?: string;
+  portfolioUrl?: string;
+  shortBio?: string;
+  careerObjective?: string;
+  skills?: string[];
 }
 
 export interface ClassSession {
@@ -48,6 +55,10 @@ export interface SubjectItem {
   };
   facultyName: string;
   syllabusUnits: string[];
+  description?: string;
+  referenceBooks?: string;
+  department?: string;
+  semester?: number;
 }
 
 export interface FacultyItem {

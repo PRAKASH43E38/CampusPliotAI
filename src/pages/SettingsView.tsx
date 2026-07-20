@@ -1,12 +1,17 @@
+/**
+ * @license
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 import { useState } from 'react';
-import { Settings, Bell, Shield, Eye, HelpCircle, Save, CheckCircle, Moon, Sun } from 'lucide-react';
+import { Bell, Shield, Eye, Save } from 'lucide-react';
 
 interface SettingsViewProps {
   isDark: boolean;
   onToggleTheme: () => void;
 }
 
-export default function SettingsView({ isDark, onToggleTheme }: SettingsViewProps) {
+export default function SettingsView({}: SettingsViewProps) {
   const [examReminders, setExamReminders] = useState(true);
   const [placementAlerts, setPlacementAlerts] = useState(true);
   const [transitAlerts, setTransitAlerts] = useState(false);
@@ -18,83 +23,67 @@ export default function SettingsView({ isDark, onToggleTheme }: SettingsViewProp
   };
 
   return (
-    <div className="space-y-8 pb-12 font-sans max-w-3xl">
+    <div className="space-y-6 pb-12 font-sans max-w-3xl">
       {/* Banner Intro */}
-      <div className={`border p-6 rounded-3xl shadow-sm flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 transition-all ${
-        isDark ? 'bg-[#0d0e11] border-slate-800 text-slate-100' : 'bg-white border-slate-200/80 text-slate-900'
-      }`}>
+      <div className="border p-6 rounded-3xl shadow-sm bg-white border-[#A7C7DD]">
         <div>
-          <h2 className={`text-xl font-extrabold ${isDark ? 'text-slate-100' : 'text-slate-950'}`}>Settings & Security Controls</h2>
-          <p className={`text-xs mt-1 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+          <h2 className="text-xl font-extrabold text-[#001D39]">Settings & Security Controls</h2>
+          <p className="text-xs mt-1 text-slate-550">
             Configure push notification filters, data sharing permissions, and UI accessibility preferences.
           </p>
         </div>
       </div>
 
-      {/* Grid layouts */}
-      <div className={`border rounded-3xl p-6 sm:p-8 shadow-sm space-y-6 transition-all ${
-        isDark ? 'bg-[#0d0e11] border-slate-800' : 'bg-white border-slate-200'
-      }`}>
+      {/* Settings Grid Panel */}
+      <div className="border rounded-3xl p-6 sm:p-8 shadow-sm space-y-6 bg-white border-[#A7C7DD]">
         {/* Notifications config section */}
         <div className="space-y-4">
-          <div className={`flex items-center gap-2 border-b pb-2.5 ${isDark ? 'border-slate-800' : 'border-slate-100'}`}>
-            <Bell className="w-5 h-5 text-blue-500" />
-            <h3 className={`text-sm font-bold uppercase tracking-wider ${isDark ? 'text-slate-300' : 'text-slate-900'}`}>Alerts & Notification Subscriptions</h3>
+          <div className="flex items-center gap-2 border-b border-[#A7C7DD]/60 pb-2.5">
+            <Bell className="w-5 h-5 text-[#0A4174]" />
+            <h3 className="text-sm font-bold uppercase tracking-wider text-[#001D39]">Alerts & Notification Subscriptions</h3>
           </div>
 
           <div className="space-y-3">
-            <label className={`flex items-start gap-3.5 p-3.5 rounded-2xl border transition-all cursor-pointer ${
-              isDark 
-                ? 'bg-slate-900/40 hover:bg-slate-900/60 border-slate-800' 
-                : 'bg-slate-50/50 hover:bg-slate-50 border-slate-100'
-            }`}>
+            <label className="flex items-start gap-3.5 p-3.5 rounded-2xl border border-slate-200/60 bg-slate-50/50 hover:bg-slate-100/30 transition-all cursor-pointer">
               <input
                 type="checkbox"
                 checked={examReminders}
                 onChange={(e) => setExamReminders(e.target.checked)}
-                className="w-4 h-4 text-blue-600 border-slate-300 rounded focus:ring-blue-500 mt-0.5"
+                className="w-4 h-4 text-[#0A4174] border-slate-300 rounded focus:ring-[#0A4174] mt-0.5"
               />
               <div>
-                <span className={`text-xs sm:text-sm font-bold block ${isDark ? 'text-slate-200' : 'text-slate-800'}`}>Exam Cell Reminders</span>
-                <p className={`text-[11px] leading-relaxed font-semibold mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+                <span className="text-xs sm:text-sm font-bold block text-[#001D39]">Exam Cell Reminders</span>
+                <p className="text-[11px] leading-relaxed text-slate-550 mt-0.5">
                   Receive priority alerts regarding CIA schedule updates, seat arrangements, and grade releases.
                 </p>
               </div>
             </label>
 
-            <label className={`flex items-start gap-3.5 p-3.5 rounded-2xl border transition-all cursor-pointer ${
-              isDark 
-                ? 'bg-slate-900/40 hover:bg-slate-900/60 border-slate-800' 
-                : 'bg-slate-50/50 hover:bg-slate-50 border-slate-100'
-            }`}>
+            <label className="flex items-start gap-3.5 p-3.5 rounded-2xl border border-slate-200/60 bg-slate-50/50 hover:bg-slate-100/30 transition-all cursor-pointer">
               <input
                 type="checkbox"
                 checked={placementAlerts}
                 onChange={(e) => setPlacementAlerts(e.target.checked)}
-                className="w-4 h-4 text-blue-600 border-slate-300 rounded focus:ring-blue-500 mt-0.5"
+                className="w-4 h-4 text-[#0A4174] border-slate-300 rounded focus:ring-[#0A4174] mt-0.5"
               />
               <div>
-                <span className={`text-xs sm:text-sm font-bold block ${isDark ? 'text-slate-200' : 'text-slate-800'}`}>Placement Opportunity Broadcasts</span>
-                <p className={`text-[11px] leading-relaxed font-semibold mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+                <span className="text-xs sm:text-sm font-bold block text-[#001D39]">Placement Opportunity Broadcasts</span>
+                <p className="text-[11px] leading-relaxed text-slate-550 mt-0.5">
                   Get notified instantly when new corporate recruitment drives, resume clinics, or mock drives are registered.
                 </p>
               </div>
             </label>
 
-            <label className={`flex items-start gap-3.5 p-3.5 rounded-2xl border transition-all cursor-pointer ${
-              isDark 
-                ? 'bg-slate-900/40 hover:bg-slate-900/60 border-slate-800' 
-                : 'bg-slate-50/50 hover:bg-slate-50 border-slate-100'
-            }`}>
+            <label className="flex items-start gap-3.5 p-3.5 rounded-2xl border border-slate-200/60 bg-slate-50/50 hover:bg-slate-100/30 transition-all cursor-pointer">
               <input
                 type="checkbox"
                 checked={transitAlerts}
                 onChange={(e) => setTransitAlerts(e.target.checked)}
-                className="w-4 h-4 text-blue-600 border-slate-300 rounded focus:ring-blue-500 mt-0.5"
+                className="w-4 h-4 text-[#0A4174] border-slate-300 rounded focus:ring-[#0A4174] mt-0.5"
               />
               <div>
-                <span className={`text-xs sm:text-sm font-bold block ${isDark ? 'text-slate-200' : 'text-slate-800'}`}>Live Shuttle Proximity Alerts</span>
-                <p className={`text-[11px] leading-relaxed font-semibold mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+                <span className="text-xs sm:text-sm font-bold block text-[#001D39]">Live Shuttle Proximity Alerts</span>
+                <p className="text-[11px] leading-relaxed text-slate-550 mt-0.5">
                   Receive mobile notifications when your scheduled transport bus route reaches within 1 KM of your home boarding stop.
                 </p>
               </div>
@@ -102,75 +91,41 @@ export default function SettingsView({ isDark, onToggleTheme }: SettingsViewProp
           </div>
         </div>
 
-        {/* Theme Preferences */}
+        {/* Theme Preferences (Locked to Blue-on-Blue SaaS Theme) */}
         <div className="space-y-4">
-          <div className={`flex items-center gap-2 border-b pb-2.5 ${isDark ? 'border-slate-800' : 'border-slate-100'}`}>
-            <Eye className="w-5 h-5 text-indigo-500" />
-            <h3 className={`text-sm font-bold uppercase tracking-wider ${isDark ? 'text-slate-300' : 'text-slate-900'}`}>Visual Interface Styling</h3>
+          <div className="flex items-center gap-2 border-b border-[#A7C7DD]/60 pb-2.5">
+            <Eye className="w-5 h-5 text-[#0A4174]" />
+            <h3 className="text-sm font-bold uppercase tracking-wider text-[#001D39]">Visual Interface Styling</h3>
           </div>
 
-          <div className={`p-4 border rounded-2xl space-y-4 transition-all ${
-            isDark ? 'bg-slate-900/40 border-slate-800' : 'bg-slate-50/50 border-slate-100'
-          }`}>
+          <div className="p-4 border border-slate-200/60 rounded-2xl space-y-2 bg-slate-50/50">
             <div>
-              <span className={`text-xs font-bold block ${isDark ? 'text-slate-200' : 'text-slate-800'}`}>System Visual Theme</span>
-              <p className={`text-[11px] leading-relaxed font-semibold ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
-                Toggle between Light mode for maximum WCAG daylight readability and Dark mode for safe, premium, late-night academic study.
+              <span className="text-xs font-bold block text-[#001D39]">SaaS Institutional Theme</span>
+              <p className="text-[11px] leading-relaxed text-slate-550 mt-0.5">
+                The visual palette is configured to the official **Blue-on-Blue SaaS Layout** matching Saranathan College of Engineering design specifications.
               </p>
-            </div>
-
-            <div className="flex items-center gap-3">
-              <button
-                type="button"
-                onClick={onToggleTheme}
-                className={`flex items-center gap-2 px-4 py-2.5 rounded-xl border text-xs font-bold transition-all cursor-pointer ${
-                  !isDark 
-                    ? 'bg-blue-600 border-blue-600 text-white shadow-md shadow-blue-500/10' 
-                    : 'bg-slate-900 border-slate-700/60 text-slate-400 hover:text-slate-200 hover:bg-slate-800'
-                }`}
-              >
-                <Sun className="w-4 h-4" />
-                Light Mode Active
-              </button>
-
-              <button
-                type="button"
-                onClick={onToggleTheme}
-                className={`flex items-center gap-2 px-4 py-2.5 rounded-xl border text-xs font-bold transition-all cursor-pointer ${
-                  isDark 
-                    ? 'bg-blue-600 border-blue-600 text-white shadow-md shadow-blue-500/10' 
-                    : 'bg-white border-slate-200 text-slate-500 hover:text-slate-800 hover:bg-slate-50'
-                }`}
-              >
-                <Moon className="w-4 h-4" />
-                Dark Mode Active
-              </button>
             </div>
           </div>
         </div>
 
         {/* Security / Privacy disclaimer */}
         <div className="space-y-4">
-          <div className={`flex items-center gap-2 border-b pb-2.5 ${isDark ? 'border-slate-800' : 'border-slate-100'}`}>
-            <Shield className="w-5 h-5 text-emerald-500" />
-            <h3 className={`text-sm font-bold uppercase tracking-wider ${isDark ? 'text-slate-300' : 'text-slate-900'}`}>Access Clearance Privacy</h3>
+          <div className="flex items-center gap-2 border-b border-[#A7C7DD]/60 pb-2.5">
+            <Shield className="w-5 h-5 text-[#4E8EA2]" />
+            <h3 className="text-sm font-bold uppercase tracking-wider text-[#001D39]">Access Clearance Privacy</h3>
           </div>
 
-          <div className={`p-4 border rounded-2xl text-[11px] font-semibold leading-relaxed transition-all ${
-            isDark ? 'bg-slate-900/40 border-slate-800 text-slate-400' : 'bg-slate-50/50 border-slate-100 text-slate-600'
-          }`}>
-            🎓 <strong className={isDark ? 'text-slate-200' : 'text-slate-800'}>FERPA Compliant Credentials Guard</strong><br />
+          <div className="p-4 border border-slate-200/60 rounded-2xl text-[11px] font-medium leading-relaxed bg-slate-50/50 text-slate-600">
+            🎓 <strong className="text-[#001D39]">FERPA Compliant Credentials Guard</strong><br />
             Your academic performance grade sheets and continuous internal assessment logs are encrypted on host containers. Personal biodata elements are concealed from third-party networks or scrapers.
           </div>
         </div>
 
         {/* Save button and success toast */}
-        <div className={`pt-6 border-t flex items-center justify-between gap-4 ${isDark ? 'border-slate-800' : 'border-slate-100'}`}>
+        <div className="pt-6 border-t border-slate-100 flex items-center justify-between gap-4">
           {savedSuccess && (
-            <div className={`text-xs font-bold flex items-center gap-2 px-4 py-2.5 rounded-xl animate-fade-in shadow-sm ${
-              isDark ? 'text-green-400 bg-green-950/20 border border-green-900/55' : 'text-green-700 bg-green-50 border border-green-200'
-            }`}>
-              <CheckCircle2 className="w-4 h-4 text-green-500" />
+            <div className="text-xs font-bold flex items-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-50 border border-emerald-250 text-emerald-700 animate-fade-in shadow-sm">
+              <CheckCircle2 className="w-4 h-4 text-emerald-500" />
               Settings updated successfully!
             </div>
           )}
@@ -179,10 +134,10 @@ export default function SettingsView({ isDark, onToggleTheme }: SettingsViewProp
 
           <button
             onClick={handleSave}
-            className="py-3 px-6 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl transition-all shadow-md shadow-blue-500/10 flex items-center gap-1.5 cursor-pointer active:scale-95 shrink-0"
+            className="py-3 px-6 bg-[#0A4174] hover:bg-[#002b52] text-white font-bold text-xs rounded-xl transition-all shadow-sm flex items-center gap-1.5 cursor-pointer active:scale-95 shrink-0"
             id="save-settings-button"
           >
-            <Save className="w-4 h-4" />
+            <Save className="w-4 h-4 text-white" />
             Save Preferences
           </button>
         </div>

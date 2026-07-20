@@ -379,22 +379,22 @@ export const getAISmartResponse = (userInput: string): string => {
 
 export async function syncWithBackend(studentId: string = 'st-0982'): Promise<void> {
   try {
-    const profileRes = await fetch('/api/profile', {
-      headers: { 'X-Student-Id': studentId }
-    });
+    const headers = studentId ? { 'X-Student-Id': studentId } : {};
+
+    const profileRes = await fetch('/api/profile', { headers });
     if (profileRes.ok) {
       const studentData = await profileRes.json();
       Object.assign(mockStudent, studentData);
     }
 
-    const classesRes = await fetch('/api/academics/timetable');
+    const classesRes = await fetch('/api/academics/timetable', { headers });
     if (classesRes.ok) {
       const classesData = await classesRes.json();
       mockClasses.length = 0;
       mockClasses.push(...classesData);
     }
 
-    const subjectsRes = await fetch('/api/academics/subjects');
+    const subjectsRes = await fetch('/api/academics/subjects', { headers });
     if (subjectsRes.ok) {
       const subjectsData = await subjectsRes.json();
       mockSubjects.length = 0;

@@ -6,256 +6,259 @@
 @import "tailwindcss";
 
 @theme {
-  /* Override default slate values to match custom theme palette */
-  --color-slate-50: #DEDCDC;
-  --color-slate-100: #191D23;
-  --color-slate-150: #57707A;
-  --color-slate-200: #57707A;
-  --color-slate-250: #57707A;
-  --color-slate-300: #57707A;
-  --color-slate-400: #DEDCDC;
-  --color-slate-500: #DEDCDC;
-  --color-slate-600: #DEDCDC;
-  --color-slate-700: #191D23;
-  --color-slate-800: #191D23;
-  --color-slate-900: #191D23;
-  --color-slate-950: #191D23;
+  /* Custom blue palette */
+  --color-primary-50: #BDD8E9;
+  --color-primary-100: #7BBDE8;
+  --color-primary-200: #6EA2B3;
+  --color-primary-300: #4E8EA2;
+  --color-primary-400: #0A4174;
+  --color-primary-500: #001D39;
+  --color-primary-600: #24435A;
+  --color-primary-700: #A7C7DD;
+  --color-primary-800: #6EA2B3;
+  --color-primary-900: #0A4174;
 
-  /* Button overrides */
-  --color-blue-50: #191D23;
-  --color-blue-100: #191D23;
-  --color-blue-200: #57707A;
-  --color-blue-300: #C5BAC4;
-  --color-blue-400: #C5BAC4;
-  --color-blue-500: #DEDCDC;
-  --color-blue-600: #C5BAC4;
-  --color-blue-700: #57707A;
-  --color-blue-800: #DEDCDC;
-  --color-blue-900: #191D23;
-
-  /* Neutral overrides */
-  --color-neutral-50: #DEDCDC;
-  --color-neutral-100: #191D23;
-  --color-neutral-200: #57707A;
-  --color-neutral-300: #C5BAC4;
-  --color-neutral-800: #191D23;
-  --color-neutral-900: #191D23;
+  /* Secondary & accent */
+  --color-secondary-500: #4E8EA2;
+  --color-accent-500: #6EA2B3;
+  --color-surface-500: #7BBDE8;
+  --color-background-500: #BDD8E9;
+  --color-heading-500: #001D39;
+  --color-text-500: #24435A;
+  --color-success-500: #4E8EA2;
+  --color-border-500: #A7C7DD;
 }
 
-/* ====================================================
-   GLOBAL PALETTE CSS OVERRIDES (DARK GREEN MATRIX SLEEK)
+/*/* ====================================================
+   GLOBAL PALETTE CSS OVERRIDES (MODERN SaaS BLUE-ON-BLUE)
    ==================================================== */
+@import url('https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300;400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap');
+
 html, body {
-  background-color: #191D23 !important;
-  color: #DEDCDC !important;
+  background-color: #BDD8E9 !important; /* Level 1 Base background */
+  color: #001E30 !important;
+  font-family: 'Hanken Grotesk', sans-serif !important;
+  height: 100vh !important;
+  overflow: hidden !important;
 }
 
-/* ----------------------------------------------------
-   BACKGROUND MAPPING
-   ---------------------------------------------------- */
-/* Primary Background: #191D23 (Primary Dark) */
-.bg-slate-50, 
-.bg-[#090a0c], 
-.bg-[#050608], 
-.bg-slate-950, 
-.bg-slate-900 {
-  background-color: #191D23 !important;
+/* Page Frame: Premium Modern SaaS floating shell */
+@media (min-width: 1024px) {
+  #root > div.flex.h-screen, 
+  div.flex.h-screen.overflow-hidden {
+    max-width: 1440px !important;
+    height: 90vh !important;
+    margin: 5vh auto !important;
+    border-radius: 24px !important;
+    background: #f7f9ff !important; /* Level 2 content container background */
+    border: 1px solid #A7C7DD !important;
+    box-shadow: 0 20px 40px rgba(10, 65, 116, 0.08) !important; /* Level 3 shadow */
+    overflow: hidden !important;
+  }
 }
 
-/* Sidebar Background: #191D23 (Secondary Dark) */
+/* Sidebar Styling: Anchor deep blue */
+aside {
+  background: #0A4174 !important;
+  border-right: 1px solid rgba(167, 199, 221, 0.3) !important;
+}
+
+aside span, aside h1, aside h2, aside h3, aside p, aside svg {
+  color: #ffffff !important;
+  stroke: #ffffff !important;
+}
+
+/* Sidebar navigation link states */
+aside a, aside button {
+  border-radius: 9999px !important; /* Selection pill shape */
+  transition: all 0.2s ease !important;
+}
+aside a:hover, aside button:hover {
+  background: rgba(255, 255, 255, 0.08) !important;
+}
+aside .bg-blue-600\/10, 
+aside .bg-blue-50,
+aside .bg-blue-600\/15 {
+  background: #ffffff !important; /* Active state is white container in sidebar */
+  color: #0A4174 !important;
+  font-weight: 700 !important;
+}
+aside .bg-blue-600\/10 span, 
+aside .bg-blue-50 span, 
+aside .bg-blue-600\/10 svg, 
+aside .bg-blue-50 svg {
+  color: #0A4174 !important;
+  stroke: #0A4174 !important;
+}
+
+/* Horizontal Top Header Bar */
+header {
+  background: rgba(247, 249, 255, 0.8) !important;
+  backdrop-filter: blur(12px) !important;
+  border-bottom: 1px solid #A7C7DD !important;
+}
+
+/* Main Workspace Content Area */
+main {
+  background: #f7f9ff !important;
+}
+
+/* Card Elements: SaaS Modernism Blue-on-Blue */
+.bg-white,
+.bg-slate-100,
+.bg-slate-905,
+.bg-slate-900\/20,
 .bg-[#0d0e11] {
-  background-color: #191D23 !important;
+  background: #ffffff !important;
+  border: 1px solid #A7C7DD !important;
+  border-radius: 24px !important; /* 24px padding + rounding containers */
+  box-shadow: 0 8px 16px rgba(10, 65, 116, 0.04) !important;
+  color: #001E30 !important;
+  padding: 24px !important; /* Generous whitespace spacing */
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
 }
 
-/* Secondary Backgrounds: #191D23 (Secondary Dark) */
-.bg-[#1e2023], 
-.bg-slate-905, 
-.bg-slate-100, 
-.bg-slate-950\/40, 
+.bg-white:hover,
+.bg-slate-100:hover,
+.bg-slate-905:hover {
+  box-shadow: 0 16px 32px rgba(10, 65, 116, 0.08) !important; /* Level 3 shadow on hover */
+  transform: translateY(-2px) !important;
+  border-color: #0A4174 !important;
+}
+
+/* Inner card sub-sections (Translucent Sky Blue layers) */
+.bg-slate-950\/40,
 .bg-slate-900\/50,
 .bg-slate-50\/30,
-.bg-slate-50\/50 {
-  background-color: #191D23 !important;
+.bg-slate-50\/50,
+.bg-slate-900\/20 {
+  background: #ecf4ff !important; /* Surface container low */
+  border: 1px solid rgba(167, 199, 221, 0.5) !important;
+  border-radius: 12px !important;
+  color: #001E30 !important;
 }
 
-/* Card Backgrounds: #191D23 (Secondary Dark) with #DEDCDC text (AAA 14.8:1 contrast) */
-.bg-white {
-  background-color: #191D23 !important;
-  color: #DEDCDC !important;
-  border: 1px solid #7E919F !important;
+/* Typography styles */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Manrope', sans-serif !important;
+  color: #001D39 !important; /* deep navy heading */
+  font-weight: 700 !important;
+}
+p, span, label, li, td, th {
+  font-family: 'Hanken Grotesk', sans-serif !important;
+  color: #16487b !important; /* Deep steel blue body */
 }
 
-/* Ensure child items in cards have light text */
-.bg-white h1, 
-.bg-white h2, 
-.bg-white h3, 
-.bg-white h4, 
-.bg-white h5, 
-.bg-white h6, 
-.bg-white p, 
-.bg-white span, 
-.bg-white label, 
-.bg-white li, 
-.bg-white td, 
-.bg-white th,
-.bg-white a {
-  color: #DEDCDC !important;
-}
-
-/* Secondary cards inside panels or lists */
-.bg-slate-905 {
-  background-color: #191D23 !important;
-  border-color: #7E919F !important;
-}
-
-/* ----------------------------------------------------
-   TYPOGRAPHY CONTRAST
-   ---------------------------------------------------- */
-h1, h2, h3, h4, h5, h6, p, span, a, label, li, td, th {
-  color: #DEDCDC !important;
-}
-
-/* Subtitles / auxiliary labels on dark backgrounds */
+/* Muted subtitles */
 .text-slate-400, 
 .text-slate-500, 
 .text-gray-400, 
 .text-slate-450 {
-  color: #979DAB !important;
-  opacity: 0.8 !important;
-}
-.text-slate-350, 
-.text-slate-300, 
-.text-slate-200 {
-  color: #DEDCDC !important;
-  opacity: 0.95 !important;
+  color: #42474f !important; /* Steel grey */
 }
 
-/* Global Lucide icons color */
+.text-blue-400,
+.text-blue-600 {
+  color: #0A4174 !important;
+}
+
+/* Icons */
 svg {
-  stroke: #DEDCDC !important;
+  stroke: #0A4174 !important;
 }
 
-/* ----------------------------------------------------
-   ACTIVE ACCENTS
-   ---------------------------------------------------- */
-/* Active nav items/links: #57707A background with #DEDCDC text */
-.bg-blue-600\/10, 
-.bg-blue-50,
-.bg-blue-600\/15 {
-  background-color: #57707A !important;
-  color: #DEDCDC !important;
+/* Form input elements styling */
+input, select, textarea {
+  background: #ffffff !important;
+  color: #001E30 !important;
+  border: 1px solid #A7C7DD !important;
+  border-radius: 12px !important; /* 12px standard elements radius */
+  padding: 10px 16px !important;
+  font-family: 'Hanken Grotesk', sans-serif !important;
+  font-size: 14px !important;
+  transition: all 0.2s ease !important;
 }
-.bg-blue-600\/10 span, 
-.bg-blue-50 span,
-.bg-blue-600\/10 p, 
-.bg-blue-50 p,
-.bg-blue-600\/10 svg, 
-.bg-blue-50 svg {
-  color: #DEDCDC !important;
-  stroke: #DEDCDC !important;
+input:focus, select:focus, textarea:focus {
+  border-color: #0A4174 !important;
+  border-width: 2px !important;
+  box-shadow: 0 0 0 3px rgba(10, 65, 116, 0.1) !important;
+  outline: none !important;
+}
+input::placeholder, textarea::placeholder {
+  color: #737780 !important;
 }
 
-/* ----------------------------------------------------
-   BUTTON STYLING (HIGH ACCENT CONTRAST)
-   ---------------------------------------------------- */
-/* Primary buttons: #C5BAC4 (Primary Accent) background with #191D23 text */
+/* Primary Action Buttons */
 button.bg-blue-600, 
 button.bg-blue-700, 
 button.bg-emerald-600, 
 button.bg-emerald-500,
 .bg-blue-600,
 .bg-blue-700 {
-  background-color: #C5BAC4 !important;
-  color: #191D23 !important;
-  border: 1px solid #C5BAC4 !important;
+  background: #0A4174 !important; /* Deep Navy */
+  color: #ffffff !important;
+  border: none !important;
+  font-family: 'Hanken Grotesk', sans-serif !important;
+  font-weight: 700 !important;
+  border-radius: 12px !important;
+  box-shadow: 0 4px 12px rgba(10, 65, 116, 0.15) !important;
+  transition: all 0.2s ease !important;
 }
+
 button.bg-blue-600:hover, 
 button.bg-blue-700:hover, 
 button.bg-emerald-600:hover, 
 button.bg-emerald-500:hover,
 .hover\:bg-blue-700:hover, 
 .hover\:bg-blue-800:hover {
-  background-color: #57707A !important;
-  color: #DEDCDC !important;
-  border-color: #57707A !important;
+  background: #002b52 !important;
+  box-shadow: 0 6px 18px rgba(10, 65, 116, 0.25) !important;
+  transform: translateY(-1px) !important;
 }
-/* Ensure button icons match button text color */
+
 button.bg-blue-600 svg, 
 button.bg-blue-700 svg, 
 button.bg-emerald-600 svg, 
 button.bg-emerald-500 svg,
 .bg-blue-600 svg,
 .bg-blue-700 svg {
-  stroke: #191D23 !important;
-}
-button.bg-blue-600:hover svg, 
-button.bg-blue-700:hover svg, 
-button.bg-emerald-600:hover svg, 
-button.bg-emerald-500:hover svg {
-  stroke: #DEDCDC !important;
+  stroke: #ffffff !important;
 }
 
-/* ----------------------------------------------------
-   FORMS & INPUTS
-   ---------------------------------------------------- */
-input, select, textarea {
-  background-color: #191D23 !important;
-  color: #DEDCDC !important;
-  border: 1px solid #7E919F !important;
-}
-input:focus, select:focus, textarea:focus {
-  border-color: #C5BAC4 !important;
-  outline: none !important;
-}
-input::placeholder, textarea::placeholder {
-  color: #DEDCDC !important;
-  opacity: 0.5 !important;
+/* Badges / Chips: 10% Opacity Secondary Teal bg */
+.bg-blue-600\/15,
+.bg-emerald-500\/10,
+.bg-emerald-500\/20,
+.bg-green-500\/10 {
+  background: rgba(78, 142, 162, 0.1) !important;
+  color: #4E8EA2 !important;
+  border: 1px solid rgba(78, 142, 162, 0.2) !important;
+  border-radius: 9999px !important; /* Selection tags pill-shaped */
 }
 
-/* ----------------------------------------------------
-   BORDERS & DIVIDERS
-   ---------------------------------------------------- */
-.border, .border-r, .border-b, .border-t, .border-l,
-.border-slate-200, .border-slate-800, .border-slate-700, .border-slate-150, .border-slate-850,
-.divide-slate-800, .divide-slate-100 {
-  border-color: #7E919F !important;
-  divide-color: #7E919F !important;
+/* Tables */
+table th {
+  background: #ecf4ff !important;
+  color: #001D39 !important;
+  font-weight: 700 !important;
+  border-bottom: 2px solid #A7C7DD !important;
+}
+table td {
+  border-bottom: 1px solid rgba(167, 199, 221, 0.4) !important;
 }
 
-/* ----------------------------------------------------
-   BADGES & BEACONS
-   ---------------------------------------------------- */
-.bg-blue-600\/15 {
-  background-color: #57707A !important;
-  color: #DEDCDC !important;
-}
-.bg-rose-500\/10, .bg-rose-500\/20, .bg-rose-500 {
-  background-color: #57707A !important;
-  color: #DEDCDC !important;
-  border-color: #7E919F !important;
-}
-
-/* ----------------------------------------------------
-   LEAFLET MAP INTEGRATION
-   ---------------------------------------------------- */
-.leaflet-container {
-  background: #191D23 !important;
-}
-
-/* ----------------------------------------------------
-   CUSTOM SCROLLBARS
-   ---------------------------------------------------- */
+/* Custom Scrollbars */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #191D23;
+  background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: #57707A;
-  border-radius: 6px;
+  background: #A7C7DD;
+  border-radius: 10px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #C5BAC4;
+  background: #0A4174;
 }

@@ -67,24 +67,9 @@ type TabView =
 
 export default function App() {
   const [state, setState] = useState<AppState>('LANDING');
-  const [isDark, setIsDark] = useState<boolean>(() => {
-    if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('isDark');
-      if (saved !== null) {
-        return saved === 'true';
-      }
-      return true;
-    }
-    return true;
-  });
-
-  const toggleTheme = () => {
-    setIsDark(prev => {
-      const next = !prev;
-      localStorage.setItem('isDark', String(next));
-      return next;
-    });
-  };
+  // Theme state removed – using fixed blue palette per design requirements
+  const isDark = false;
+  const toggleTheme = () => {};
   const [userRole, setUserRole] = useState<'STUDENT' | 'ADMIN'>(() => {
     if (typeof window !== 'undefined') {
       const saved = localStorage.getItem('userRole');
@@ -92,29 +77,68 @@ export default function App() {
     }
     return 'STUDENT';
   });
+  const [studentId, setStudentId] = useState<string>(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('studentId') || '';
+    }
+    return '';
+  });
   const [activeTab, setActiveTab] = useState<TabView>('dashboard');
   const [searchQuery, setSearchQuery] = useState('');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [notifDropdownOpen, setNotifDropdownOpen] = useState(false);
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
-  const [unreadNotifications, setUnreadNotifications] = useState(3);
+  
+  const [notifications, setNotifications] = useState<any[]>([]);
 
   const [dataLoaded, setDataLoaded] = useState(false);
+
+  const loadNotifications = (sId: string = studentId) => {
+    if (userRole !== 'STUDENT' || !sId) return;
+    fetch('/api/notifications', {
+      headers: { 'X-Student-Id': sId }
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (Array.isArray(data)) {
+          setNotifications(data);
+        }
+      })
+      .catch(err => console.error("Failed to load notifications:", err));
+  };
+
+  useEffect(() => {
+    const savedLoggedIn = localStorage.getItem('isLoggedIn');
+    const savedRole = localStorage.getItem('userRole') as 'STUDENT' | 'ADMIN' | null;
+    const savedStudentId = localStorage.getItem('studentId');
+    if (savedLoggedIn === 'true' && savedRole) {
+      setUserRole(savedRole);
+      if (savedRole === 'STUDENT' && savedStudentId) {
+        setStudentId(savedStudentId);
+      }
+      setState('APP');
+      if (savedRole === 'ADMIN') {
+        setActiveTab('admin-panel');
+      } else {
+        setActiveTab('dashboard');
+      }
+    }
+  }, []);
 
   useEffect(() => {
     if (state === 'APP') {
       setDataLoaded(false);
-      syncWithBackend().then(() => {
+      const sId = studentId || localStorage.getItem('studentId') || 'st-0982';
+      syncWithBackend(sId).then(() => {
         setDataLoaded(true);
+        if (userRole === 'STUDENT') {
+          loadNotifications(sId);
+        }
       });
     }
-  }, [state]);
+  }, [state, studentId, userRole]);
 
-  const notifications = [
-    { id: 'n-1', text: 'Dr. Ramesh Iyer uploaded Relational Algebra notes', time: '1 hour ago' },
-    { id: 'n-2', text: 'CIA-2 Internal assessment timelines published', time: '3 hours ago' },
-    { id: 'n-3', text: 'Adobe MTS placement registrations ending soon', time: '1 day ago' }
-  ];
+  const unreadNotifications = notifications.filter(n => !n.isRead).length;
 
   const handleStartPortal = () => {
     setState('LOGIN');
@@ -124,9 +148,14 @@ export default function App() {
     setState('LOGIN');
   };
 
-  const handleLoginSuccess = (role: 'STUDENT' | 'ADMIN') => {
+  const handleLoginSuccess = (role: 'STUDENT' | 'ADMIN', sId?: string) => {
     setUserRole(role);
     localStorage.setItem('userRole', role);
+    localStorage.setItem('isLoggedIn', 'true');
+    if (role === 'STUDENT' && sId) {
+      setStudentId(sId);
+      localStorage.setItem('studentId', sId);
+    }
     setState('APP');
     if (role === 'ADMIN') {
       setActiveTab('admin-panel');
@@ -138,8 +167,46 @@ export default function App() {
   const handleLogout = () => {
     setState('LANDING');
     setUserRole('STUDENT');
+    setStudentId('');
     localStorage.removeItem('userRole');
+    localStorage.removeItem('studentId');
+    localStorage.removeItem('isLoggedIn');
     setProfileDropdownOpen(false);
+  };
+
+  const handleClearAllNotifications = () => {
+    fetch('/api/notifications/read', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Student-Id': studentId
+      }
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          loadNotifications();
+        }
+      })
+      .catch(err => console.error("Failed to clear notifications:", err));
+  };
+
+  const handleMarkAsRead = (notifId: string) => {
+    fetch('/api/notifications/read', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Student-Id': studentId
+      },
+      body: JSON.stringify({ notificationId: notifId })
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          loadNotifications();
+        }
+      })
+      .catch(err => console.error("Failed to mark notification read:", err));
   };
 
   // Smart global search navigation helper
@@ -208,7 +275,7 @@ export default function App() {
       ];
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 selection:bg-blue-100 selection:text-blue-800">
+    <div className="min-h-screen bg-[var(--color-background-500)] text-[var(--color-heading-500)] selection:bg-blue-100 selection:text-blue-800">
       <AnimatePresence mode="wait">
         {/* Landing View State */}
         {state === 'LANDING' && (
@@ -231,96 +298,103 @@ export default function App() {
             <div className="flex h-screen overflow-hidden">
             
             {/* Desktop Adaptive Sidebar */}
-            <aside className={`hidden lg:flex flex-col w-64 border-r transition-colors duration-300 ${
-              isDark 
-                ? 'border-slate-800 bg-[#0d0e11] text-slate-200' 
-                : 'border-slate-200/80 bg-white text-slate-800'
-            } shrink-0`}>
-              <div className={`p-4 border-b transition-colors duration-300 ${isDark ? 'border-slate-800' : 'border-slate-200/80'}`}>
+            <aside className="hidden lg:flex flex-col w-64 border-r border-[#0A4174]/20 bg-[#0A4174] text-[#BDD8E9] shrink-0">
+              <div className="p-5 border-b border-white/10">
                 {/* Brand Capsule Matching User Screenshot */}
-                <div className={`flex items-center gap-2.5 px-3.5 py-2.5 rounded-full border transition-all shadow-sm ${
-                  isDark 
-                    ? 'bg-[#1e2023] border-slate-700/60 text-slate-100' 
-                    : 'bg-slate-100 border-slate-200 text-slate-800'
-                }`}>
+                <div className="flex items-center gap-3 px-4 py-3 rounded-2xl bg-white/5 border border-white/10 transition-all shadow-sm">
                   {/* 4-Quadrant Custom Circle Logo */}
-                  <div className="relative w-6 h-6 rounded-full overflow-hidden flex flex-wrap shrink-0 shadow-sm border border-slate-700/20">
+                  <div className="relative w-6 h-6 rounded-full overflow-hidden flex flex-wrap shrink-0 shadow-sm border border-white/10">
                     <div className="w-3 h-3 bg-[#10b981]" />
-                    <div className={`w-3 h-3 ${isDark ? 'bg-[#2b2d31]' : 'bg-slate-300'}`} />
+                    <div className="w-3 h-3 bg-[#BDD8E9]" />
                     <div className="w-3 h-3 bg-[#06b6d4]" />
                     <div className="w-3 h-3 bg-[#6366f1]" />
                   </div>
                   
                   {/* Brand Text */}
-                  <span className="font-sans font-bold text-[11.5px] tracking-tight leading-none truncate flex-1">
-                    CampusPilot<span className="text-blue-500">AI</span>
+                  <span className="font-sans font-extrabold text-[12px] tracking-tight leading-none text-white flex-1">
+                    CampusPilot<span className="text-[#7BBDE8]">AI</span>
                   </span>
                   
                   {/* 3-Dots Action Button */}
-                  <MoreVertical className="w-3.5 h-3.5 text-slate-400 shrink-0 cursor-pointer hover:text-slate-200" />
+                  <MoreVertical className="w-4 h-4 text-white/55 shrink-0 cursor-pointer hover:text-white" />
                 </div>
               </div>
 
               {/* Sidebar list scrolling container */}
               <div className="flex-1 overflow-y-auto px-4 py-6 space-y-6">
                 {/* Core Portal categories */}
-                <div className="space-y-1.5">
-                  <span className="text-[9px] font-mono font-bold text-slate-400 uppercase tracking-widest px-3">Academic Core</span>
-                  {sidebarItems.filter(item => item.section === 'portal').map(item => (
-                    <button
-                      key={item.id}
-                      onClick={() => setActiveTab(item.id as TabView)}
-                      className={`w-full flex items-center gap-3 py-2.5 px-3 rounded-xl text-xs font-bold transition-all ${
-                        activeTab === item.id
-                          ? (isDark ? 'bg-blue-600/10 text-blue-400' : 'bg-blue-50 text-blue-600')
-                          : (isDark ? 'text-slate-400 hover:text-slate-200 hover:bg-slate-900/60' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50')
-                      }`}
-                      id={`sidebar-item-${item.id}`}
-                    >
-                      {item.icon}
-                      {item.label}
-                    </button>
-                  ))}
+                <div className="space-y-2">
+                  <span className="text-[9px] font-mono font-bold text-[#7BBDE8] uppercase tracking-widest px-3">Academic Core</span>
+                  {sidebarItems.filter(item => item.section === 'portal').map(item => {
+                    const isSelected = activeTab === item.id;
+                    return (
+                      <button
+                        key={item.id}
+                        onClick={() => setActiveTab(item.id as TabView)}
+                        className={`w-full flex items-center gap-3 py-3 px-4 rounded-xl text-xs font-bold transition-all border border-transparent cursor-pointer ${
+                          isSelected
+                            ? 'bg-white text-[#001D39] shadow-sm font-extrabold'
+                            : 'text-[#7BBDE8] hover:text-white hover:bg-[#4E8EA2]/30'
+                        }`}
+                        id={`sidebar-item-${item.id}`}
+                      >
+                        <span className={isSelected ? 'text-[#001D39]' : 'text-[#7BBDE8]'}>
+                          {item.icon}
+                        </span>
+                        {item.label}
+                      </button>
+                    );
+                  })}
                 </div>
 
                 {/* Campus Engagement categories */}
-                <div className="space-y-1.5">
-                  <span className="text-[9px] font-mono font-bold text-slate-400 uppercase tracking-widest px-3">Campus Life</span>
-                  {sidebarItems.filter(item => item.section === 'life').map(item => (
-                    <button
-                      key={item.id}
-                      onClick={() => setActiveTab(item.id as TabView)}
-                      className={`w-full flex items-center gap-3 py-2.5 px-3 rounded-xl text-xs font-bold transition-all ${
-                        activeTab === item.id
-                          ? (isDark ? 'bg-blue-600/10 text-blue-400' : 'bg-blue-50 text-blue-600')
-                          : (isDark ? 'text-slate-400 hover:text-slate-200 hover:bg-slate-900/60' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50')
-                      }`}
-                      id={`sidebar-item-${item.id}`}
-                    >
-                      {item.icon}
-                      {item.label}
-                    </button>
-                  ))}
+                <div className="space-y-2">
+                  <span className="text-[9px] font-mono font-bold text-[#7BBDE8] uppercase tracking-widest px-3">Campus Life</span>
+                  {sidebarItems.filter(item => item.section === 'life').map(item => {
+                    const isSelected = activeTab === item.id;
+                    return (
+                      <button
+                        key={item.id}
+                        onClick={() => setActiveTab(item.id as TabView)}
+                        className={`w-full flex items-center gap-3 py-3 px-4 rounded-xl text-xs font-bold transition-all border border-transparent cursor-pointer ${
+                          isSelected
+                            ? 'bg-white text-[#001D39] shadow-sm font-extrabold'
+                            : 'text-[#7BBDE8] hover:text-white hover:bg-[#4E8EA2]/30'
+                        }`}
+                        id={`sidebar-item-${item.id}`}
+                      >
+                        <span className={isSelected ? 'text-[#001D39]' : 'text-[#7BBDE8]'}>
+                          {item.icon}
+                        </span>
+                        {item.label}
+                      </button>
+                    );
+                  })}
                 </div>
 
                 {/* Safety and Config categories */}
-                <div className="space-y-1.5">
-                  <span className="text-[9px] font-mono font-bold text-slate-400 uppercase tracking-widest px-3">Safety & Settings</span>
-                  {sidebarItems.filter(item => item.section === 'safety').map(item => (
-                    <button
-                      key={item.id}
-                      onClick={() => setActiveTab(item.id as TabView)}
-                      className={`w-full flex items-center gap-3 py-2.5 px-3 rounded-xl text-xs font-bold transition-all ${
-                        activeTab === item.id
-                          ? (isDark ? 'bg-blue-600/10 text-blue-400' : 'bg-blue-50 text-blue-600')
-                          : (isDark ? 'text-slate-400 hover:text-slate-200 hover:bg-slate-900/60' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50')
-                      }`}
-                      id={`sidebar-item-${item.id}`}
-                    >
-                      {item.icon}
-                      {item.label}
-                    </button>
-                  ))}
+                <div className="space-y-2">
+                  <span className="text-[9px] font-mono font-bold text-[#7BBDE8] uppercase tracking-widest px-3">Safety & Settings</span>
+                  {sidebarItems.filter(item => item.section === 'safety').map(item => {
+                    const isSelected = activeTab === item.id;
+                    return (
+                      <button
+                        key={item.id}
+                        onClick={() => setActiveTab(item.id as TabView)}
+                        className={`w-full flex items-center gap-3 py-3 px-4 rounded-xl text-xs font-bold transition-all border border-transparent cursor-pointer ${
+                          isSelected
+                            ? 'bg-white text-[#001D39] shadow-sm font-extrabold'
+                            : 'text-[#7BBDE8] hover:text-white hover:bg-[#4E8EA2]/30'
+                        }`}
+                        id={`sidebar-item-${item.id}`}
+                      >
+                        <span className={isSelected ? 'text-[#001D39]' : 'text-[#7BBDE8]'}>
+                          {item.icon}
+                        </span>
+                        {item.label}
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
 
@@ -352,67 +426,62 @@ export default function App() {
                     animate={{ x: 0 }}
                     exit={{ x: '-100%' }}
                     transition={{ type: 'tween', duration: 0.3 }}
-                    className={`fixed top-0 bottom-0 left-0 w-64 z-50 shadow-2xl flex flex-col lg:hidden border-r transition-colors duration-300 ${
-                      isDark ? 'bg-[#0d0e11] border-slate-800 text-slate-100' : 'bg-white border-slate-200 text-slate-900'
-                    }`}
+                    className="fixed top-0 bottom-0 left-0 w-64 z-50 shadow-2xl flex flex-col lg:hidden border-r border-[#0A4174]/20 bg-[#0A4174]"
                   >
-                    <div className={`p-4 border-b flex items-center justify-between transition-colors duration-300 ${
-                      isDark ? 'border-slate-800' : 'border-slate-150'
-                    }`}>
+                    <div className="p-4 border-b border-white/10 flex items-center justify-between">
                       {/* Mobile Brand Capsule */}
-                      <div className={`flex items-center gap-2 px-3 py-2 rounded-full border transition-all shadow-sm ${
-                        isDark 
-                          ? 'bg-[#1e2023] border-slate-700/60 text-slate-100' 
-                          : 'bg-slate-100 border-slate-200 text-slate-800'
-                      }`}>
+                      <div className="flex items-center gap-2 px-3 py-2 rounded-full border border-white/10 bg-white/5 transition-all shadow-sm">
                         {/* 4-Quadrant Custom Circle Logo */}
-                        <div className="relative w-5 h-5 rounded-full overflow-hidden flex flex-wrap shrink-0 shadow-sm border border-slate-700/20">
+                        <div className="relative w-5 h-5 rounded-full overflow-hidden flex flex-wrap shrink-0 shadow-sm border border-white/10">
                           <div className="w-2.5 h-2.5 bg-[#10b981]" />
-                          <div className={`w-2.5 h-2.5 ${isDark ? 'bg-[#2b2d31]' : 'bg-slate-300'}`} />
+                          <div className="w-2.5 h-2.5 bg-[#BDD8E9]" />
                           <div className="w-2.5 h-2.5 bg-[#06b6d4]" />
                           <div className="w-2.5 h-2.5 bg-[#6366f1]" />
                         </div>
                         
-                        <span className="font-sans font-bold text-[11px] tracking-tight leading-none truncate flex-1">
-                          CampusPilot<span className="text-blue-500">AI</span>
+                        <span className="font-sans font-bold text-[11px] tracking-tight leading-none text-white truncate flex-1">
+                          CampusPilot<span className="text-[#7BBDE8]">AI</span>
                         </span>
                       </div>
-                      <button onClick={() => setMobileMenuOpen(false)} className="p-1 hover:bg-slate-500/10 rounded-lg">
-                        <X className="w-4 h-4 text-slate-500 hover:text-slate-900" />
+                      <button onClick={() => setMobileMenuOpen(false)} className="p-1 hover:bg-white/10 rounded-lg cursor-pointer">
+                        <X className="w-4 h-4 text-white" />
                       </button>
                     </div>
 
                     <div className="flex-1 overflow-y-auto px-4 py-6 space-y-6">
-                      <div className="space-y-1">
-                        {sidebarItems.map(item => (
-                          <button
-                            key={item.id}
-                            onClick={() => {
-                              setActiveTab(item.id as TabView);
-                              setMobileMenuOpen(false);
-                            }}
-                            className={`w-full flex items-center gap-3 py-2.5 px-3 rounded-xl text-xs font-bold transition-all ${
-                              activeTab === item.id
-                                ? (isDark ? 'bg-blue-600/10 text-blue-400' : 'bg-blue-50 text-blue-600')
-                                : (isDark ? 'text-slate-400 hover:text-slate-200 hover:bg-slate-900/60' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50')
-                            }`}
-                          >
-                            {item.icon}
-                            {item.label}
-                          </button>
-                        ))}
+                      <div className="space-y-2">
+                        {sidebarItems.map(item => {
+                          const isSelected = activeTab === item.id;
+                          return (
+                            <button
+                              key={item.id}
+                              onClick={() => {
+                                setActiveTab(item.id as TabView);
+                                setMobileMenuOpen(false);
+                              }}
+                              className={`w-full flex items-center gap-3 py-3 px-4 rounded-xl text-xs font-bold transition-all border border-transparent cursor-pointer ${
+                                isSelected
+                                  ? 'bg-white text-[#001D39] shadow-sm font-extrabold'
+                                  : 'text-[#7BBDE8] hover:text-white hover:bg-[#4E8EA2]/30'
+                              }`}
+                            >
+                              <span className={isSelected ? 'text-[#001D39]' : 'text-[#7BBDE8]'}>
+                                {item.icon}
+                              </span>
+                              {item.label}
+                            </button>
+                          );
+                        })}
                       </div>
                     </div>
 
-                    <div className={`p-4 border-t transition-colors duration-300 ${isDark ? 'border-slate-800' : 'border-slate-100'}`}>
+                    <div className="p-4 border-t border-white/10">
                       <button
                         onClick={handleLogout}
-                        className={`w-full flex items-center gap-3 py-2.5 px-3 rounded-xl text-xs font-bold transition-all ${
-                          isDark ? 'text-slate-400 hover:text-rose-400 hover:bg-rose-950/20' : 'text-slate-500 hover:text-rose-600 hover:bg-rose-50'
-                        }`}
+                        className="w-full flex items-center gap-3 py-3 px-4 rounded-xl text-xs font-bold transition-all text-[#7BBDE8] hover:text-[#ffffff] hover:bg-white/10 cursor-pointer"
                       >
                         <LogOut className="w-4 h-4" />
-                        Logout
+                        Logout Session
                       </button>
                     </div>
                   </motion.aside>
@@ -422,14 +491,11 @@ export default function App() {
 
             {/* Main view container shell */}
             <div className="flex-1 flex flex-col overflow-hidden">
-              {/* Premium Top Navigation */}
-              <header className={`h-18 border-b px-6 flex items-center justify-between shrink-0 relative z-30 transition-colors duration-300 ${
-                isDark ? 'bg-[#0d0e11] border-slate-800 text-slate-100' : 'bg-white border-slate-200/80 text-slate-900'
-              }`}>
+              <header className="h-18 px-6 flex items-center justify-between shrink-0 relative z-30 bg-white border-b border-[#A7C7DD]/60 shadow-sm text-slate-800">
                 <div className="flex items-center gap-4">
                   <button 
                     onClick={() => setMobileMenuOpen(true)}
-                    className="lg:hidden p-2 text-slate-500 hover:text-slate-900 transition-colors"
+                    className="lg:hidden p-2 text-[#0A4174] hover:bg-slate-100 rounded-xl transition-colors cursor-pointer"
                   >
                     <Menu className="w-5 h-5" />
                   </button>
@@ -437,32 +503,24 @@ export default function App() {
                   {/* Smart Global Search */}
                   <div className="relative hidden sm:block w-72">
                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
-                      <Search className="w-4 h-4" />
+                      <Search className="w-4 h-4 text-[#0A4174]" />
                     </div>
                     <input
                       type="text"
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
                       placeholder="Fuzzy Global Search..."
-                      className={`w-full pl-9 pr-4 py-2 border rounded-xl text-xs transition-all outline-none font-medium ${
-                        isDark 
-                          ? 'bg-slate-900/50 border-slate-700/60 text-slate-100 placeholder-slate-500 focus:border-blue-500' 
-                          : 'bg-slate-50 border-slate-200 text-slate-800 placeholder-slate-400 focus:border-blue-500'
-                      }`}
+                      className="w-full pl-9 pr-4 py-2 border border-[#A7C7DD] rounded-full text-xs transition-all outline-none font-medium bg-white text-slate-800 placeholder-slate-400 focus:border-[#0A4174] focus:ring-2 focus:ring-[#0A4174]/10"
                     />
 
                     {/* Search results dropdown dropdown list */}
                     {searchResults.length > 0 && (
-                      <div className={`absolute top-full left-0 right-0 mt-1.5 border rounded-xl shadow-xl z-50 max-h-64 overflow-y-auto divide-y ${
-                        isDark ? 'bg-slate-900 border-slate-700 divide-slate-800' : 'bg-white border-slate-200 divide-slate-100'
-                      }`}>
+                      <div className="absolute top-full left-0 right-0 mt-1.5 border border-[#A7C7DD] rounded-xl shadow-lg z-50 max-h-64 overflow-y-auto divide-y bg-white divide-slate-100">
                         {searchResults.map((res, i) => (
                           <div
                             key={i}
                             onClick={() => handleSearchSelection(res.tab)}
-                            className={`p-3 cursor-pointer text-xs font-bold flex items-center gap-2 transition-colors ${
-                              isDark ? 'hover:bg-slate-800/80 text-slate-300' : 'hover:bg-blue-50/50 text-slate-700'
-                            }`}
+                            className="p-3 cursor-pointer text-xs font-bold flex items-center gap-2 transition-colors hover:bg-slate-50 text-slate-700"
                           >
                             <Search className="w-3.5 h-3.5 text-slate-400" />
                             {res.label}
@@ -474,21 +532,6 @@ export default function App() {
                 </div>
 
                 <div className="flex items-center gap-4">
-                  {/* Theme Toggle Switch */}
-                  <button
-                    onClick={toggleTheme}
-                    className={`flex items-center justify-center p-2.5 rounded-xl border transition-all cursor-pointer active:scale-95 ${
-                      isDark 
-                        ? 'bg-slate-900 border-slate-700/60 text-amber-400 hover:bg-slate-800' 
-                        : 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100/80'
-                    }`}
-                    title={isDark ? "Switch to Light Mode" : "Switch to Dark Mode"}
-                    id="theme-toggle-button"
-                  >
-                    {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
-                  </button>
-
-
                   {/* Notification Bell Dropdown */}
                   <div className="relative">
                     <button 
@@ -527,7 +570,7 @@ export default function App() {
                               <span className={`text-xs font-bold ${isDark ? 'text-slate-200' : 'text-slate-900'}`}>Academic Notices</span>
                               <button 
                                 onClick={() => {
-                                  setUnreadNotifications(0);
+                                  handleClearAllNotifications();
                                   setNotifDropdownOpen(false);
                                 }}
                                 className="text-[10px] text-blue-500 font-bold hover:underline"
@@ -536,12 +579,25 @@ export default function App() {
                               </button>
                             </div>
 
-                            <div className="space-y-3">
-                              {unreadNotifications > 0 ? (
+                            <div className="space-y-3 max-h-60 overflow-y-auto pr-1">
+                              {notifications.length > 0 ? (
                                 notifications.map(notif => (
-                                  <div key={notif.id} className="text-xs space-y-1 p-1">
-                                    <p className={`font-semibold ${isDark ? 'text-slate-300' : 'text-slate-800'}`}>{notif.text}</p>
-                                    <span className="text-[10px] text-slate-500 block">{notif.time}</span>
+                                  <div 
+                                    key={notif.id} 
+                                    className={`text-xs space-y-1 p-2 rounded-xl transition-all cursor-pointer ${
+                                      notif.isRead 
+                                        ? 'opacity-50' 
+                                        : (isDark ? 'bg-slate-850 hover:bg-slate-800' : 'bg-blue-50/50 hover:bg-blue-50')
+                                    }`}
+                                    onClick={() => {
+                                      handleMarkAsRead(notif.id);
+                                    }}
+                                  >
+                                    <p className={`font-bold ${isDark ? 'text-slate-200' : 'text-slate-800'}`}>{notif.title}</p>
+                                    <p className={`text-[11px] ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>{notif.message}</p>
+                                    <span className="text-[9px] text-slate-550 block font-mono">
+                                      {new Date(notif.createdAt).toLocaleDateString()}
+                                    </span>
                                   </div>
                                 ))
                               ) : (
@@ -561,23 +617,21 @@ export default function App() {
                         setProfileDropdownOpen(!profileDropdownOpen);
                         setNotifDropdownOpen(false);
                       }}
-                      className={`flex items-center gap-2 px-2.5 py-1.5 border rounded-xl transition-all cursor-pointer ${
-                        isDark ? 'bg-slate-900 border-slate-800 text-slate-200 hover:bg-slate-800' : 'bg-slate-50 hover:bg-slate-100 border-slate-200/60 text-slate-800'
-                      }`}
+                      className="flex items-center gap-2 px-2.5 py-1.5 border border-[#A7C7DD] rounded-xl bg-white hover:bg-slate-50 text-[#001D39] transition-all cursor-pointer shadow-sm"
                       id="topbar-user-profile-button"
                     >
                       {mockStudent.avatar ? (
                         <img 
                           src={mockStudent.avatar} 
                           alt={mockStudent.name} 
-                          className="w-6 h-6 rounded-lg object-cover border border-slate-800/40"
+                          className="w-6 h-6 rounded-lg object-cover border border-[#A7C7DD]/40"
                         />
                       ) : (
-                        <div className="w-6 h-6 rounded-lg bg-slate-950 text-white font-bold text-xs flex items-center justify-center border border-slate-800/40">
+                        <div className="w-6 h-6 rounded-lg bg-[#0A4174] text-white font-bold text-xs flex items-center justify-center border border-[#A7C7DD]/40">
                           {mockStudent.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() || 'ST'}
                         </div>
                       )}
-                      <span className="text-xs font-bold hidden md:block">{mockStudent.name}</span>
+                      <span className="text-xs font-bold hidden md:block text-[#001D39]">{mockStudent.name}</span>
                     </button>
 
                     <AnimatePresence>

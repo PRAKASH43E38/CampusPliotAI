@@ -13,16 +13,16 @@ interface LandingPageProps {
 
 export default function LandingPage({ onStart, onExploreAI }: LandingPageProps) {
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 font-sans selection:bg-blue-100 selection:text-blue-800">
+    <div className="min-h-screen bg-[var(--color-background-500)] text-[var(--color-heading-500)] font-sans selection:bg-blue-100 selection:text-blue-800">
       {/* Premium Header */}
-      <header className="sticky top-0 z-50 backdrop-blur-md bg-white/70 border-b border-slate-200/80 transition-all">
+      <header className="sticky top-0 z-50 backdrop-blur-md bg-[var(--color-surface-500)]/70 border-b border-[var(--color-border-500)]/80 transition-all">
         <div className="max-w-7xl mx-auto px-6 h-18 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-purple-500 flex items-center justify-center text-white shadow-md shadow-blue-500/20">
+            <div className="w-10 h-10 rounded-xl bg-[var(--color-primary-400)] flex items-center justify-center text-white shadow-md shadow-[var(--color-primary-400)]/20">
               <GraduationCap className="w-6 h-6" />
             </div>
             <div>
-              <span className="font-sans font-bold tracking-tight text-lg text-slate-900">CampusPilot <span className="text-blue-600">AI</span></span>
+              <span className="font-sans font-bold tracking-tight text-lg text-[var(--color-heading-500)]">CampusPilot <span className="text-[var(--color-primary-400)]">AI</span></span>
               <p className="text-[10px] font-mono uppercase tracking-widest text-slate-400">Institutional Hub</p>
             </div>
           </div>

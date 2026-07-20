@@ -17,7 +17,7 @@ declare global {
 const GOOGLE_CLIENT_ID = (import.meta as any).env?.VITE_GOOGLE_CLIENT_ID;
 
 interface LoginPageProps {
-  onLoginSuccess: (role: 'STUDENT' | 'ADMIN') => void;
+  onLoginSuccess: (role: 'STUDENT' | 'ADMIN', studentId?: string) => void;
   onBack: () => void;
 }
 
@@ -133,9 +133,9 @@ export default function LoginPage({ onLoginSuccess, onBack }: LoginPageProps) {
         }
         return res.json();
       })
-      .then(_data => {
+      .then(data => {
         setLoading(false);
-        onLoginSuccess(detectedRole);
+        onLoginSuccess(detectedRole, data.student?.id);
       })
       .catch(err => {
         setLoading(false);
@@ -183,9 +183,9 @@ export default function LoginPage({ onLoginSuccess, onBack }: LoginPageProps) {
       }
       return res.json();
     })
-    .then(_data => {
+    .then(data => {
       setLoading(false);
-      onLoginSuccess(role);
+      onLoginSuccess(role, data.student?.id);
     })
     .catch(err => {
       setLoading(false);
@@ -200,7 +200,7 @@ export default function LoginPage({ onLoginSuccess, onBack }: LoginPageProps) {
       setEmail('2023@saranathan.ac.in');
       setPassword('••••••••••••');
     } else {
-      setEmail('admin.operations@university.edu');
+      setEmail('admin@saranathan.ac.in');
       setPassword('••••••••••••');
     }
   };
@@ -231,10 +231,10 @@ export default function LoginPage({ onLoginSuccess, onBack }: LoginPageProps) {
       }
       return res.json();
     })
-    .then(_data => {
+    .then(data => {
       setLoading(false);
       setShowGoogleChooser(false);
-      onLoginSuccess(selectedRole);
+      onLoginSuccess(selectedRole, data.student?.id);
     })
     .catch(err => {
       setLoading(false);
@@ -496,7 +496,7 @@ export default function LoginPage({ onLoginSuccess, onBack }: LoginPageProps) {
                     {/* Admin Account */}
                     <button
                       type="button"
-                      onClick={() => handleGoogleAccountSelect('admin.operations@university.edu', 'ADMIN')}
+                      onClick={() => handleGoogleAccountSelect('admin@saranathan.ac.in', 'ADMIN')}
                       className="w-full py-3.5 px-2 hover:bg-slate-50 flex items-center gap-3 transition-colors text-left border-none outline-none cursor-pointer text-slate-800"
                     >
                       <div className="w-8 h-8 rounded-full bg-purple-600 text-white font-semibold text-sm flex items-center justify-center shadow-inner shrink-0">
@@ -504,7 +504,7 @@ export default function LoginPage({ onLoginSuccess, onBack }: LoginPageProps) {
                       </div>
                       <div className="flex-1 min-w-0">
                         <p className="text-xs font-semibold text-slate-900 truncate">Campus Administrator</p>
-                        <p className="text-xs text-slate-500 truncate">admin.operations@university.edu</p>
+                        <p className="text-xs text-slate-500 truncate">admin@saranathan.ac.in</p>
                       </div>
                       <span className="text-[10px] font-bold text-purple-600 bg-purple-50 px-2 py-0.5 rounded-full uppercase shrink-0">Admin</span>
                     </button>

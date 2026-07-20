@@ -2,6 +2,7 @@ from flask import Flask, jsonify
 from flask_cors import CORS
 from models import db
 from config import Config
+from flask_migrate import Migrate
 from routes import auth_bp, academics_bp, campus_bp, engagement_bp, resources_bp, transport_bp, ai_bp
 
 def create_app():
@@ -13,6 +14,9 @@ def create_app():
 
     # Initialize SQLAlchemy database
     db.init_app(app)
+
+    # Initialize Flask-Migrate
+    Migrate(app, db)
 
     # Register blueprints under the /api prefix
     app.register_blueprint(auth_bp, url_prefix='/api')
