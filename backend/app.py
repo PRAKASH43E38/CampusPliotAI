@@ -1,12 +1,15 @@
+# pyrefly: ignore [missing-import]
 from flask import Flask, jsonify
 from flask_cors import CORS
 from models import db
 from config import Config
+import os
 from flask_migrate import Migrate
 from routes import auth_bp, academics_bp, campus_bp, engagement_bp, resources_bp, transport_bp, ai_bp
 
 def create_app():
     app = Flask(__name__)
+    app.config['DEBUG'] = True
     app.config.from_object(Config)
 
     # Enable CORS for frontend integration
@@ -46,4 +49,4 @@ app = create_app()
 
 if __name__ == '__main__':
     # Running on port 5000 by default
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='0.0.0.0', port=int(os.getenv('PORT', 5000)), debug=True)

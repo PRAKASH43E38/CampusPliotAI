@@ -1,5 +1,6 @@
 import os
 import json
+from config import Config
 from flask import Blueprint, request, jsonify
 from models import db, Student, Subject, ClassSession, Faculty, Event, Club, Location, Placement, HostelMenu, Department, Semester
 import google.generativeai as genai
@@ -119,15 +120,15 @@ def chat():
     if not message:
         return jsonify({'error': 'Message is required'}), 400
 
-    api_key = os.environ.get('GEMINI_API_KEY', '')
+    api_key = Config.GEMINI_API_KEY
 
     if api_key:
         try:
             # Gather fresh grounded context from db state
             context = get_campus_context(student_id)
             
-            genai.configure(api_key=api_key)
-            model = genai.GenerativeModel('gemini-2.5-flash')
+            genai.configure(api_key=api_key, transport='rest')
+            model = genai.GenerativeModel('gemini-1.5-pro')
             
             prompt = (
                 "You are CampusPilot AI, a professional, institutional-level AI campus companion for a university. "

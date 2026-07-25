@@ -94,17 +94,18 @@ export default function App() {
   const [dataLoaded, setDataLoaded] = useState(false);
 
   const loadNotifications = (sId: string = studentId) => {
-    if (userRole !== 'STUDENT' || !sId) return;
-    fetch('/api/notifications', {
-      headers: { 'X-Student-Id': sId }
-    })
-      .then(res => res.json())
-      .then(data => {
-        if (Array.isArray(data)) {
-          setNotifications(data);
-        }
-      })
-      .catch(err => console.error("Failed to load notifications:", err));
+    // Backend disabled temporarily
+    // if (userRole !== 'STUDENT' || !sId) return;
+    // fetch('/api/notifications', {
+    //   headers: { 'X-Student-Id': sId }
+    // })
+    //   .then(res => res.json())
+    //   .then(data => {
+    //     if (Array.isArray(data)) {
+    //       setNotifications(data);
+    //     }
+    //   })
+    //   .catch(err => console.error("Failed to load notifications:", err));
   };
 
   useEffect(() => {
@@ -129,12 +130,12 @@ export default function App() {
     if (state === 'APP') {
       setDataLoaded(false);
       const sId = studentId || localStorage.getItem('studentId') || 'st-0982';
-      syncWithBackend(sId).then(() => {
+      // syncWithBackend(sId).then(() => {
         setDataLoaded(true);
         if (userRole === 'STUDENT') {
           loadNotifications(sId);
         }
-      });
+      // });
     }
   }, [state, studentId, userRole]);
 
@@ -175,38 +176,40 @@ export default function App() {
   };
 
   const handleClearAllNotifications = () => {
-    fetch('/api/notifications/read', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Student-Id': studentId
-      }
-    })
-      .then(res => res.json())
-      .then(data => {
-        if (data.success) {
-          loadNotifications();
-        }
-      })
-      .catch(err => console.error("Failed to clear notifications:", err));
+    // Backend disabled temporarily
+    // fetch('/api/notifications/read', {
+    //   method: 'POST',
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //     'X-Student-Id': studentId
+    //   }
+    // })
+    //   .then(res => res.json())
+    //   .then(data => {
+    //     if (data.success) {
+    //       loadNotifications();
+    //     }
+    //   })
+    //   .catch(err => console.error("Failed to clear notifications:", err));
   };
 
   const handleMarkAsRead = (notifId: string) => {
-    fetch('/api/notifications/read', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Student-Id': studentId
-      },
-      body: JSON.stringify({ notificationId: notifId })
-    })
-      .then(res => res.json())
-      .then(data => {
-        if (data.success) {
-          loadNotifications();
-        }
-      })
-      .catch(err => console.error("Failed to mark notification read:", err));
+    // Backend disabled temporarily
+    // fetch('/api/notifications/read', {
+    //   method: 'POST',
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //     'X-Student-Id': studentId
+    //   },
+    //   body: JSON.stringify({ notificationId: notifId })
+    // })
+    //   .then(res => res.json())
+    //   .then(data => {
+    //     if (data.success) {
+    //       loadNotifications();
+    //     }
+    //   })
+    //   .catch(err => console.error("Failed to mark notification read:", err));
   };
 
   // Smart global search navigation helper

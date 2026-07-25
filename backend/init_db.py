@@ -2,7 +2,7 @@ import os
 import sys
 import json
 import uuid
-from flask import Flask
+# Flask import moved inside seed_database
 from models import (
     db, Student, StudentProfile, Department, Semester, AdminUser, Subject, SubjectSyllabus,
     AcademicRecord, ClassSession, Faculty, Event, Club, Location, Resource, ResourceCategory,
@@ -12,6 +12,8 @@ from models import (
 from config import Config
 
 def seed_database():
+    # pyrefly: ignore [missing-import]
+    from flask import Flask
     app = Flask(__name__)
     app.config.from_object(Config)
     db.init_app(app)

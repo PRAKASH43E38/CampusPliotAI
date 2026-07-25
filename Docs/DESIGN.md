@@ -1,4 +1,4 @@
----
+dei ---
 name: CampusPilot AI Design System
 colors:
   surface: '#f7f9ff'
