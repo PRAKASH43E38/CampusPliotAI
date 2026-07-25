@@ -160,37 +160,11 @@ export default function LoginPage({ onLoginSuccess, onBack }: LoginPageProps) {
       return;
     }
 
-
-
-    fetch('/api/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ email: emailStr, role })
-    })
-    .then(res => {
-      if (!res.ok) {
-        return res.text().then(text => {
-          let data;
-          try {
-            data = JSON.parse(text);
-          } catch (e) {
-            throw new Error(`Server Error (${res.status}): ${text.slice(0, 50)}`);
-          }
-          throw new Error(data.error || 'Authentication Failed');
-        });
-      }
-      return res.json();
-    })
-    .then(data => {
+    // Bypass backend login for easy access
+    setTimeout(() => {
       setLoading(false);
-      onLoginSuccess(role, data.student?.id);
-    })
-    .catch(err => {
-      setLoading(false);
-      setError(err.message || 'Server connection failed.');
-    });
+      onLoginSuccess(role, role === 'STUDENT' ? 'st-0982' : undefined);
+    }, 500);
   };
 
   const handlePreFill = (selectedRole: 'STUDENT' | 'ADMIN') => {
@@ -210,36 +184,12 @@ export default function LoginPage({ onLoginSuccess, onBack }: LoginPageProps) {
     setError('');
     setGoogleError('');
     
-    fetch('/api/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ email: selectedEmail, role: selectedRole })
-    })
-    .then(res => {
-      if (!res.ok) {
-        return res.text().then(text => {
-          let data;
-          try {
-            data = JSON.parse(text);
-          } catch (e) {
-            throw new Error(`Server Error (${res.status}): ${text.slice(0, 50)}`);
-          }
-          throw new Error(data.error || 'Authentication Failed');
-        });
-      }
-      return res.json();
-    })
-    .then(data => {
+    // Bypass backend login for easy access
+    setTimeout(() => {
       setLoading(false);
       setShowGoogleChooser(false);
-      onLoginSuccess(selectedRole, data.student?.id);
-    })
-    .catch(err => {
-      setLoading(false);
-      setGoogleError(err.message || 'Authentication Failed');
-    });
+      onLoginSuccess(selectedRole, selectedRole === 'STUDENT' ? 'st-0982' : undefined);
+    }, 500);
   };
 
   const handleGoogleCustomSubmit = () => {
@@ -252,7 +202,12 @@ export default function LoginPage({ onLoginSuccess, onBack }: LoginPageProps) {
 
     let detectedRole: 'STUDENT' | 'ADMIN' = role;
 
-    handleGoogleAccountSelect(emailStr, detectedRole);
+    // Bypass backend login for easy access
+    setTimeout(() => {
+      setLoading(false);
+      setShowGoogleChooser(false);
+      onLoginSuccess(detectedRole, detectedRole === 'STUDENT' ? 'st-0982' : undefined);
+    }, 500);
   };
 
   return (
