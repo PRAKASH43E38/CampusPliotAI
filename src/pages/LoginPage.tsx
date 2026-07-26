@@ -119,32 +119,6 @@ export const LoginPage: React.FC = () => {
           </button>
         </form>
 
-        {/* Quick Demo Access Bar */}
-        <div className="p-3.5 rounded-2xl bg-emerald-950/60 border border-emerald-800/80 text-center space-y-2">
-          <span className="text-[11px] font-bold text-emerald-400 uppercase tracking-wider block">
-            🚀 Quick Hackathon Demo Logins:
-          </span>
-          <div className="flex items-center justify-center gap-2 text-xs">
-            <button
-              onClick={() => {
-                loginAsStudent();
-                navigate('/student');
-              }}
-              className="px-3 py-1 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-[11px] transition-all"
-            >
-              Demo Student
-            </button>
-            <button
-              onClick={() => {
-                loginAsAdmin();
-                navigate('/admin');
-              }}
-              className="px-3 py-1 rounded-xl bg-emerald-800 hover:bg-emerald-700 text-white font-bold text-[11px] transition-all"
-            >
-              Demo Admin
-            </button>
-          </div>
-        </div>
 
       </div>
     </div>

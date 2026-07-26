@@ -27,7 +27,7 @@ export const StudentDashboard: React.FC = () => {
             <Sparkles className="w-4 h-4 text-addictive animate-pulse" /> AI Powered Campus Intelligence
           </div>
           <h1 className="text-2xl sm:text-4xl font-black text-white tracking-tight">
-            Welcome back, {currentUser.name.split(' ')[0]}! 🚀
+            Welcome back, {currentUser.name.split(' ')[0]}!
           </h1>
           <p className="text-xs sm:text-sm text-emerald-200 mt-1 font-medium max-w-xl leading-relaxed">
             {currentUser.department} • {currentUser.year} ({currentUser.section}) • Roll No: {currentUser.rollNumber}
@@ -39,13 +39,13 @@ export const StudentDashboard: React.FC = () => {
             to="/copilot"
             className="px-5 py-3 rounded-2xl bg-addictive text-white font-black text-xs shadow-sm flex items-center gap-2 transition-all hover:scale-105 hover:shadow-md hover:shadow-pink-500/25 border-none"
           >
-            Ask Copilot ✨
+            Ask Copilot
           </Link>
           <Link
             to="/map"
             className="px-5 py-3 rounded-2xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-200 font-bold text-xs transition-all flex items-center gap-2"
           >
-            Campus Map 🗺️
+            Campus Map
           </Link>
         </div>
       </div>

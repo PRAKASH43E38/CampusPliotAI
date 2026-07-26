@@ -13,7 +13,7 @@ export const OFFICIAL_DEPARTMENTS = [
 
 export const currentUser: UserProfile = {
   id: 'usr_001',
-  name: 'Alex Morgan',
+  name: 'Astrabyte',
   email: 'alex.morgan@campuspilot.edu',
   role: 'student',
   avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=300',
