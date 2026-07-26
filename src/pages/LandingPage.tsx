@@ -2,11 +2,12 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Sparkles, MapPin, GraduationCap, ArrowRight, ShieldCheck, Users, Calendar, Award, CheckCircle2, Send } from 'lucide-react';
 import { Footer } from '../components/common/Footer';
+import welcomeImg from '../assets/welcome-freshers.png';
 
 export const LandingPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-[#080614] text-white selection:bg-pink-500 selection:text-white overflow-hidden font-sans relative">
-      
+
       {/* Ambient background glows matching Mark Davis design */}
       <div className="fixed top-0 right-1/4 w-[500px] h-[500px] bg-gradient-to-br from-pink-500/20 via-purple-600/20 to-transparent rounded-full blur-[100px] pointer-events-none -z-10" />
       <div className="fixed bottom-10 left-1/4 w-[550px] h-[550px] bg-gradient-to-tr from-blue-600/20 via-purple-600/15 to-transparent rounded-full blur-[120px] pointer-events-none -z-10" />
@@ -47,83 +48,54 @@ export const LandingPage: React.FC = () => {
       </header>
 
       {/* Hero Section */}
-      <section className="relative pt-20 pb-28 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-8">
-        
-        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-pink-500/30 text-xs font-extrabold text-pink-300 shadow-md">
-          <Sparkles className="w-4 h-4 text-pink-400 animate-pulse" />
-          <span className="bg-gradient-to-r from-pink-400 via-purple-300 to-blue-400 bg-clip-text text-transparent font-black">
-            The AI-First Digital Campus Platform for Universities
-          </span>
-        </div>
+      <section className="relative pt-20 pb-28 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-        <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight text-white max-w-5xl mx-auto leading-none">
-          Smart Experience That Makes an <br />
-          <span className="bg-gradient-to-r from-pink-500 via-purple-400 to-blue-400 bg-clip-text text-transparent font-black">
-            Academic Impact.
-          </span>
-        </h1>
-
-        <p className="text-sm sm:text-lg text-slate-300 max-w-2xl mx-auto leading-relaxed font-medium">
-          Powered by autonomous agentic AI, CampusPilot seamlessly unifies interactive 3D campus maps, personalized day planners, faculty cabin locators, attendance trackers, and academic vaults into a sleek experience.
-        </p>
-
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
-          <Link
-            to="/student"
-            className="w-full sm:w-auto px-8 py-4 rounded-full bg-gradient-to-r from-pink-500 via-purple-600 to-blue-600 text-white font-extrabold text-sm shadow-xl shadow-pink-500/25 flex items-center justify-center gap-2 transition-all hover:scale-105"
-          >
-            Explore Dashboard <ArrowRight className="w-4 h-4" />
-          </Link>
-          <Link
-            to="/admin"
-            className="w-full sm:w-auto px-8 py-4 rounded-full bg-[#140f35] hover:bg-[#1a1442] border border-white/10 text-slate-200 font-extrabold text-sm flex items-center justify-center gap-2 transition-all"
-          >
-            Admin Workspace <ShieldCheck className="w-4 h-4 text-purple-400" />
-          </Link>
-        </div>
-
-        {/* Hero Card Graphic Mockup */}
-        <div className="relative mt-16 max-w-5xl mx-auto rounded-3xl bg-[#140f33] border border-white/10 p-5 shadow-2xl overflow-hidden text-left space-y-4">
-          <div className="flex items-center justify-between border-b border-white/10 pb-3">
-            <div className="flex items-center gap-2">
-              <span className="w-3 h-3 rounded-full bg-pink-500" />
-              <span className="w-3 h-3 rounded-full bg-purple-500" />
-              <span className="w-3 h-3 rounded-full bg-blue-500" />
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+          <div className="text-center lg:text-left space-y-8">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-pink-500/30 text-xs font-extrabold text-pink-300 shadow-md">
+              <Sparkles className="w-4 h-4 text-pink-400 animate-pulse" />
+              <span className="bg-gradient-to-r from-pink-400 via-purple-300 to-blue-400 bg-clip-text text-transparent font-black">
+                Welcome to the Future of Campus Life
+              </span>
             </div>
-            <span className="text-xs text-slate-400 font-mono">campuspilot-ai.edu/copilot</span>
+
+            <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight text-white max-w-3xl leading-none">
+              Welcome Home, <br />
+              <span className="bg-gradient-to-r from-pink-500 via-purple-400 to-blue-400 bg-clip-text text-transparent font-black">
+                Freshers! 🎓
+              </span>
+            </h1>
+
+            <p className="text-sm sm:text-lg text-slate-300 max-w-xl leading-relaxed font-medium">
+              Step into your new journey with confidence. CampusPilot is your ultimate AI-powered companion to navigate classrooms, find your favorite spots, and master your academic life from day one.
+            </p>
+
+            <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-4">
+              <Link
+                to="/freshers-guide"
+                className="w-full sm:w-auto px-8 py-4 rounded-full bg-gradient-to-r from-pink-500 via-purple-600 to-blue-600 text-white font-extrabold text-sm shadow-xl shadow-pink-500/25 flex items-center justify-center gap-2 transition-all hover:scale-105"
+              >
+                Get Your Freshers Guide 🚀 <ArrowRight className="w-4 h-4" />
+              </Link>
+              <Link
+                to="/admin"
+                className="w-full sm:w-auto px-8 py-4 rounded-full bg-[#140f35] hover:bg-[#1a1442] border border-white/10 text-slate-200 font-extrabold text-sm flex items-center justify-center gap-2 transition-all"
+              >
+                Admin Workspace <ShieldCheck className="w-4 h-4 text-purple-400" />
+              </Link>
+            </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="p-4 rounded-2xl bg-[#1a1442] border border-white/10 space-y-2">
-              <div className="flex items-center gap-2 text-xs font-bold text-pink-400">
-                <Sparkles className="w-4 h-4 text-pink-400" /> AI Day Planner
-              </div>
-              <p className="text-xs text-white font-bold">CSE 3rd Year • Section B</p>
-              <div className="space-y-2 text-[11px] text-slate-300">
-                <div className="p-2.5 rounded-xl bg-[#140f35] border border-white/10 font-medium">09:00 AM • AI & Neural Nets (AB-1 302)</div>
-                <div className="p-2.5 rounded-xl bg-[#140f35] border border-white/10 font-medium">11:30 AM • DBMS Lab (Tech Center 204)</div>
-              </div>
-            </div>
+          <div className="relative group">
+            {/* Floating Glow Effect */}
+            <div className="absolute -inset-4 bg-gradient-to-r from-pink-500 via-purple-600 to-blue-600 rounded-3xl blur-2xl opacity-30 group-hover:opacity-50 transition-opacity duration-500" />
 
-            <div className="p-4 rounded-2xl bg-[#1a1442] border border-white/10 space-y-2">
-              <div className="flex items-center gap-2 text-xs font-bold text-purple-400">
-                <MapPin className="w-4 h-4 text-purple-400" /> Live Map Routing
-              </div>
-              <p className="text-xs text-white font-bold">Alan Turing Academic Block</p>
-              <div className="h-24 rounded-xl bg-[#140f35] border border-white/10 flex items-center justify-center text-xs text-purple-300 font-bold">
-                Map Route Preview Active
-              </div>
-            </div>
-
-            <div className="p-4 rounded-2xl bg-[#1a1442] border border-white/10 space-y-2">
-              <div className="flex items-center gap-2 text-xs font-bold text-blue-400">
-                <GraduationCap className="w-4 h-4 text-blue-400" /> Attendance Status
-              </div>
-              <p className="text-xs text-white font-bold">Overall: 88.5% (Safe Zone)</p>
-              <div className="space-y-2 text-[11px] text-slate-300">
-                <div className="p-2.5 rounded-xl bg-[#140f35] border border-white/10 font-medium">CGPA: 8.92 (Top 5% Batch)</div>
-                <div className="p-2.5 rounded-xl bg-[#140f35] border border-white/10 font-medium">HackCampus 2026 Confirmed</div>
-              </div>
+            <div className="relative rounded-3xl overflow-hidden border border-white/20 shadow-2xl bg-[#140f33]/50 backdrop-blur-sm p-2 transition-transform duration-500 group-hover:scale-[1.02]">
+              <img
+                src={welcomeImg}
+                alt="Welcome Freshers"
+                className="w-full h-auto rounded-2xl shadow-inner object-cover"
+              />
             </div>
           </div>
         </div>
@@ -170,7 +142,7 @@ export const LandingPage: React.FC = () => {
             <span className="inline-block text-xs font-bold text-purple-400 group-hover:text-pink-400 transition-colors cursor-pointer">Learn More →</span>
           </div>
 
-          <div className="p-6 rounded-2xl bg-[#140f33] border border-white/10 hover:border-pink-500/50 transition-all text-center space-y-4 group">
+          <div className="p-6 rounded-2xl bg-[#1 la0f33] border border-white/10 hover:border-pink-500/50 transition-all text-center space-y-4 group">
             <div className="w-14 h-14 mx-auto rounded-full bg-gradient-to-br from-pink-500 to-indigo-600 text-white flex items-center justify-center font-bold shadow-lg shadow-pink-500/30 group-hover:scale-110 transition-transform">
               <Users className="w-6 h-6 text-white" />
             </div>

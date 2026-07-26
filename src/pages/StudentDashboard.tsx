@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Sparkles, Calendar, Clock, GraduationCap, Award, BookOpen, ChevronRight, ArrowUpRight, Bell } from 'lucide-react';
 import { StatCard } from '../components/common/StatCard';
 import { currentUser, timetableSlots, announcements, academicResources } from '../data/mockData';
+import freshersBanner from '../assets/welcome-freshers-banner.jpeg';
 
 export const StudentDashboard: React.FC = () => {
   const nextClass = timetableSlots[0];
@@ -10,6 +11,15 @@ export const StudentDashboard: React.FC = () => {
   return (
     <div className="max-w-7xl mx-auto p-4 sm:p-6 space-y-8">
       
+      {/* Freshers Banner */}
+      <div className="relative overflow-hidden rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm bg-white dark:bg-slate-900 flex justify-center p-2">
+        <img
+          src={freshersBanner}
+          alt="Welcome Freshers 2026"
+          className="w-full max-w-4xl h-auto object-contain rounded-2xl"
+        />
+      </div>
+
       {/* Welcome Banner */}
       <div className="p-6 sm:p-8 rounded-3xl bg-emerald-950 border border-emerald-800 text-white shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
         <div>
