@@ -7,7 +7,7 @@ export const LoginPage: React.FC = () => {
   const { loginAsStudent, loginAsAdmin } = useAuth();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<'student' | 'admin'>('student');
-  const [email, setEmail] = useState('alex.morgan@campuspilot.edu');
+  const [email, setEmail] = useState('astrabyte@gmail.com');
   const [password, setPassword] = useState('••••••••••••');
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -39,7 +39,7 @@ export const LoginPage: React.FC = () => {
           <button
             onClick={() => {
               setActiveTab('student');
-              setEmail('alex.morgan@campuspilot.edu');
+              setEmail('astrabyte@gmail.com');
             }}
             className={`py-2 rounded-xl transition-all flex items-center justify-center gap-1.5 ${
               activeTab === 'student' ? 'bg-emerald-600 text-white shadow-sm' : 'text-slate-400 hover:text-white'
@@ -86,7 +86,7 @@ export const LoginPage: React.FC = () => {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-xs font-semibold text-slate-300 mb-1.5">University Email Address</label>
+            <label className="block text-xs font-semibold text-slate-300 mb-1.5">Email Address</label>
             <div className="relative">
               <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
               <input
