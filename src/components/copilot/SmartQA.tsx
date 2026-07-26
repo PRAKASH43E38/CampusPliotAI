@@ -21,7 +21,7 @@ export const SmartQA: React.FC = () => {
       q: 'How do I book a private 24/7 Library Study Pod?',
       answer: 'Quiet study pods in Aryabhata Central Library 3rd Floor can be reserved up to 48 hours in advance.',
       steps: [
-        'Open CampusPilot AI -> Academics -> Library Pod Booking',
+        'Open SCE FIESTA -> Academics -> Library Pod Booking',
         'Select Pod # (Pod 1 to 12 available with dual monitor setups)',
         'Choose duration slot (Max 3 hours per student per day)',
         'Tap RFID Student Card at Pod door scanner to unlock'
@@ -33,7 +33,7 @@ export const SmartQA: React.FC = () => {
       q: 'What is the procedure for Hostel Leave Permission & Night Gate Pass?',
       answer: 'Outstation leave requests require parent OTP approval submitted before 06:00 PM on the departure date.',
       steps: [
-        'Submit leave application in CampusPilot -> Freshers Guide -> Hostel Pass',
+        'Submit leave application in SCE FIESTA -> Freshers Guide -> Hostel Pass',
         'System sends SMS OTP to registered parent mobile number',
         'Once parent confirms via OTP, digital QR Gate Pass is generated',
         'Scan QR code at Hostel Main Security Gate during departure and entry'

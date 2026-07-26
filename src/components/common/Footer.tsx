@@ -13,7 +13,7 @@ export const Footer: React.FC = () => {
               <Sparkles className="w-4 h-4" />
             </div>
             <div>
-              <p className="font-bold text-sm text-slate-900 dark:text-white">CampusPilot AI</p>
+              <p className="font-bold text-sm text-slate-900 dark:text-white">SCE FIESTA</p>
               <p className="text-xs text-slate-500 dark:text-slate-400">One Platform. Complete College Life.</p>
             </div>
           </div>
@@ -36,7 +36,7 @@ export const Footer: React.FC = () => {
         </div>
 
         <div className="mt-8 pt-4 border-t border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-400">
-          <p>© 2026 CampusPilot AI Inc. Built for Digital Campus Platform.</p>
+          <p>© 2026 SCE FIESTA. Built for Digital Campus Platform.</p>
           <p className="mt-2 sm:mt-0 flex items-center gap-1 font-medium">
             Engineered with <Heart className="w-3.5 h-3.5 text-emerald-600 fill-emerald-600 inline" /> for Students & Faculty.
           </p>

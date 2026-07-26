@@ -627,7 +627,7 @@ const freshersTitles = [
   'Campus Printing & Photocopy Center Locations and Charges',
   'How to Access University Email on Mobile Phone Outlook?',
   'Plagiarism Policy & Turnitin Checker Access for Assignments',
-  'How to Form a Hackathon Team via CampusPilot AI?',
+  'How to Form a Hackathon Team via SCE FIESTA?',
   'Placement Cell Training Registration for 5th Semester',
   'Alumni Network Connection & Professional Guidance',
   'Campus Cafe & Smoothie Bar Timings & Student Discounts',
@@ -645,7 +645,7 @@ export const freshersGuideItems: FreshersItem[] = freshersTitles.map((title, i) 
     title,
     description: `Official handbook procedures and guidelines regarding ${title.toLowerCase()} for university students.`,
     details: [
-      `Step 1: Open CampusPilot AI portal and select your respective Department.`,
+      `Step 1: Open SCE FIESTA portal and select your respective Department.`,
       'Step 2: Verify your student credentials and RFID smart card number.',
       'Step 3: Complete online form submission or visit designated department desk.',
       'Step 4: Contact 24/7 campus helpdesk at Ext 100 for immediate assistance.'

@@ -77,7 +77,7 @@ export const ClubMatcher: React.FC = () => {
             AI Club & Event Matcher <span className="text-xs px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-bold border border-emerald-500/20">Personalized</span>
           </h3>
           <p className="text-xs text-slate-500 dark:text-slate-400 font-medium">
-            Select your passions to let CampusPilot AI discover your perfect campus communities.
+            Select your passions to let SCE FIESTA discover your perfect campus communities.
           </p>
         </div>
       </div>

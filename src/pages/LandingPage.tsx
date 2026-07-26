@@ -20,7 +20,7 @@ export const LandingPage: React.FC = () => {
               <Sparkles className="w-5 h-5 text-white" />
             </div>
             <span className="font-extrabold text-xl tracking-tight text-white flex items-center gap-1.5">
-              CampusPilot <span className="text-[10px] px-2 py-0.5 rounded-full bg-gradient-to-r from-pink-500 to-purple-600 text-white font-black">AI</span>
+              SCE FIESTA
             </span>
           </div>
 
@@ -67,7 +67,7 @@ export const LandingPage: React.FC = () => {
             </h1>
 
             <p className="text-sm sm:text-lg text-slate-300 max-w-xl leading-relaxed font-medium">
-              Step into your new journey with confidence. CampusPilot is your ultimate AI-powered companion to navigate classrooms, find your favorite spots, and master your academic life from day one.
+              Step into your new journey with confidence. SCE FIESTA is your ultimate companion to navigate classrooms, find your favorite spots, and master your academic life from day one.
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-4">

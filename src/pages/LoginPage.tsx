@@ -30,7 +30,7 @@ export const LoginPage: React.FC = () => {
           <div className="w-12 h-12 rounded-2xl bg-emerald-600 flex items-center justify-center text-white mx-auto shadow-sm">
             <Sparkles className="w-6 h-6" />
           </div>
-          <h1 className="text-2xl font-black text-white tracking-tight">CampusPilot AI Portal</h1>
+          <h1 className="text-2xl font-black text-white tracking-tight">SCE FIESTA Portal</h1>
           <p className="text-xs text-slate-400 font-medium">One Platform. Complete College Life.</p>
         </div>
 

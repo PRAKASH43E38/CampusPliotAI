@@ -30,7 +30,7 @@ export const Navbar: React.FC = () => {
             </div>
             <div className="flex flex-col">
               <span className="font-extrabold text-base sm:text-lg tracking-tight text-slate-900 dark:text-white flex items-center gap-1.5">
-                CampusPilot <span className="text-[10px] px-2 py-0.5 rounded-full bg-gradient-to-r from-pink-500 to-purple-600 text-white font-black">AI</span>
+                SCE FIESTA
               </span>
               <span className="text-[10px] text-slate-500 dark:text-slate-400 -mt-1 font-medium tracking-wide">
                 Smart Digital Campus

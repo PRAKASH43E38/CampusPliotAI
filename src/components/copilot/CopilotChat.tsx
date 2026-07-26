@@ -13,7 +13,7 @@ export const CopilotChat: React.FC = () => {
     {
       id: 'msg_1',
       sender: 'ai',
-      text: "Hello Alex! I'm CampusPilot AI — your autonomous digital campus copilot. I can guide you to your next lecture hall, generate your first-day itinerary, match you with tech clubs, or explain campus administrative procedures.",
+      text: "Hello Astrabyte! I'm SCE FIESTA — your autonomous digital campus copilot. I can guide you to your next lecture hall, generate your first-day itinerary, match you with tech clubs, or explain campus administrative procedures.",
       timestamp: 'Just now',
       suggestedActions: [
         'Where is my next class right now?',
@@ -130,7 +130,7 @@ export const CopilotChat: React.FC = () => {
           </div>
           <div>
             <h1 className="text-xl sm:text-2xl font-extrabold tracking-tight text-white flex items-center gap-2">
-              CampusPilot AI Copilot
+              SCE FIESTA Copilot
               <span className="text-xs px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-bold">
                 GPT-4o & Antigravity Powered
               </span>
@@ -298,7 +298,7 @@ export const CopilotChat: React.FC = () => {
                 type="text"
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
-                placeholder="Ask CampusPilot AI (e.g. 'Where is my next class?' or 'Show me notes')..."
+                placeholder="Ask SCE FIESTA (e.g. 'Where is my next class?' or 'Show me notes')..."
                 className="flex-1 pl-4 pr-12 py-3 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs sm:text-sm text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500"
               />
               <button
