@@ -13,6 +13,7 @@ export interface UserProfile {
   cgpa?: number;
   attendancePct?: number;
   bio?: string;
+  profileCompleted?: boolean;
 }
 
 export interface Classroom {
@@ -155,4 +156,55 @@ export interface AIMessage {
   timestamp: string;
   cards?: AICardData[];
   suggestedActions?: string[];
+}
+
+export interface StudentProfile {
+  student_id?: number;
+  full_name: string;
+  college_email: string;
+  phone_number?: string;
+  gender?: string;
+  dob?: string;
+  address?: string;
+  
+  register_number: string;
+  department: string;
+  batch: string;
+  year: string;
+  semester?: number;
+  section?: string;
+  
+  parent_name?: string;
+  parent_occupation?: string;
+  family_income?: string;
+  first_graduate?: boolean;
+  scholarship_required?: boolean;
+  
+  current_skills?: string[];
+  areas_of_interest?: string[];
+  campus_interests?: string[];
+  
+  communication_skills?: boolean;
+  teamwork?: boolean;
+  leadership?: boolean;
+  problem_solving?: boolean;
+  confidence_level?: 'Low' | 'Medium' | 'High';
+  
+  reason_for_department?: string;
+  excited_to_learn?: string;
+  new_skill_first_year?: string;
+  
+  profile_completed?: boolean;
+  profile_completion_pct?: number;
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface StudentDatabaseStats {
+  total_students: number;
+  department_wise: Record<string, number>;
+  year_wise: Record<string, number>;
+  scholarship_requests: number;
+  first_graduates: number;
+  avg_profile_completion: number;
 }

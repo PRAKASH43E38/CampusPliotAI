@@ -1,15 +1,63 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Sparkles, Calendar, Clock, GraduationCap, Award, BookOpen, ChevronRight, ArrowUpRight, Bell } from 'lucide-react';
+import { Sparkles, Calendar, Clock, GraduationCap, Award, BookOpen, ChevronRight, ArrowUpRight, Bell, UserPlus } from 'lucide-react';
 import { StatCard } from '../components/common/StatCard';
-import { currentUser, timetableSlots, announcements, academicResources } from '../data/mockData';
+import { currentUser, timetableSlots, academicResources } from '../data/mockData';
+import { Announcement } from '../types';
+import { apiService } from '../services/apiService';
+import { StudentOnboardingModal } from '../components/common/StudentOnboardingModal';
+import { useAuth } from '../context/AuthContext';
 import freshersBanner from '../assets/welcome-freshers-banner.jpeg';
 
 export const StudentDashboard: React.FC = () => {
+  const { profileCompleted, user } = useAuth();
+  const [announcementsList, setAnnouncementsList] = useState<Announcement[]>([]);
+  const [showOnboardingModal, setShowOnboardingModal] = useState<boolean>(false);
   const nextClass = timetableSlots[0];
+
+  useEffect(() => {
+    async function loadData() {
+      try {
+        const anns = await apiService.getAnnouncements();
+        if (anns && anns.length > 0) setAnnouncementsList(anns);
+      } catch (err) {
+        console.error("Failed to load announcements for StudentDashboard:", err);
+      }
+    }
+    loadData();
+
+    // Auto open onboarding modal if first-time student login and profile not completed
+    if (user?.role === 'student' && !profileCompleted) {
+      setShowOnboardingModal(true);
+    }
+  }, [profileCompleted, user]);
 
   return (
     <div className="max-w-7xl mx-auto p-4 sm:p-6 space-y-8">
+      
+      {/* Onboarding Callout Banner */}
+      <div className="p-4 sm:p-6 rounded-3xl bg-gradient-to-r from-indigo-950 via-slate-900 to-emerald-950 border border-emerald-500/30 text-white shadow-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-2xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-black text-lg shrink-0">
+            🎓
+          </div>
+          <div>
+            <h3 className="font-black text-sm text-white flex items-center gap-2">
+              Student Profile Onboarding Registration
+            </h3>
+            <p className="text-xs text-slate-300">
+              Complete your student profile to store academic details, skills, and economic info permanently in SSE FESTA Student Database.
+            </p>
+          </div>
+        </div>
+
+        <button
+          onClick={() => setShowOnboardingModal(true)}
+          className="px-5 py-2.5 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs shadow-md shrink-0 flex items-center gap-2 transition-all hover:scale-105"
+        >
+          <UserPlus className="w-4 h-4" /> Complete Onboarding Form
+        </button>
+      </div>
       
       {/* Freshers Banner */}
       <div className="relative overflow-hidden rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm bg-white dark:bg-slate-900 flex justify-center p-2">
@@ -232,7 +280,7 @@ export const StudentDashboard: React.FC = () => {
               <Bell className="w-4 h-4 text-emerald-600" /> Campus Broadcasts
             </h3>
             <div className="space-y-3">
-              {announcements.slice(0, 2).map((ann) => (
+              {announcementsList.slice(0, 2).map((ann) => (
                 <div key={ann.id} className="p-3 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700/80 text-xs">
                   <div className="flex items-center justify-between text-[10px] text-slate-400 mb-1 font-medium">
                     <span className="font-bold text-emerald-600 dark:text-emerald-400">{ann.category}</span>
@@ -248,6 +296,11 @@ export const StudentDashboard: React.FC = () => {
         </div>
 
       </div>
+
+      <StudentOnboardingModal
+        isOpen={showOnboardingModal}
+        onClose={() => setShowOnboardingModal(false)}
+      />
     </div>
   );
 };

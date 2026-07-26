@@ -1,14 +1,32 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Calendar, Clock, MapPin, Tag, Users, CheckCircle2, Pin, Sparkles, Filter, Search, Share2, Bell } from 'lucide-react';
-import { campusEvents, announcements, OFFICIAL_DEPARTMENTS } from '../data/mockData';
-import { CampusEvent } from '../types';
+import { OFFICIAL_DEPARTMENTS } from '../data/mockData';
+import { CampusEvent, Announcement } from '../types';
+import { apiService } from '../services/apiService';
 
 export const EventsPage: React.FC = () => {
-  const [eventsList, setEventsList] = useState<CampusEvent[]>(campusEvents);
+  const [eventsList, setEventsList] = useState<CampusEvent[]>([]);
+  const [announcementsList, setAnnouncementsList] = useState<Announcement[]>([]);
   const [selectedDept, setSelectedDept] = useState<string>('All Departments');
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedEvent, setSelectedEvent] = useState<CampusEvent | null>(null);
+
+  useEffect(() => {
+    async function loadData() {
+      try {
+        const [evts, anns] = await Promise.all([
+          apiService.getEvents(),
+          apiService.getAnnouncements()
+        ]);
+        if (evts && evts.length > 0) setEventsList(evts);
+        if (anns && anns.length > 0) setAnnouncementsList(anns);
+      } catch (err) {
+        console.error("Failed to load events from SQLite:", err);
+      }
+    }
+    loadData();
+  }, []);
 
   const categories = ['All', 'Hackathon', 'Workshop', 'Cultural', 'Technical', 'Seminar', 'Sports'];
 
@@ -81,7 +99,7 @@ export const EventsPage: React.FC = () => {
           <Pin className="w-4 h-4 text-indigo-500 fill-indigo-500" /> Pinned Official Announcements
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {announcements.slice(0, 4).map((ann) => (
+          {announcementsList.slice(0, 4).map((ann: Announcement) => (
             <div
               key={ann.id}
               className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-indigo-500/20 dark:border-indigo-500/30 shadow-lg hover:shadow-xl transition-all"
@@ -159,7 +177,7 @@ export const EventsPage: React.FC = () => {
 
       {/* Events Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
-        {(filteredEvents.length > 0 ? filteredEvents : campusEvents.slice(0, 10)).map((evt) => (
+        {filteredEvents.map((evt: CampusEvent) => (
           <div
             key={evt.id}
             className="p-5 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xl hover:shadow-2xl transition-all duration-300 flex flex-col justify-between group"
@@ -207,7 +225,7 @@ export const EventsPage: React.FC = () => {
               </div>
 
               <div className="mt-4 flex flex-wrap gap-1.5">
-                {evt.tags.map((t, idx) => (
+                {evt.tags.map((t: string, idx: number) => (
                   <span key={idx} className="text-[10px] px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 font-semibold">
                     #{t}
                   </span>

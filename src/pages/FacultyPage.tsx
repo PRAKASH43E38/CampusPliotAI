@@ -1,19 +1,38 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Search, Mail, Phone, MapPin, Clock, Star, BookOpen, MessageSquare, Calendar, Sparkles, Building2, Filter } from 'lucide-react';
-import { facultyMembers, OFFICIAL_DEPARTMENTS } from '../data/mockData';
+import { OFFICIAL_DEPARTMENTS } from '../data/mockData';
 import { FacultyMember } from '../types';
+import { apiService } from '../services/apiService';
 
 export const FacultyPage: React.FC = () => {
   const [selectedDept, setSelectedDept] = useState<string>('All Departments');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedFaculty, setSelectedFaculty] = useState<FacultyMember | null>(null);
   const [bookingSuccess, setBookingSuccess] = useState(false);
+  const [facultyList, setFacultyList] = useState<FacultyMember[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
 
-  const filteredFaculty = facultyMembers.filter((fac) => {
+  useEffect(() => {
+    async function loadFaculty() {
+      try {
+        const data = await apiService.getFaculty();
+        if (data && data.length > 0) {
+          setFacultyList(data);
+        }
+      } catch (err) {
+        console.error("Failed to load faculty from SQLite:", err);
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadFaculty();
+  }, []);
+
+  const filteredFaculty = facultyList.filter((fac) => {
     const matchesDept = selectedDept === 'All Departments' || fac.department === selectedDept;
     const matchesQuery = fac.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      fac.specialization.some((s) => s.toLowerCase().includes(searchQuery.toLowerCase())) ||
-      fac.cabin.toLowerCase().includes(searchQuery.toLowerCase());
+      (fac.researchArea && fac.researchArea.toLowerCase().includes(searchQuery.toLowerCase())) ||
+      (fac.cabin && fac.cabin.toLowerCase().includes(searchQuery.toLowerCase()));
     return matchesDept && matchesQuery;
   });
 
@@ -43,8 +62,8 @@ export const FacultyPage: React.FC = () => {
         </div>
         
         <div className="p-3.5 rounded-2xl bg-slate-900/90 border border-slate-800 text-center shrink-0">
-          <span className="text-2xl font-black text-indigo-400">60 Professors</span>
-          <span className="block text-[10px] text-slate-400 font-semibold uppercase">Across 7 Departments</span>
+          <span className="text-2xl font-black text-indigo-400">{loading ? 'Loading...' : `${facultyList.length} Professors`}</span>
+          <span className="block text-[10px] text-slate-400 font-semibold uppercase">Live from Central DB</span>
         </div>
       </div>
 
@@ -71,8 +90,8 @@ export const FacultyPage: React.FC = () => {
         <div className="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar">
           {OFFICIAL_DEPARTMENTS.map((dept) => {
             const count = dept === 'All Departments'
-              ? facultyMembers.length
-              : facultyMembers.filter(f => f.department === dept).length;
+              ? facultyList.length
+              : facultyList.filter((f: FacultyMember) => f.department === dept).length;
             const isSelected = selectedDept === dept;
 
             return (

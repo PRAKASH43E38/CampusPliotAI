@@ -1,15 +1,31 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Sparkles, Bell, Search, User, LogOut, SlidersHorizontal, Send } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
-import { announcements } from '../../data/mockData';
+import { useNotifications } from '../../context/NotificationContext';
+import { Announcement } from '../../types';
+import { apiService } from '../../services/apiService';
 
 export const Navbar: React.FC = () => {
   const { user, role, logout } = useAuth();
+  const { notifications, unreadCount, markAllAsRead } = useNotifications();
   const navigate = useNavigate();
   const [showNotifications, setShowNotifications] = useState(false);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [announcementList, setAnnouncementList] = useState<Announcement[]>([]);
+
+  useEffect(() => {
+    async function loadNotifications() {
+      try {
+        const anns = await apiService.getAnnouncements();
+        setAnnouncementList(anns);
+      } catch (err) {
+        console.error("Failed to load notifications in Navbar:", err);
+      }
+    }
+    loadNotifications();
+  }, []);
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -73,46 +89,59 @@ export const Navbar: React.FC = () => {
           {/* Notifications Dropdown */}
           <div className="relative">
             <button
-              onClick={() => setShowNotifications(!showNotifications)}
+              onClick={() => {
+                setShowNotifications(!showNotifications);
+                if (!showNotifications) markAllAsRead();
+              }}
               className="relative p-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-100 dark:bg-[#140f35] text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-white/10 transition-all"
               aria-label="Notifications"
             >
               <Bell className="w-4 h-4 text-slate-700 dark:text-slate-300" />
-              <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-pink-500 animate-ping" />
-              <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-pink-500" />
+              {unreadCount > 0 && (
+                <>
+                  <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-emerald-500 animate-ping" />
+                  <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-emerald-500" />
+                </>
+              )}
             </button>
 
             {showNotifications && (
               <div className="absolute right-0 mt-2 w-80 sm:w-96 bg-white dark:bg-[#140f35] border border-slate-200 dark:border-white/15 rounded-2xl shadow-xl p-4 z-50 animate-in fade-in zoom-in-95 duration-150">
                 <div className="flex items-center justify-between mb-3 border-b border-slate-100 dark:border-white/10 pb-2">
                   <h4 className="font-bold text-sm text-slate-900 dark:text-white flex items-center gap-2">
-                    <Bell className="w-4 h-4 text-pink-500" />
-                    Campus Alerts & Broadcasts
+                    <Bell className="w-4 h-4 text-emerald-500" />
+                    Live Campus Broadcasts & Updates
                   </h4>
-                  <span className="text-[10px] bg-pink-500/10 text-pink-600 dark:text-pink-300 px-2 py-0.5 rounded-full font-bold">
-                    3 New
-                  </span>
+                  {unreadCount > 0 && (
+                    <span className="text-[10px] bg-emerald-500/10 text-emerald-600 dark:text-emerald-300 px-2 py-0.5 rounded-full font-bold">
+                      {unreadCount} New
+                    </span>
+                  )}
                 </div>
                 <div className="space-y-2.5 max-h-72 overflow-y-auto pr-1">
-                  {announcements.slice(0, 3).map((ann) => (
-                    <div
-                      key={ann.id}
-                      className="p-3 rounded-xl bg-slate-50 dark:bg-[#1a1442] border border-slate-100 dark:border-white/5"
-                    >
-                      <div className="flex items-center justify-between text-xs mb-1">
-                        <span className="font-bold text-pink-600 dark:text-pink-400">
-                          {ann.category}
-                        </span>
-                        <span className="text-[10px] text-slate-400">{ann.date}</span>
+                  {notifications.length === 0 ? (
+                    <p className="text-xs text-slate-400 py-4 text-center">No alerts at the moment.</p>
+                  ) : (
+                    notifications.map((notif) => (
+                      <div
+                        key={notif.id}
+                        className="p-3 rounded-xl bg-slate-50 dark:bg-[#1a1442] border border-slate-100 dark:border-white/5"
+                      >
+                        <div className="flex items-center justify-between text-xs mb-1">
+                          <span className="font-bold text-emerald-600 dark:text-emerald-400">
+                            {notif.category}
+                          </span>
+                          <span className="text-[10px] text-slate-400">{notif.timestamp}</span>
+                        </div>
+                        <p className="text-xs font-bold text-slate-900 dark:text-white line-clamp-1">
+                          {notif.title}
+                        </p>
+                        <p className="text-[11px] text-slate-500 dark:text-slate-300 line-clamp-2 mt-0.5">
+                          {notif.message}
+                        </p>
                       </div>
-                      <p className="text-xs font-bold text-slate-900 dark:text-white line-clamp-1">
-                        {ann.title}
-                      </p>
-                      <p className="text-[11px] text-slate-500 dark:text-slate-300 line-clamp-2 mt-0.5">
-                        {ann.content}
-                      </p>
-                    </div>
-                  ))}
+                    ))
+                  )}
                 </div>
               </div>
             )}

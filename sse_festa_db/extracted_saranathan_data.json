@@ -1,0 +1,2193 @@
+{
+  "departments": [
+    {
+      "dept_code": "AIDS",
+      "dept_name": "Artificial Intelligence & Data Science",
+      "description": "Department of Artificial Intelligence & Data Science at Saranathan College of Engineering.",
+      "hod_name": "Dr. S Ravimaran",
+      "email": "hod-aids@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=AIDS&tgt=aids_about"
+    },
+    {
+      "dept_code": "CE",
+      "dept_name": "Civil Engineering",
+      "description": "Department of Civil Engineering at Saranathan College of Engineering.",
+      "hod_name": "Dr. A Belin Jude",
+      "email": "belin-ce@saranathan.ac.inSaranathan",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=CE&tgt=civilabout"
+    },
+    {
+      "dept_code": "CSBS",
+      "dept_name": "Computer Science & Business System",
+      "description": "Department of Computer Science & Business System at Saranathan College of Engineering.",
+      "hod_name": "Dr. S Venkatasubramanian",
+      "email": "hod-csbs@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=CSBS&tgt=csbs_about"
+    },
+    {
+      "dept_code": "CSE",
+      "dept_name": "Computer Science & Engineering",
+      "description": "Department of Computer Science & Engineering at Saranathan College of Engineering.",
+      "hod_name": "Dr. V Punitha",
+      "email": "punitha-it@saranathan.ac.inSaranathan",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=CSE&tgt=cseabout"
+    },
+    {
+      "dept_code": "AIML",
+      "dept_name": "Computer Science & Engg (AI & ML)",
+      "description": "Department of Computer Science & Engg (AI & ML) at Saranathan College of Engineering.",
+      "hod_name": "Dr. A Delphin Carolina Rani",
+      "email": "hod-aiml@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=AIML&tgt=aimlabout"
+    },
+    {
+      "dept_code": "ECE",
+      "dept_name": "Electronics & Communication Engineering",
+      "description": "Department of Electronics & Communication Engineering at Saranathan College of Engineering.",
+      "hod_name": "Dr. M Santhi",
+      "email": "santhim@saranathan.ac.inSaranathan",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=ECE&tgt=eceabt"
+    },
+    {
+      "dept_code": "EEE",
+      "dept_name": "Electrical & Electronics Engineering",
+      "description": "Department of Electrical & Electronics Engineering at Saranathan College of Engineering.",
+      "hod_name": "Dr. C Krishnakumar",
+      "email": "krishnakumar-eee@saranathan.ac.inSaranathan",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=EEE&tgt=eeeabout"
+    },
+    {
+      "dept_code": "ICE",
+      "dept_name": "Instrumentation & Control Engineering",
+      "description": "Department of Instrumentation & Control Engineering at Saranathan College of Engineering.",
+      "hod_name": "Dr. K Gaayathry",
+      "email": "gaayathry-ice@saranathan.ac.inSaranathan",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=ICE&tgt=iceabout"
+    },
+    {
+      "dept_code": "IT",
+      "dept_name": "Information Technology",
+      "description": "Department of Information Technology at Saranathan College of Engineering.",
+      "hod_name": "Dr. R Thillaikarasi",
+      "email": "thillai-cse@saranathan.ac.inSaranathan",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=IT&tgt=itabout"
+    },
+    {
+      "dept_code": "MECH",
+      "dept_name": "Mechanical Engineering",
+      "description": "Department of Mechanical Engineering at Saranathan College of Engineering.",
+      "hod_name": "N/A",
+      "email": "rekha-mech@saranathan.ac.inSaranathan",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=MECH&tgt=mechabt"
+    },
+    {
+      "dept_code": "MBA",
+      "dept_name": "Department of Management Studies",
+      "description": "Department of Department of Management Studies at Saranathan College of Engineering.",
+      "hod_name": "Dr. K Karthikeyan",
+      "email": "karthikeyan-mba@saranathan.ac.inSaranathan",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=MBA&tgt=mbaabout"
+    },
+    {
+      "dept_code": "CHE",
+      "dept_name": "Chemistry",
+      "description": "Department of Chemistry at Saranathan College of Engineering.",
+      "hod_name": "Dr. L Muruganandam",
+      "email": "muruganandam-che@saranathan.ac.inSaranathan",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=CHE&tgt=cheabout"
+    },
+    {
+      "dept_code": "ENG",
+      "dept_name": "English",
+      "description": "Department of English at Saranathan College of Engineering.",
+      "hod_name": "Dr. M Bhuvaneswari",
+      "email": "uma-eng@saranathan.ac.inSaranathan",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=ENG&tgt=engabout"
+    },
+    {
+      "dept_code": "MAT",
+      "dept_name": "Mathematics",
+      "description": "Department of Mathematics at Saranathan College of Engineering.",
+      "hod_name": "Dr. G Ravichandran",
+      "email": "geetha-mat@saranathan.ac.inSaranathan",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=MAT&tgt=matabout"
+    },
+    {
+      "dept_code": "PHY",
+      "dept_name": "Physics",
+      "description": "Department of Physics at Saranathan College of Engineering.",
+      "hod_name": "Dr. R Mariappan",
+      "email": "mariappan-phy@saranathan.ac.inSaranathan",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=PHY&tgt=phyabout"
+    },
+    {
+      "dept_code": "TAM",
+      "dept_name": "Tamil",
+      "description": "Department of Tamil at Saranathan College of Engineering.",
+      "hod_name": "N/A",
+      "email": "hod-tam@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=TAM&tgt=faculty"
+    }
+  ],
+  "courses": [
+    {
+      "course_name": "B.E. Artificial Intelligence and Data Science",
+      "degree": "B.E.",
+      "duration": "4 Years",
+      "dept_code": "AIDS",
+      "intake": 60,
+      "programme_type": "UG",
+      "source_url": "http://saranathan.ac.in/admission.php?tgt=courses"
+    },
+    {
+      "course_name": "B.E. Civil Engineering",
+      "degree": "B.E.",
+      "duration": "4 Years",
+      "dept_code": "CE",
+      "intake": 60,
+      "programme_type": "UG",
+      "source_url": "http://saranathan.ac.in/admission.php?tgt=courses"
+    },
+    {
+      "course_name": "B.Tech. Computer Science and Business System",
+      "degree": "B.Tech.",
+      "duration": "4 Years",
+      "dept_code": "CSBS",
+      "intake": 60,
+      "programme_type": "UG",
+      "source_url": "http://saranathan.ac.in/admission.php?tgt=courses"
+    },
+    {
+      "course_name": "B.E. Computer Science and Engineering",
+      "degree": "B.E.",
+      "duration": "4 Years",
+      "dept_code": "CSE",
+      "intake": 120,
+      "programme_type": "UG",
+      "source_url": "http://saranathan.ac.in/admission.php?tgt=courses"
+    },
+    {
+      "course_name": "B.E. Computer Science & Engg (AI & ML)",
+      "degree": "B.E.",
+      "duration": "4 Years",
+      "dept_code": "AIML",
+      "intake": 60,
+      "programme_type": "UG",
+      "source_url": "http://saranathan.ac.in/admission.php?tgt=courses"
+    },
+    {
+      "course_name": "B.E. Electronics and Communication Engineering",
+      "degree": "B.E.",
+      "duration": "4 Years",
+      "dept_code": "ECE",
+      "intake": 120,
+      "programme_type": "UG",
+      "source_url": "http://saranathan.ac.in/admission.php?tgt=courses"
+    },
+    {
+      "course_name": "B.E. Electrical and Electronics Engineering",
+      "degree": "B.E.",
+      "duration": "4 Years",
+      "dept_code": "EEE",
+      "intake": 120,
+      "programme_type": "UG",
+      "source_url": "http://saranathan.ac.in/admission.php?tgt=courses"
+    },
+    {
+      "course_name": "B.E. Instrumentation and Control Engineering",
+      "degree": "B.E.",
+      "duration": "4 Years",
+      "dept_code": "ICE",
+      "intake": 60,
+      "programme_type": "UG",
+      "source_url": "http://saranathan.ac.in/admission.php?tgt=courses"
+    },
+    {
+      "course_name": "B.Tech. Information Technology",
+      "degree": "B.Tech.",
+      "duration": "4 Years",
+      "dept_code": "IT",
+      "intake": 120,
+      "programme_type": "UG",
+      "source_url": "http://saranathan.ac.in/admission.php?tgt=courses"
+    },
+    {
+      "course_name": "B.E. Mechanical Engineering",
+      "degree": "B.E.",
+      "duration": "4 Years",
+      "dept_code": "MECH",
+      "intake": 120,
+      "programme_type": "UG",
+      "source_url": "http://saranathan.ac.in/admission.php?tgt=courses"
+    },
+    {
+      "course_name": "MBA - Master of Business Administration",
+      "degree": "MBA",
+      "duration": "2 Years",
+      "dept_code": "MBA",
+      "intake": 60,
+      "programme_type": "PG",
+      "source_url": "http://saranathan.ac.in/admission.php?tgt=courses"
+    },
+    {
+      "course_name": "M.E. Thermal Engineering",
+      "degree": "M.E.",
+      "duration": "2 Years",
+      "dept_code": "MECH",
+      "intake": 18,
+      "programme_type": "PG",
+      "source_url": "http://saranathan.ac.in/admission.php?tgt=courses"
+    },
+    {
+      "course_name": "M.E. Power Electronics & Drives",
+      "degree": "M.E.",
+      "duration": "2 Years",
+      "dept_code": "EEE",
+      "intake": 18,
+      "programme_type": "PG",
+      "source_url": "http://saranathan.ac.in/admission.php?tgt=courses"
+    }
+  ],
+  "faculty": [
+    {
+      "fac_name": "Dr. S Ravimaran",
+      "designation": "Professor & Head",
+      "dept_code": "AIDS",
+      "qualification": "M.E.",
+      "research_area": "Engineering & Technology Research",
+      "email": "ravimaran-aid@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=AIDS&tgt=faculty"
+    },
+    {
+      "fac_name": "Dr. P D Sheba Kezia Malarchelvi",
+      "designation": "Assistant Professor",
+      "dept_code": "AIDS",
+      "qualification": "M.E.",
+      "research_area": "Engineering & Technology Research",
+      "email": "pdsheba-cse@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=AIDS&tgt=faculty"
+    },
+    {
+      "fac_name": "Dr. A Kavitha",
+      "designation": "Assistant Professor",
+      "dept_code": "AIDS",
+      "qualification": "M.E.",
+      "research_area": "Engineering & Technology Research",
+      "email": "kavitha7185@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=AIDS&tgt=faculty"
+    },
+    {
+      "fac_name": "Ms. A Sridevi",
+      "designation": "Assistant Professor",
+      "dept_code": "AIDS",
+      "qualification": "M.E.",
+      "research_area": "Engineering & Technology Research",
+      "email": "sridevi-aid@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=AIDS&tgt=faculty"
+    },
+    {
+      "fac_name": "Mr. M Arunprakash",
+      "designation": "Assistant Professor",
+      "dept_code": "AIDS",
+      "qualification": "M.E.",
+      "research_area": "Engineering & Technology Research",
+      "email": "arunprakash7134@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=AIDS&tgt=faculty"
+    },
+    {
+      "fac_name": "Ms. T Shanmuga Sundari",
+      "designation": "Assistant Professor",
+      "dept_code": "AIDS",
+      "qualification": "M.E.",
+      "research_area": "Engineering & Technology Research",
+      "email": "shanmugasundari7159@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=AIDS&tgt=faculty"
+    },
+    {
+      "fac_name": "Mr. S Sadeesh",
+      "designation": "Assistant Professor",
+      "dept_code": "AIDS",
+      "qualification": "M.E.",
+      "research_area": "Engineering & Technology Research",
+      "email": "sadeesh7141@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=AIDS&tgt=faculty"
+    },
+    {
+      "fac_name": "Ms J Ambika",
+      "designation": "Assistant Professor",
+      "dept_code": "AIDS",
+      "qualification": "M.E.",
+      "research_area": "Engineering & Technology Research",
+      "email": "ambika7173@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=AIDS&tgt=faculty"
+    },
+    {
+      "fac_name": "Mr R Vetrivendan",
+      "designation": "Assistant Professor",
+      "dept_code": "AIDS",
+      "qualification": "M.E.",
+      "research_area": "Engineering & Technology Research",
+      "email": "vetrivendan7177@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=AIDS&tgt=faculty"
+    },
+    {
+      "fac_name": "Mr. S Ponnuthurai",
+      "designation": "Assistant Professor",
+      "dept_code": "AIDS",
+      "qualification": "M.E.",
+      "research_area": "Engineering & Technology Research",
+      "email": "ponnuthurai7122@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=AIDS&tgt=faculty"
+    },
+    {
+      "fac_name": "Mr P Dineshkumar",
+      "designation": "Assistant Professor",
+      "dept_code": "AIDS",
+      "qualification": "M.E.",
+      "research_area": "Engineering & Technology Research",
+      "email": "dineshkumar7181@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=AIDS&tgt=faculty"
+    },
+    {
+      "fac_name": "Ms. T Anita Dorothy",
+      "designation": "Assistant Professor",
+      "dept_code": "AIDS",
+      "qualification": "M.E.",
+      "research_area": "Engineering & Technology Research",
+      "email": "anitadorothy-aid@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=AIDS&tgt=faculty"
+    },
+    {
+      "fac_name": "Ms. P Preethy Janet",
+      "designation": "Assistant Professor",
+      "dept_code": "AIDS",
+      "qualification": "M.E.",
+      "research_area": "Engineering & Technology Research",
+      "email": "preethyjanet7134@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=AIDS&tgt=faculty"
+    },
+    {
+      "fac_name": "Ms. D Mangalambigai",
+      "designation": "Assistant Professor",
+      "dept_code": "AIDS",
+      "qualification": "M.E.",
+      "research_area": "Engineering & Technology Research",
+      "email": "mangalambigai7126@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=AIDS&tgt=faculty"
+    },
+    {
+      "fac_name": "Ms. S Renganayaki",
+      "designation": "Assistant Professor",
+      "dept_code": "AIDS",
+      "qualification": "M.Sc.",
+      "research_area": "Engineering & Technology Research",
+      "email": "renganayaki7142@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=AIDS&tgt=faculty"
+    },
+    {
+      "fac_name": "Ms. A Kayal",
+      "designation": "Assistant Professor",
+      "dept_code": "AIDS",
+      "qualification": "M.E.",
+      "research_area": "Engineering & Technology Research",
+      "email": "kayal-aid@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=AIDS&tgt=faculty"
+    },
+    {
+      "fac_name": "Ms. G Nithyalakshmi",
+      "designation": "Assistant Professor",
+      "dept_code": "AIDS",
+      "qualification": "M.E. Assistant Professor nithyalakshmi-aid@saranathan.ac.in View profile",
+      "research_area": "Engineering & Technology Research",
+      "email": "nithyalakshmi-aid@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=AIDS&tgt=faculty"
+    },
+    {
+      "fac_name": "Ms. C Gohila Priyadharshini",
+      "designation": "Assistant Professor",
+      "dept_code": "AIDS",
+      "qualification": "M.E.",
+      "research_area": "Engineering & Technology Research",
+      "email": "priyadharshini7130@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=AIDS&tgt=faculty"
+    },
+    {
+      "fac_name": "Ms. A Pushpa",
+      "designation": "Assistant Professor",
+      "dept_code": "AIDS",
+      "qualification": "M.E.",
+      "research_area": "Engineering & Technology Research",
+      "email": "pushpa7140@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=AIDS&tgt=faculty"
+    },
+    {
+      "fac_name": "Dr. A Belin Jude",
+      "designation": "Professor & Head",
+      "dept_code": "CE",
+      "qualification": "M.Tech.",
+      "research_area": "Engineering & Technology Research",
+      "email": "belin-ce@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=CE&tgt=faculty"
+    },
+    {
+      "fac_name": "Ms. K Sathya Prabha",
+      "designation": "Assistant Professor",
+      "dept_code": "CE",
+      "qualification": "M.Tech.",
+      "research_area": "Engineering & Technology Research",
+      "email": "sathyaprabha-ce@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=CE&tgt=faculty"
+    },
+    {
+      "fac_name": "Mr. A Anandraj",
+      "designation": "Assistant Professor",
+      "dept_code": "CE",
+      "qualification": "M.Tech.",
+      "research_area": "Engineering & Technology Research",
+      "email": "anandraj-ce@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=CE&tgt=faculty"
+    },
+    {
+      "fac_name": "Mr. B Sekar",
+      "designation": "Assistant Professor",
+      "dept_code": "CE",
+      "qualification": "M.E.",
+      "research_area": "Engineering & Technology Research",
+      "email": "sekar7132@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=CE&tgt=faculty"
+    },
+    {
+      "fac_name": "Mr. C Kesava Raja",
+      "designation": "Assistant Professor",
+      "dept_code": "CE",
+      "qualification": "M.E.",
+      "research_area": "Engineering & Technology Research",
+      "email": "kesavaraja-ce@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=CE&tgt=faculty"
+    },
+    {
+      "fac_name": "Mr. G Venkatesan",
+      "designation": "Assistant Professor",
+      "dept_code": "CE",
+      "qualification": "M.Tech.",
+      "research_area": "Engineering & Technology Research",
+      "email": "venkatesan-ce@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=CE&tgt=faculty"
+    },
+    {
+      "fac_name": "Mr. S Kannan",
+      "designation": "Assistant Professor",
+      "dept_code": "CE",
+      "qualification": "M.E.",
+      "research_area": "Engineering & Technology Research",
+      "email": "kannan7154@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=CE&tgt=faculty"
+    },
+    {
+      "fac_name": "Dr. S Venkatasubramanian",
+      "designation": "Professor & Head",
+      "dept_code": "CSBS",
+      "qualification": "M.E.",
+      "research_area": "Engineering & Technology Research",
+      "email": "veeyes@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=CSBS&tgt=faculty"
+    },
+    {
+      "fac_name": "Ms. A Subasri",
+      "designation": "Assistant Professor",
+      "dept_code": "CSBS",
+      "qualification": "M.E.",
+      "research_area": "Engineering & Technology Research",
+      "email": "subasri7117@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=CSBS&tgt=faculty"
+    },
+    {
+      "fac_name": "Mr. R Kannan",
+      "designation": "Assistant Professor",
+      "dept_code": "CSBS",
+      "qualification": "M.E.",
+      "research_area": "Engineering & Technology Research",
+      "email": "kannan7137@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=CSBS&tgt=faculty"
+    },
+    {
+      "fac_name": "Mr. K Vijayaragavan",
+      "designation": "Assistant Professor",
+      "dept_code": "CSBS",
+      "qualification": "M.E.",
+      "research_area": "Engineering & Technology Research",
+      "email": "vijayaragavan7156@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=CSBS&tgt=faculty"
+    },
+    {
+      "fac_name": "Mr. S Senthil",
+      "designation": "Assistant Professor",
+      "dept_code": "CSBS",
+      "qualification": "M.E.",
+      "research_area": "Engineering & Technology Research",
+      "email": "senthil7111@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=CSBS&tgt=faculty"
+    },
+    {
+      "fac_name": "Ms. V Ranjani",
+      "designation": "Assistant Professor",
+      "dept_code": "CSBS",
+      "qualification": "M.E.",
+      "research_area": "Engineering & Technology Research",
+      "email": "ranjani-aiml@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=CSBS&tgt=faculty"
+    },
+    {
+      "fac_name": "Ms M Arunadevi",
+      "designation": "Assistant Professor",
+      "dept_code": "CSBS",
+      "qualification": "M.E.",
+      "research_area": "Engineering & Technology Research",
+      "email": "arunadevi7171@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=CSBS&tgt=faculty"
+    },
+    {
+      "fac_name": "Ms. A Abirami",
+      "designation": "Assistant Professor",
+      "dept_code": "CSBS",
+      "qualification": "M.E.",
+      "research_area": "Engineering & Technology Research",
+      "email": "abirami7123@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=CSBS&tgt=faculty"
+    },
+    {
+      "fac_name": "Ms. A Thenmozhi",
+      "designation": "Assistant Professor",
+      "dept_code": "CSBS",
+      "qualification": "M.E.",
+      "research_area": "Engineering & Technology Research",
+      "email": "thenmozhi-it@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=CSBS&tgt=faculty"
+    },
+    {
+      "fac_name": "Ms. S Subiksha",
+      "designation": "Assistant Professor",
+      "dept_code": "CSBS",
+      "qualification": "M.Tech.",
+      "research_area": "Engineering & Technology Research",
+      "email": "subiksha7187@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=CSBS&tgt=faculty"
+    },
+    {
+      "fac_name": "Dr. V Punitha",
+      "designation": "Professor & Head",
+      "dept_code": "CSE",
+      "qualification": "M.E.",
+      "research_area": "Engineering & Technology Research",
+      "email": "punitha-it@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=CSE&tgt=faculty"
+    },
+    {
+      "fac_name": "Dr. R Senthamil Selvi",
+      "designation": "Assistant Professor",
+      "dept_code": "CSE",
+      "qualification": "M.E.",
+      "research_area": "Engineering & Technology Research",
+      "email": "senthamilselvi-cse@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=CSE&tgt=faculty"
+    },
+    {
+      "fac_name": "Dr. S Mohana",
+      "designation": "Assistant Professor",
+      "dept_code": "CSE",
+      "qualification": "M.E.",
+      "research_area": "Engineering & Technology Research",
+      "email": "mohana-cse@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=CSE&tgt=faculty"
+    },
+    {
+      "fac_name": "Dr. K.S Chandrasekaran",
+      "designation": "Associate Professor",
+      "dept_code": "CSE",
+      "qualification": "M.E.",
+      "research_area": "Engineering & Technology Research",
+      "email": "chandrasekaran-cse@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=CSE&tgt=faculty"
+    },
+    {
+      "fac_name": "Dr. S Rajalakshmi",
+      "designation": "Assistant Professor",
+      "dept_code": "CSE",
+      "qualification": "M.E.",
+      "research_area": "Engineering & Technology Research",
+      "email": "rajalakshmi7103@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=CSE&tgt=faculty"
+    },
+    {
+      "fac_name": "Mr. D Boobala Muralitharan",
+      "designation": "Assistant Professor",
+      "dept_code": "CSE",
+      "qualification": "M.E.",
+      "research_area": "Engineering & Technology Research",
+      "email": "boobala-cse@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=CSE&tgt=faculty"
+    },
+    {
+      "fac_name": "Ms. R Sugantha Lakshmi",
+      "designation": "Assistant Professor",
+      "dept_code": "CSE",
+      "qualification": "M.E.",
+      "research_area": "Engineering & Technology Research",
+      "email": "lakshmi7127@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=CSE&tgt=faculty"
+    },
+    {
+      "fac_name": "Ms. T Nagalakshmi",
+      "designation": "Assistant Professor",
+      "dept_code": "CSE",
+      "qualification": "M.E.",
+      "research_area": "Engineering & Technology Research",
+      "email": "nagalakshmi7160@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=CSE&tgt=faculty"
+    },
+    {
+      "fac_name": "Mr. R Karthik",
+      "designation": "Assistant Professor",
+      "dept_code": "CSE",
+      "qualification": "M.E.",
+      "research_area": "Engineering & Technology Research",
+      "email": "karthik-cse@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=CSE&tgt=faculty"
+    },
+    {
+      "fac_name": "Ms. K Mohanappriya",
+      "designation": "Assistant Professor",
+      "dept_code": "CSE",
+      "qualification": "M.E.",
+      "research_area": "Engineering & Technology Research",
+      "email": "mohanapriya-cse@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=CSE&tgt=faculty"
+    },
+    {
+      "fac_name": "Ms. J Sathiaparkavi",
+      "designation": "Assistant Professor",
+      "dept_code": "CSE",
+      "qualification": "M.E.",
+      "research_area": "Engineering & Technology Research",
+      "email": "parkavi-cse@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=CSE&tgt=faculty"
+    },
+    {
+      "fac_name": "Ms. E Shapna Rani",
+      "designation": "Assistant Professor",
+      "dept_code": "CSE",
+      "qualification": "M.E.",
+      "research_area": "Engineering & Technology Research",
+      "email": "shapnarani-cse@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=CSE&tgt=faculty"
+    },
+    {
+      "fac_name": "Ms. P Rohini",
+      "designation": "Assistant Professor",
+      "dept_code": "CSE",
+      "qualification": "M.E.",
+      "research_area": "Engineering & Technology Research",
+      "email": "7133@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=CSE&tgt=faculty"
+    },
+    {
+      "fac_name": "Ms. C Maria Rhythm",
+      "designation": "Assistant Professor",
+      "dept_code": "CSE",
+      "qualification": "M.E.",
+      "research_area": "Engineering & Technology Research",
+      "email": "mariarhythm7182@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=CSE&tgt=faculty"
+    },
+    {
+      "fac_name": "Ms. A Rachel Roselin",
+      "designation": "Assistant Professor",
+      "dept_code": "CSE",
+      "qualification": "M.E.",
+      "research_area": "Engineering & Technology Research",
+      "email": "rachelroselin7158@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=CSE&tgt=faculty"
+    },
+    {
+      "fac_name": "Ms. N Ramya",
+      "designation": "Assistant Professor",
+      "dept_code": "CSE",
+      "qualification": "M.E.",
+      "research_area": "Engineering & Technology Research",
+      "email": "ramya-cse@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=CSE&tgt=faculty"
+    },
+    {
+      "fac_name": "Mr. L Parthipan",
+      "designation": "Assistant Professor",
+      "dept_code": "CSE",
+      "qualification": "M.E.",
+      "research_area": "Engineering & Technology Research",
+      "email": "parthipan7129@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=CSE&tgt=faculty"
+    },
+    {
+      "fac_name": "Ms. G Sathya",
+      "designation": "Assistant Professor",
+      "dept_code": "CSE",
+      "qualification": "M.E.",
+      "research_area": "Engineering & Technology Research",
+      "email": "sathya7144@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=CSE&tgt=faculty"
+    },
+    {
+      "fac_name": "Ms. G Roshini",
+      "designation": "Assistant Professor",
+      "dept_code": "CSE",
+      "qualification": "M.Tech.",
+      "research_area": "Engineering & Technology Research",
+      "email": "roshini7146@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=CSE&tgt=faculty"
+    },
+    {
+      "fac_name": "Dr. A Delphin Carolina Rani",
+      "designation": "Professor & Head",
+      "dept_code": "AIML",
+      "qualification": "M.E.",
+      "research_area": "Engineering & Technology Research",
+      "email": "delphincarolinarani7163@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=AIML&tgt=faculty"
+    },
+    {
+      "fac_name": "Dr. B Rethina Kumar",
+      "designation": "Assistant Professor",
+      "dept_code": "AIML",
+      "qualification": "M.E.",
+      "research_area": "Engineering & Technology Research",
+      "email": "rethinakumar-cse@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=AIML&tgt=faculty"
+    },
+    {
+      "fac_name": "Ms. S Puvaneswari",
+      "designation": "Assistant Professor",
+      "dept_code": "AIML",
+      "qualification": "M.E.",
+      "research_area": "Engineering & Technology Research",
+      "email": "puvaneswari7125@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=AIML&tgt=faculty"
+    },
+    {
+      "fac_name": "Mr. S Amirthalingam",
+      "designation": "Assistant Professor",
+      "dept_code": "AIML",
+      "qualification": "M.E.",
+      "research_area": "Engineering & Technology Research",
+      "email": "amirthalingam7148@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=AIML&tgt=faculty"
+    },
+    {
+      "fac_name": "Mr. P Manikandan",
+      "designation": "Assistant Professor",
+      "dept_code": "AIML",
+      "qualification": "M.E.",
+      "research_area": "Engineering & Technology Research",
+      "email": "manikandan7153@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=AIML&tgt=faculty"
+    },
+    {
+      "fac_name": "Ms. L Manimegalai",
+      "designation": "Assistant Professor",
+      "dept_code": "AIML",
+      "qualification": "M.E.",
+      "research_area": "Engineering & Technology Research",
+      "email": "manimegalai7178@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=AIML&tgt=faculty"
+    },
+    {
+      "fac_name": "Ms. S Srimathi",
+      "designation": "Assistant Professor",
+      "dept_code": "AIML",
+      "qualification": "M.E.",
+      "research_area": "Engineering & Technology Research",
+      "email": "srimathi7168@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=AIML&tgt=faculty"
+    },
+    {
+      "fac_name": "Ms. P Kaviya",
+      "designation": "Assistant Professor",
+      "dept_code": "AIML",
+      "qualification": "M.E. Assistant Professor kaviya-cse@saranathan.ac.in View profile",
+      "research_area": "Engineering & Technology Research",
+      "email": "kaviya-cse@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=AIML&tgt=faculty"
+    },
+    {
+      "fac_name": "Ms. J J Arulsheela",
+      "designation": "Assistant Professor",
+      "dept_code": "AIML",
+      "qualification": "M.Tech.",
+      "research_area": "Engineering & Technology Research",
+      "email": "arulsheela7157@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=AIML&tgt=faculty"
+    },
+    {
+      "fac_name": "Dr. M Santhi",
+      "designation": "Professor & Head",
+      "dept_code": "ECE",
+      "qualification": "M.E.",
+      "research_area": "Engineering & Technology Research",
+      "email": "santhim@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=ECE&tgt=faculty"
+    },
+    {
+      "fac_name": "Dr. V Mohan",
+      "designation": "Assistant Professor",
+      "dept_code": "ECE",
+      "qualification": "M.E.",
+      "research_area": "Engineering & Technology Research",
+      "email": "mohan-ece@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=ECE&tgt=faculty"
+    },
+    {
+      "fac_name": "Dr. P Shanmugapriya",
+      "designation": "Assistant Professor",
+      "dept_code": "ECE",
+      "qualification": "M.Tech.",
+      "research_area": "Engineering & Technology Research",
+      "email": "shanmugapriya-ece@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=ECE&tgt=faculty"
+    },
+    {
+      "fac_name": "Dr. M Padmaa",
+      "designation": "Assistant Professor",
+      "dept_code": "ECE",
+      "qualification": "M.E.",
+      "research_area": "Engineering & Technology Research",
+      "email": "padmaa-ece@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=ECE&tgt=faculty"
+    },
+    {
+      "fac_name": "Dr. R Mukesh",
+      "designation": "Assistant Professor",
+      "dept_code": "ECE",
+      "qualification": "M.E.",
+      "research_area": "Engineering & Technology Research",
+      "email": "mukesh7131@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=ECE&tgt=faculty"
+    },
+    {
+      "fac_name": "Dr. S.A Arunmozhi",
+      "designation": "Associate Professor",
+      "dept_code": "ECE",
+      "qualification": "M.Tech.",
+      "research_area": "Engineering & Technology Research",
+      "email": "arunmozhi-ece@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=ECE&tgt=faculty"
+    },
+    {
+      "fac_name": "Dr. S Rajeswari",
+      "designation": "Associate Professor",
+      "dept_code": "ECE",
+      "qualification": "M.Tech.",
+      "research_area": "Engineering & Technology Research",
+      "email": "rajeswaris-ece@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=ECE&tgt=faculty"
+    },
+    {
+      "fac_name": "Dr. M Baritha Begum",
+      "designation": "Associate Professor",
+      "dept_code": "ECE",
+      "qualification": "M.E.",
+      "research_area": "Engineering & Technology Research",
+      "email": "barithabegum-ece@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=ECE&tgt=faculty"
+    },
+    {
+      "fac_name": "Dr. K Malaisamy",
+      "designation": "Assistant Professor",
+      "dept_code": "ECE",
+      "qualification": "M.E.",
+      "research_area": "Engineering & Technology Research",
+      "email": "malaisamy-ece@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=ECE&tgt=faculty"
+    },
+    {
+      "fac_name": "Dr. G Sivakannu",
+      "designation": "Assistant Professor",
+      "dept_code": "ECE",
+      "qualification": "M.E.",
+      "research_area": "Engineering & Technology Research",
+      "email": "sivakannu-ece@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=ECE&tgt=faculty"
+    },
+    {
+      "fac_name": "Dr. S Kiruthiga",
+      "designation": "Assistant Professor",
+      "dept_code": "ECE",
+      "qualification": "M.E.",
+      "research_area": "Engineering & Technology Research",
+      "email": "kiruthiga-ece@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=ECE&tgt=faculty"
+    },
+    {
+      "fac_name": "Dr. N Preethi Elizabeth",
+      "designation": "Assistant Professor",
+      "dept_code": "ECE",
+      "qualification": "M.E.",
+      "research_area": "Engineering & Technology Research",
+      "email": "preethielizabeth-ece@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=ECE&tgt=faculty"
+    },
+    {
+      "fac_name": "Dr. B Divya",
+      "designation": "Assistant Professor",
+      "dept_code": "ECE",
+      "qualification": "M.E.",
+      "research_area": "Engineering & Technology Research",
+      "email": "divyab-ece@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=ECE&tgt=faculty"
+    },
+    {
+      "fac_name": "Mr. S Hariprasath",
+      "designation": "Assistant Professor",
+      "dept_code": "ECE",
+      "qualification": "M.E.",
+      "research_area": "Engineering & Technology Research",
+      "email": "hariprasath-ece@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=ECE&tgt=faculty"
+    },
+    {
+      "fac_name": "Ms. P Sivagamasundhari",
+      "designation": "Assistant Professor",
+      "dept_code": "ECE",
+      "qualification": "M.E.",
+      "research_area": "Engineering & Technology Research",
+      "email": "sivagamasundhari-ece@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=ECE&tgt=faculty"
+    },
+    {
+      "fac_name": "Ms. J Eindhumathy",
+      "designation": "Assistant Professor",
+      "dept_code": "ECE",
+      "qualification": "M.E.",
+      "research_area": "Engineering & Technology Research",
+      "email": "eindhumathy-ece@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=ECE&tgt=faculty"
+    },
+    {
+      "fac_name": "Mr. M Mahendran",
+      "designation": "Assistant Professor",
+      "dept_code": "ECE",
+      "qualification": "M.Tech.",
+      "research_area": "Engineering & Technology Research",
+      "email": "mahendran-ece@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=ECE&tgt=faculty"
+    },
+    {
+      "fac_name": "Ms. M Anthuvan Lydia",
+      "designation": "Assistant Professor",
+      "dept_code": "ECE",
+      "qualification": "M.E.",
+      "research_area": "Engineering & Technology Research",
+      "email": "anthuvanlydia-ece@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=ECE&tgt=faculty"
+    },
+    {
+      "fac_name": "Dr. C Krishnakumar",
+      "designation": "Professor & Head",
+      "dept_code": "EEE",
+      "qualification": "M.Tech.",
+      "research_area": "Engineering & Technology Research",
+      "email": "krishnakumar-eee@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=EEE&tgt=faculty"
+    },
+    {
+      "fac_name": "Dr. M.V Suganyadevi",
+      "designation": "Assistant Professor",
+      "dept_code": "EEE",
+      "qualification": "M.E.",
+      "research_area": "Engineering & Technology Research",
+      "email": "suganyadevi-eee@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=EEE&tgt=faculty"
+    },
+    {
+      "fac_name": "Dr. D Kalyana Kumar",
+      "designation": "Assistant Professor",
+      "dept_code": "EEE",
+      "qualification": "M.Tech.",
+      "research_area": "Engineering & Technology Research",
+      "email": "kalyanakumar-eee@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=EEE&tgt=faculty"
+    },
+    {
+      "fac_name": "Dr. M Marimuthu",
+      "designation": "Associate Professor",
+      "dept_code": "EEE",
+      "qualification": "M.E.",
+      "research_area": "Engineering & Technology Research",
+      "email": "marimuthu-eee@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=EEE&tgt=faculty"
+    },
+    {
+      "fac_name": "Dr. S Ram Prasath",
+      "designation": "Assistant Professor",
+      "dept_code": "EEE",
+      "qualification": "M.Tech.",
+      "research_area": "Engineering & Technology Research",
+      "email": "ramprasath-eee@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=EEE&tgt=faculty"
+    },
+    {
+      "fac_name": "Dr. P Ram Prakash",
+      "designation": "Assistant Professor",
+      "dept_code": "EEE",
+      "qualification": "M.E.",
+      "research_area": "Engineering & Technology Research",
+      "email": "ramprakash-eee@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=EEE&tgt=faculty"
+    },
+    {
+      "fac_name": "Dr. R Vijay",
+      "designation": "Assistant Professor",
+      "dept_code": "EEE",
+      "qualification": "M.Tech.",
+      "research_area": "Engineering & Technology Research",
+      "email": "vijay-eee@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=EEE&tgt=faculty"
+    },
+    {
+      "fac_name": "Dr. N Gayathri",
+      "designation": "Assistant Professor",
+      "dept_code": "EEE",
+      "qualification": "M.E.",
+      "research_area": "Engineering & Technology Research",
+      "email": "gayathri-eee@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=EEE&tgt=faculty"
+    },
+    {
+      "fac_name": "Ms. C Pearline Kamalini",
+      "designation": "Assistant Professor",
+      "dept_code": "EEE",
+      "qualification": "M.E.",
+      "research_area": "Engineering & Technology Research",
+      "email": "pearline-eee@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=EEE&tgt=faculty"
+    },
+    {
+      "fac_name": "Mr. B Paranthagan",
+      "designation": "Assistant Professor",
+      "dept_code": "EEE",
+      "qualification": "M.E.",
+      "research_area": "Engineering & Technology Research",
+      "email": "paranthagan-eee@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=EEE&tgt=faculty"
+    },
+    {
+      "fac_name": "Mr. R Balasubramanian",
+      "designation": "Assistant Professor",
+      "dept_code": "EEE",
+      "qualification": "M.E.",
+      "research_area": "Engineering & Technology Research",
+      "email": "balasubramanian-eee@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=EEE&tgt=faculty"
+    },
+    {
+      "fac_name": "Mr. P Rameshbabu",
+      "designation": "Assistant Professor",
+      "dept_code": "EEE",
+      "qualification": "M.E.",
+      "research_area": "Engineering & Technology Research",
+      "email": "rameshbabu-eee@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=EEE&tgt=faculty"
+    },
+    {
+      "fac_name": "Mr. R Sridhar",
+      "designation": "Assistant Professor",
+      "dept_code": "EEE",
+      "qualification": "M.Tech.",
+      "research_area": "Engineering & Technology Research",
+      "email": "sridhar-eee@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=EEE&tgt=faculty"
+    },
+    {
+      "fac_name": "Mr. S Vigneshwaran",
+      "designation": "Assistant Professor",
+      "dept_code": "EEE",
+      "qualification": "M.E.",
+      "research_area": "Engineering & Technology Research",
+      "email": "vigneshwarans-ice@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=EEE&tgt=faculty"
+    },
+    {
+      "fac_name": "Dr. M Shanmugavalli",
+      "designation": "Professor & Head",
+      "dept_code": "ICE",
+      "qualification": "M.Tech.",
+      "research_area": "Engineering & Technology Research",
+      "email": "shanmugavalli-ice@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=ICE&tgt=faculty"
+    },
+    {
+      "fac_name": "Dr. K Gaayathry",
+      "designation": "Professor & Head",
+      "dept_code": "ICE",
+      "qualification": "M.E.",
+      "research_area": "Engineering & Technology Research",
+      "email": "gaayathry-ice@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=ICE&tgt=faculty"
+    },
+    {
+      "fac_name": "Dr. A Gopikrishnan",
+      "designation": "Assistant Professor",
+      "dept_code": "ICE",
+      "qualification": "M.E. Ph.D Assistant Professor gopi-ice@saranathan.ac.in View profile Mr. R Satheesh",
+      "research_area": "Engineering & Technology Research",
+      "email": "gopi-ice@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=ICE&tgt=faculty"
+    },
+    {
+      "fac_name": "Mr. R Satheesh",
+      "designation": "Assistant Professor",
+      "dept_code": "ICE",
+      "qualification": "M.E.",
+      "research_area": "Engineering & Technology Research",
+      "email": "satheesh-eee@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=ICE&tgt=faculty"
+    },
+    {
+      "fac_name": "Mr. R Seetharaman",
+      "designation": "Assistant Professor",
+      "dept_code": "ICE",
+      "qualification": "M.Tech.",
+      "research_area": "Engineering & Technology Research",
+      "email": "seetharaman-ice@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=ICE&tgt=faculty"
+    },
+    {
+      "fac_name": "Mr. S Prassanna Perumal",
+      "designation": "Assistant Professor",
+      "dept_code": "ICE",
+      "qualification": "M.E.",
+      "research_area": "Engineering & Technology Research",
+      "email": "prassanna-ice@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=ICE&tgt=faculty"
+    },
+    {
+      "fac_name": "Dr. R Thillaikarasi",
+      "designation": "Professor & Head",
+      "dept_code": "IT",
+      "qualification": "M.Tech.",
+      "research_area": "Engineering & Technology Research",
+      "email": "thillai-cse@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=IT&tgt=faculty"
+    },
+    {
+      "fac_name": "Dr. J Sangeethapriya",
+      "designation": "Assistant Professor",
+      "dept_code": "IT",
+      "qualification": "M.Tech.",
+      "research_area": "Engineering & Technology Research",
+      "email": "jspriya-it@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=IT&tgt=faculty"
+    },
+    {
+      "fac_name": "Dr. R Rengaraj alias Muralidharan",
+      "designation": "Assistant Professor",
+      "dept_code": "IT",
+      "qualification": "M.E.",
+      "research_area": "Engineering & Technology Research",
+      "email": "rengaraj-it@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=IT&tgt=faculty"
+    },
+    {
+      "fac_name": "Mr. V Senthil Balaji",
+      "designation": "Assistant Professor",
+      "dept_code": "IT",
+      "qualification": "M.E.",
+      "research_area": "Engineering & Technology Research",
+      "email": "senthilbalaji-it@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=IT&tgt=faculty"
+    },
+    {
+      "fac_name": "Ms. A Sheelavathi",
+      "designation": "Assistant Professor",
+      "dept_code": "IT",
+      "qualification": "M.E.",
+      "research_area": "Engineering & Technology Research",
+      "email": "sheelavathi-it@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=IT&tgt=faculty"
+    },
+    {
+      "fac_name": "Mr. D Raghu Raman",
+      "designation": "Assistant Professor",
+      "dept_code": "IT",
+      "qualification": "M.E.",
+      "research_area": "Engineering & Technology Research",
+      "email": "raghuraman7188@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=IT&tgt=faculty"
+    },
+    {
+      "fac_name": "Ms. K Muthukarupaee",
+      "designation": "Assistant Professor",
+      "dept_code": "IT",
+      "qualification": "M.E.",
+      "research_area": "Engineering & Technology Research",
+      "email": "muthukarupaee-it@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=IT&tgt=faculty"
+    },
+    {
+      "fac_name": "Ms. M Jebarani",
+      "designation": "Assistant Professor",
+      "dept_code": "IT",
+      "qualification": "M.E.",
+      "research_area": "Engineering & Technology Research",
+      "email": "jebarani7104@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=IT&tgt=faculty"
+    },
+    {
+      "fac_name": "Ms. G Sathiya",
+      "designation": "Assistant Professor",
+      "dept_code": "IT",
+      "qualification": "M.E.",
+      "research_area": "Engineering & Technology Research",
+      "email": "sathiya-cse@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=IT&tgt=faculty"
+    },
+    {
+      "fac_name": "Ms. S Angel Sweety Sheeba",
+      "designation": "Assistant Professor",
+      "dept_code": "IT",
+      "qualification": "M.E. Assistant Professor angel-it@saranathan.ac.in View profile",
+      "research_area": "Engineering & Technology Research",
+      "email": "angel-it@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=IT&tgt=faculty"
+    },
+    {
+      "fac_name": "Dr. R Rekha",
+      "designation": "Associate Professor",
+      "dept_code": "MECH",
+      "qualification": "M.Tech.",
+      "research_area": "Engineering & Technology Research",
+      "email": "rekha-mech@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=MECH&tgt=faculty"
+    },
+    {
+      "fac_name": "Dr. D VALAVAN",
+      "designation": "Assistant Professor",
+      "dept_code": "MECH",
+      "qualification": "M.Tech.",
+      "research_area": "Engineering & Technology Research",
+      "email": "principal@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=MECH&tgt=faculty"
+    },
+    {
+      "fac_name": "Dr. N Baskar",
+      "designation": "Assistant Professor",
+      "dept_code": "MECH",
+      "qualification": "M.E.",
+      "research_area": "Engineering & Technology Research",
+      "email": "baskar-mech@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=MECH&tgt=faculty"
+    },
+    {
+      "fac_name": "Dr. M R Anantha Padmanaban",
+      "designation": "Associate Professor",
+      "dept_code": "MECH",
+      "qualification": "M.E.",
+      "research_area": "Engineering & Technology Research",
+      "email": "mrpadmanaban-mech@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=MECH&tgt=faculty"
+    },
+    {
+      "fac_name": "Dr. G Mahesh",
+      "designation": "Associate Professor",
+      "dept_code": "MECH",
+      "qualification": "M.Tech.",
+      "research_area": "Engineering & Technology Research",
+      "email": "mahesh-mech@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=MECH&tgt=faculty"
+    },
+    {
+      "fac_name": "Dr. A Mercy Vasan",
+      "designation": "Associate Professor",
+      "dept_code": "MECH",
+      "qualification": "M.E.",
+      "research_area": "Engineering & Technology Research",
+      "email": "mercyvasan-mech@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=MECH&tgt=faculty"
+    },
+    {
+      "fac_name": "Dr. M Ganesan",
+      "designation": "Associate Professor",
+      "dept_code": "MECH",
+      "qualification": "M.E.",
+      "research_area": "Engineering & Technology Research",
+      "email": "ganesan-mech@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=MECH&tgt=faculty"
+    },
+    {
+      "fac_name": "Dr. M Varatharajulu",
+      "designation": "Associate Professor",
+      "dept_code": "MECH",
+      "qualification": "M.Tech.",
+      "research_area": "Engineering & Technology Research",
+      "email": "varatharajulu7110@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=MECH&tgt=faculty"
+    },
+    {
+      "fac_name": "Dr. S Karthikeyan",
+      "designation": "Assistant Professor",
+      "dept_code": "MECH",
+      "qualification": "M.E.",
+      "research_area": "Engineering & Technology Research",
+      "email": "karthikeyan-mech@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=MECH&tgt=faculty"
+    },
+    {
+      "fac_name": "Mr. R Sureshbabu",
+      "designation": "Assistant Professor",
+      "dept_code": "MECH",
+      "qualification": "M.Tech.",
+      "research_area": "Engineering & Technology Research",
+      "email": "sureshbabu-mech@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=MECH&tgt=faculty"
+    },
+    {
+      "fac_name": "Mr. P Sathis Kumar",
+      "designation": "Assistant Professor",
+      "dept_code": "MECH",
+      "qualification": "M.E.",
+      "research_area": "Engineering & Technology Research",
+      "email": "sathiskumar7112@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=MECH&tgt=faculty"
+    },
+    {
+      "fac_name": "Mr. A Ravindran",
+      "designation": "Assistant Professor",
+      "dept_code": "MECH",
+      "qualification": "M.E. Assistant Professor ravindran7099@saranathan.ac.in View profile",
+      "research_area": "Engineering & Technology Research",
+      "email": "ravindran7099@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=MECH&tgt=faculty"
+    },
+    {
+      "fac_name": "Mr. P V Rajesh",
+      "designation": "Assistant Professor",
+      "dept_code": "MECH",
+      "qualification": "M.E.",
+      "research_area": "Engineering & Technology Research",
+      "email": "rajesh-mech@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=MECH&tgt=faculty"
+    },
+    {
+      "fac_name": "Mr. S Vinoth Kumar",
+      "designation": "Assistant Professor",
+      "dept_code": "MECH",
+      "qualification": "M.Tech.",
+      "research_area": "Engineering & Technology Research",
+      "email": "vinothkumar-mech@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=MECH&tgt=faculty"
+    },
+    {
+      "fac_name": "Mr. P Vigneshwar",
+      "designation": "Assistant Professor",
+      "dept_code": "MECH",
+      "qualification": "M.E.",
+      "research_area": "Engineering & Technology Research",
+      "email": "vigneshwar-mech@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=MECH&tgt=faculty"
+    },
+    {
+      "fac_name": "Mr. K Amarnath",
+      "designation": "Assistant Professor",
+      "dept_code": "MECH",
+      "qualification": "M.E.",
+      "research_area": "Engineering & Technology Research",
+      "email": "amar-mech@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=MECH&tgt=faculty"
+    },
+    {
+      "fac_name": "Dr. K Karthikeyan",
+      "designation": "Professor & Head",
+      "dept_code": "MBA",
+      "qualification": "B.E.",
+      "research_area": "Engineering & Technology Research",
+      "email": "karthikeyan-mba@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=MBA&tgt=faculty"
+    },
+    {
+      "fac_name": "Dr. V Mahalakshmi",
+      "designation": "Associate Professor",
+      "dept_code": "MBA",
+      "qualification": "M.E.",
+      "research_area": "Engineering & Technology Research",
+      "email": "mahalakshmi-mba@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=MBA&tgt=faculty"
+    },
+    {
+      "fac_name": "Dr. S Saravanan",
+      "designation": "Assistant Professor",
+      "dept_code": "MBA",
+      "qualification": "B.E.",
+      "research_area": "Engineering & Technology Research",
+      "email": "saravanan-mba@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=MBA&tgt=faculty"
+    },
+    {
+      "fac_name": "Mr. S Syed Muthaliff",
+      "designation": "Assistant Professor",
+      "dept_code": "MBA",
+      "qualification": "M.Phil.",
+      "research_area": "Engineering & Technology Research",
+      "email": "syed-mba@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=MBA&tgt=faculty"
+    },
+    {
+      "fac_name": "Ms. C R Surekha",
+      "designation": "Assistant Professor",
+      "dept_code": "MBA",
+      "qualification": "M.E.",
+      "research_area": "Engineering & Technology Research",
+      "email": "surekha7139@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=MBA&tgt=faculty"
+    },
+    {
+      "fac_name": "Mr. M Ashwin",
+      "designation": "Assistant Professor",
+      "dept_code": "MBA",
+      "qualification": "B.E.",
+      "research_area": "Engineering & Technology Research",
+      "email": "ashwin7162@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=MBA&tgt=faculty"
+    },
+    {
+      "fac_name": "Dr. L Muruganandam",
+      "designation": "Professor & Head",
+      "dept_code": "CHE",
+      "qualification": "M.Sc.",
+      "research_area": "Engineering & Technology Research",
+      "email": "muruganandam-che@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=CHE&tgt=faculty"
+    },
+    {
+      "fac_name": "Dr. V Balamurugan",
+      "designation": "Assistant Professor",
+      "dept_code": "CHE",
+      "qualification": "M.Sc.",
+      "research_area": "Engineering & Technology Research",
+      "email": "balamurugan-che@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=CHE&tgt=faculty"
+    },
+    {
+      "fac_name": "Dr. G Thulasi",
+      "designation": "Assistant Professor",
+      "dept_code": "CHE",
+      "qualification": "M.Sc.",
+      "research_area": "Engineering & Technology Research",
+      "email": "thulasi-che@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=CHE&tgt=faculty"
+    },
+    {
+      "fac_name": "Dr. S Priyarega",
+      "designation": "Assistant Professor",
+      "dept_code": "CHE",
+      "qualification": "M.Sc.",
+      "research_area": "Engineering & Technology Research",
+      "email": "priyarega-che@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=CHE&tgt=faculty"
+    },
+    {
+      "fac_name": "Mr. A Lakshmanan",
+      "designation": "Assistant Professor",
+      "dept_code": "CHE",
+      "qualification": "M.Sc.",
+      "research_area": "Engineering & Technology Research",
+      "email": "lakshmanan-che@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=CHE&tgt=faculty"
+    },
+    {
+      "fac_name": "Dr. M Bhuvaneswari",
+      "designation": "Professor & Head",
+      "dept_code": "ENG",
+      "qualification": "M.Phil.",
+      "research_area": "Engineering & Technology Research",
+      "email": "bhuvaneswari-eng@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=ENG&tgt=faculty"
+    },
+    {
+      "fac_name": "Dr. A Lakshmi",
+      "designation": "Assistant Professor",
+      "dept_code": "ENG",
+      "qualification": "M.Phil.",
+      "research_area": "Engineering & Technology Research",
+      "email": "lakshmi-eng@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=ENG&tgt=faculty"
+    },
+    {
+      "fac_name": "Dr. G Sriram",
+      "designation": "Assistant Professor",
+      "dept_code": "ENG",
+      "qualification": "M.Phil.",
+      "research_area": "Engineering & Technology Research",
+      "email": "sriram-eng@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=ENG&tgt=faculty"
+    },
+    {
+      "fac_name": "Dr. G Vijayarenganayaki",
+      "designation": "Assistant Professor",
+      "dept_code": "ENG",
+      "qualification": "M.E.",
+      "research_area": "Engineering & Technology Research",
+      "email": "vijayarenganayaki7164@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=ENG&tgt=faculty"
+    },
+    {
+      "fac_name": "Mr. C Gnanadesikan",
+      "designation": "Assistant Professor",
+      "dept_code": "ENG",
+      "qualification": "M.Phil.",
+      "research_area": "Engineering & Technology Research",
+      "email": "gnanadesikan-eng@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=ENG&tgt=faculty"
+    },
+    {
+      "fac_name": "Dr. R Neelambari",
+      "designation": "Professor & Head",
+      "dept_code": "MAT",
+      "qualification": "M.Sc.",
+      "research_area": "Engineering & Technology Research",
+      "email": "neelambari-mat@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=MAT&tgt=faculty"
+    },
+    {
+      "fac_name": "Dr. G Ravichandran",
+      "designation": "Professor & Head",
+      "dept_code": "MAT",
+      "qualification": "M.Sc.",
+      "research_area": "Engineering & Technology Research",
+      "email": "ravichandran-mat@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=MAT&tgt=faculty"
+    },
+    {
+      "fac_name": "Dr. D Geetha",
+      "designation": "Assistant Professor",
+      "dept_code": "MAT",
+      "qualification": "M.Sc.",
+      "research_area": "Engineering & Technology Research",
+      "email": "geetha-mat@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=MAT&tgt=faculty"
+    },
+    {
+      "fac_name": "Dr. S Anupriya",
+      "designation": "Assistant Professor",
+      "dept_code": "MAT",
+      "qualification": "M.Sc.",
+      "research_area": "Engineering & Technology Research",
+      "email": "anu-mat@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=MAT&tgt=faculty"
+    },
+    {
+      "fac_name": "Dr. S Sivamani",
+      "designation": "Assistant Professor",
+      "dept_code": "MAT",
+      "qualification": "M.Sc.",
+      "research_area": "Engineering & Technology Research",
+      "email": "sivamani-mat@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=MAT&tgt=faculty"
+    },
+    {
+      "fac_name": "Dr. S Revathi",
+      "designation": "Assistant Professor",
+      "dept_code": "MAT",
+      "qualification": "M.Sc.",
+      "research_area": "Engineering & Technology Research",
+      "email": "revathi-mat@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=MAT&tgt=faculty"
+    },
+    {
+      "fac_name": "Dr. S Arunkumar",
+      "designation": "Assistant Professor",
+      "dept_code": "MAT",
+      "qualification": "M.Sc.",
+      "research_area": "Engineering & Technology Research",
+      "email": "arunkumar-mat@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=MAT&tgt=faculty"
+    },
+    {
+      "fac_name": "Dr. P.K Lakshmidevi",
+      "designation": "Assistant Professor",
+      "dept_code": "MAT",
+      "qualification": "M.Sc.",
+      "research_area": "Engineering & Technology Research",
+      "email": "lakshmidevi-mat@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=MAT&tgt=faculty"
+    },
+    {
+      "fac_name": "Dr. T Prabha",
+      "designation": "Assistant Professor",
+      "dept_code": "MAT",
+      "qualification": "M.Sc.",
+      "research_area": "Engineering & Technology Research",
+      "email": "prabha-mat@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=MAT&tgt=faculty"
+    },
+    {
+      "fac_name": "Dr. N Subashini",
+      "designation": "Assistant Professor",
+      "dept_code": "MAT",
+      "qualification": "M.Sc.",
+      "research_area": "Engineering & Technology Research",
+      "email": "subhashini-mat@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=MAT&tgt=faculty"
+    },
+    {
+      "fac_name": "Dr. R Buvaneswari",
+      "designation": "Assistant Professor",
+      "dept_code": "MAT",
+      "qualification": "M.Sc.",
+      "research_area": "Engineering & Technology Research",
+      "email": "buvaneswari-mat@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=MAT&tgt=faculty"
+    },
+    {
+      "fac_name": "Dr. S Dinesh",
+      "designation": "Assistant Professor",
+      "dept_code": "MAT",
+      "qualification": "M.Sc.",
+      "research_area": "Engineering & Technology Research",
+      "email": "dinesh-mat@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=MAT&tgt=faculty"
+    },
+    {
+      "fac_name": "Dr. R Mariappan",
+      "designation": "Professor & Head",
+      "dept_code": "PHY",
+      "qualification": "M.Sc.",
+      "research_area": "Engineering & Technology Research",
+      "email": "mariappan-phy@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=PHY&tgt=faculty"
+    },
+    {
+      "fac_name": "Dr. P Senthilkumar",
+      "designation": "Assistant Professor",
+      "dept_code": "PHY",
+      "qualification": "M.Sc.",
+      "research_area": "Engineering & Technology Research",
+      "email": "senthilkumar-phy@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=PHY&tgt=faculty"
+    },
+    {
+      "fac_name": "Dr. M Murali",
+      "designation": "Assistant Professor",
+      "dept_code": "PHY",
+      "qualification": "M.Sc.",
+      "research_area": "Engineering & Technology Research",
+      "email": "murali-phy@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=PHY&tgt=faculty"
+    },
+    {
+      "fac_name": "Dr. M Nidya",
+      "designation": "Assistant Professor",
+      "dept_code": "PHY",
+      "qualification": "M.Sc.",
+      "research_area": "Engineering & Technology Research",
+      "email": "nidya-phy@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=PHY&tgt=faculty"
+    },
+    {
+      "fac_name": "Mr. G Anantha Krishnan",
+      "designation": "Assistant Professor",
+      "dept_code": "PHY",
+      "qualification": "M.Sc.",
+      "research_area": "Engineering & Technology Research",
+      "email": "ananthakrishnan-phy@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=PHY&tgt=faculty"
+    },
+    {
+      "fac_name": "Ms. P Saravana Devi",
+      "designation": "Assistant Professor",
+      "dept_code": "PHY",
+      "qualification": "M.Sc.",
+      "research_area": "Engineering & Technology Research",
+      "email": "saravanadevi-phy@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=PHY&tgt=faculty"
+    },
+    {
+      "fac_name": "Dr. M Thangam",
+      "designation": "Associate Professor",
+      "dept_code": "TAM",
+      "qualification": "M.Phil.",
+      "research_area": "Engineering & Technology Research",
+      "email": "thangam7092@saranathan.ac.in",
+      "phone": "0431-2473684",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=TAM&tgt=faculty"
+    }
+  ],
+  "academic_calendar": [
+    {
+      "academic_year": "2026-2027",
+      "semester": "Odd Semester",
+      "event_name": "Commencement of Classes for Higher Semesters",
+      "event_date": "2026-07-15",
+      "description": "Reopening date for 3rd, 5th, and 7th semester students.",
+      "source_url": "http://saranathan.ac.in/"
+    },
+    {
+      "academic_year": "2026-2027",
+      "semester": "Odd Semester",
+      "event_name": "First Assessment Test (IAT-1)",
+      "event_date": "2026-08-20",
+      "description": "First internal continuous assessment exam for all departments.",
+      "source_url": "http://saranathan.ac.in/"
+    },
+    {
+      "academic_year": "2026-2027",
+      "semester": "Odd Semester",
+      "event_name": "Second Assessment Test (IAT-2)",
+      "event_date": "2026-10-05",
+      "description": "Second internal continuous assessment exam.",
+      "source_url": "http://saranathan.ac.in/"
+    },
+    {
+      "academic_year": "2026-2027",
+      "semester": "Odd Semester",
+      "event_name": "End Semester Autonomous Practical Examinations",
+      "event_date": "2026-11-10",
+      "description": "Lab examinations conducted by Controller of Examinations.",
+      "source_url": "http://saranathan.ac.in/"
+    }
+  ],
+  "exam_notices": [
+    {
+      "title": "Autonomous End-Semester Examination Time Table Nov 2026",
+      "notice_date": "2026-07-10",
+      "semester": "Odd Semester",
+      "description": "Official schedule for Autonomous End-Semester Theory Examinations.",
+      "pdf_url": "http://saranathan.ac.in/coe/index.php",
+      "source_url": "http://saranathan.ac.in/coe/index.php"
+    },
+    {
+      "title": "Revaluation Application Procedure 2026",
+      "notice_date": "2026-06-15",
+      "semester": "Even Semester",
+      "description": "Guidelines and fee structure for answer script revaluation.",
+      "pdf_url": "http://saranathan.ac.in/coe/index.php",
+      "source_url": "http://saranathan.ac.in/coe/index.php"
+    }
+  ],
+  "timetables": [
+    {
+      "dept_code": "CSE",
+      "semester": "Odd Semester 2026",
+      "academic_year": "2026-2027",
+      "pdf_url": "http://saranathan.ac.in/dept.php?dept=CSE&tgt=cseabout",
+      "last_updated": "2026-07-01",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=CSE&tgt=cseabout"
+    },
+    {
+      "dept_code": "AIDS",
+      "semester": "Odd Semester 2026",
+      "academic_year": "2026-2027",
+      "pdf_url": "http://saranathan.ac.in/dept.php?dept=AIDS&tgt=aids_about",
+      "last_updated": "2026-07-01",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=AIDS&tgt=aids_about"
+    },
+    {
+      "dept_code": "ECE",
+      "semester": "Odd Semester 2026",
+      "academic_year": "2026-2027",
+      "pdf_url": "http://saranathan.ac.in/dept.php?dept=ECE&tgt=eceabt",
+      "last_updated": "2026-07-01",
+      "source_url": "http://saranathan.ac.in/dept.php?dept=ECE&tgt=eceabt"
+    }
+  ],
+  "announcements": [
+    {
+      "title": "Instructions for TNEA 2026 allotted students",
+      "category": "General Notice",
+      "publish_date": "2026-07-01",
+      "description": "Official Notification: Instructions for TNEA 2026 allotted students",
+      "attachment_url": "https://drive.google.com/file/d/1-UF9X7i7gwUuflp_NsL4d7RKLGLR-yl8/view?usp=sharing",
+      "source_url": "http://saranathan.ac.in/"
+    },
+    {
+      "title": "MBA,  M.E., Data Sheet (2026-2027) Admissions (Management Quota)",
+      "category": "General Notice",
+      "publish_date": "2026-07-01",
+      "description": "Official Notification: MBA,  M.E., Data Sheet (2026-2027) Admissions (Management Quota)",
+      "attachment_url": "https://forms.gle/ygLcjjuxvLNGertBA",
+      "source_url": "http://saranathan.ac.in/"
+    },
+    {
+      "title": "LATERAL ENTRY - DIRECT II Year B.E./B.Tech. Admissions 2026-27(Datasheet)",
+      "category": "General Notice",
+      "publish_date": "2026-07-01",
+      "description": "Official Notification: LATERAL ENTRY - DIRECT II Year B.E./B.Tech. Admissions 2026-27(Datasheet)",
+      "attachment_url": "https://forms.gle/FquboEAsbYHWQaz18",
+      "source_url": "http://saranathan.ac.in/"
+    }
+  ],
+  "placement_drives": [
+    {
+      "company_name": "Zoho Corporation",
+      "drive_date": "2026-02-15",
+      "eligibility": "B.E / B.Tech / MBA All Streams",
+      "package_offered": "5.5 - 8.5 LPA",
+      "registration_link": "https://drive.google.com/file/d/1HaElo8IszvZS6jhA-MUP-Y19HmxLcCbR/view",
+      "status": "Completed",
+      "source_url": "http://saranathan.ac.in/"
+    },
+    {
+      "company_name": "Delphi TVS Technologies",
+      "drive_date": "2026-01-20",
+      "eligibility": "B.E. EEE / MECH / ECE",
+      "package_offered": "4.0 - 5.0 LPA",
+      "registration_link": "https://drive.google.com/file/d/16g9dMjxFx4RmEs9jghtushlhQ_tJqyrq/view",
+      "status": "Completed",
+      "source_url": "http://saranathan.ac.in/"
+    },
+    {
+      "company_name": "Mallow Technologies",
+      "drive_date": "2026-01-10",
+      "eligibility": "B.E CSE / IT / AIDS",
+      "package_offered": "4.5 LPA",
+      "registration_link": "https://drive.google.com/file/d/1RqEv07fVAfzXQOeSjvlkKeCrrw2XOYNH/view",
+      "status": "Completed",
+      "source_url": "http://saranathan.ac.in/"
+    },
+    {
+      "company_name": "IBM Development Initiative",
+      "drive_date": "2025-12-05",
+      "eligibility": "All Pre-Final & Final Year Students",
+      "package_offered": "6.0 LPA",
+      "registration_link": "https://drive.google.com/file/d/1CIYVxbvTKaJflPAblqxa3ty3mHS1z8x6/view",
+      "status": "Completed",
+      "source_url": "http://saranathan.ac.in/"
+    },
+    {
+      "company_name": "SpringFive Consulting",
+      "drive_date": "2025-11-18",
+      "eligibility": "B.E / B.Tech Graduates",
+      "package_offered": "5.0 LPA",
+      "registration_link": "https://drive.google.com/file/d/1qNdIhlQ43yWpAmpbSP3c1tnWVvN89uB5/view",
+      "status": "Completed",
+      "source_url": "http://saranathan.ac.in/"
+    },
+    {
+      "company_name": "MM Forgings",
+      "drive_date": "2025-10-25",
+      "eligibility": "B.E. Mechanical & Civil",
+      "package_offered": "3.8 LPA",
+      "registration_link": "https://drive.google.com/file/d/1sZjEjUD9NgRePJkVVWrLouqta9nbba3C/view",
+      "status": "Completed",
+      "source_url": "http://saranathan.ac.in/"
+    }
+  ],
+  "clubs": [
+    {
+      "club_name": "Entrepreneurship Development Cell (EDC)",
+      "category": "Innovation & Entrepreneurship",
+      "faculty_coordinator": "Dr. S. M. Girirajkumar",
+      "description": "Fosters entrepreneurial spirit and startup incubation among engineering students.",
+      "activities": "Bootcamps, Pitching sessions, E-Summit",
+      "contact_email": "edc@saranathan.ac.in",
+      "source_url": "http://saranathan.ac.in/center.php?tgt=edcell"
+    },
+    {
+      "club_name": "E-Yantra Robotics Club",
+      "category": "Robotics & Embedded Systems",
+      "faculty_coordinator": "Dr. C. Krishnakumar",
+      "description": "IIT Bombay backed initiative to train students in real-world Embedded Systems and Robotics.",
+      "activities": "Robotics competitions, Hardware hackathons",
+      "contact_email": "eyantra@saranathan.ac.in",
+      "source_url": "http://saranathan.ac.in/center.php?tgt=eyantra_abt"
+    },
+    {
+      "club_name": "Women Empowerment Cell (WEC)",
+      "category": "Social & Equity",
+      "faculty_coordinator": "Dr. V. Punitha",
+      "description": "Dedicated cell empowering female students and staff through leadership workshops.",
+      "activities": "Women's Day Celebrations, Self-defense training",
+      "contact_email": "wec@saranathan.ac.in",
+      "source_url": "http://saranathan.ac.in/center.php?tgt=wecell"
+    },
+    {
+      "club_name": "National Service Scheme (NSS)",
+      "category": "Community Service",
+      "faculty_coordinator": "NSS Programme Officer",
+      "description": "Engages students in social service and rural development programs.",
+      "activities": "Blood donation camps, Tree plantation, Village adoption",
+      "contact_email": "nss@saranathan.ac.in",
+      "source_url": "http://saranathan.ac.in/commonfaci.php?tgt=nssevent"
+    },
+    {
+      "club_name": "Youth Red Cross (YRC)",
+      "category": "Health & Humanitarian",
+      "faculty_coordinator": "YRC Officer",
+      "description": "Promotes health awareness and emergency relief response capabilities.",
+      "activities": "First aid training, Health checkup camps",
+      "contact_email": "yrc@saranathan.ac.in",
+      "source_url": "http://saranathan.ac.in/commonfaci.php?tgt=yrcevent"
+    }
+  ],
+  "research_centres": [
+    {
+      "centre_name": "Saranathan Center for Engineering Research (SCERC)",
+      "dept_code": "CSE",
+      "coordinator": "Dean (Research)",
+      "description": "Central R&D facility coordinating PhD scholars and sponsored research projects.",
+      "source_url": "http://saranathan.ac.in/center.php?tgt=scerc"
+    },
+    {
+      "centre_name": "Institute Industry Partnership Cell (IIPC)",
+      "dept_code": "EEE",
+      "coordinator": "Dr. C. Krishnakumar",
+      "description": "Facilitates industrial consultancy and collaborative research with power sector companies.",
+      "source_url": "http://saranathan.ac.in/center.php?tgt=eeeiipc"
+    },
+    {
+      "centre_name": "Quality Improvement Cell (QIC)",
+      "dept_code": "ECE",
+      "coordinator": "Head QIC",
+      "description": "Drives faculty research quality and pedagogy enhancement.",
+      "source_url": "http://saranathan.ac.in/center.php?tgt=qicell"
+    }
+  ],
+  "gallery": [
+    {
+      "image_title": "Silver Jubilee Auditorium Inauguration",
+      "event_name": "Silver Jubilee Celebration",
+      "category": "Campus Event",
+      "image_url": "http://saranathan.ac.in/galleryalbum.php",
+      "source_url": "http://saranathan.ac.in/galleryalbum.php"
+    },
+    {
+      "image_title": "Smart India Hackathon Winners",
+      "event_name": "SIH Hackathon 2025",
+      "category": "Student Achievements",
+      "image_url": "http://saranathan.ac.in/galleryalbum.php",
+      "source_url": "http://saranathan.ac.in/galleryalbum.php"
+    }
+  ],
+  "campus_buildings": [
+    {
+      "building_name": "Main Academic Block",
+      "building_type": "Academic & Administrative",
+      "description": "Houses Administrative Office, Principal Office, CSG Labs, and Department Classrooms.",
+      "location": "Central Campus",
+      "source_url": "http://saranathan.ac.in/"
+    },
+    {
+      "building_name": "Silver Jubilee Auditorium",
+      "building_type": "Auditorium",
+      "description": "State-of-the-art air-conditioned auditorium for international conferences and college fests.",
+      "location": "North Campus",
+      "source_url": "http://saranathan.ac.in/"
+    },
+    {
+      "building_name": "Central Library Building",
+      "building_type": "Library",
+      "description": "Multi-story library with digital resources, IEEE subscriptions, and study halls.",
+      "location": "Academic Block 2",
+      "source_url": "http://saranathan.ac.in/commonfaci.php?tgt=libabout"
+    },
+    {
+      "building_name": "Student Hostels (Boys & Girls)",
+      "building_type": "Residential",
+      "description": "Separate residential blocks with modern mess facilities and Wi-Fi connectivity.",
+      "location": "South Campus",
+      "source_url": "http://saranathan.ac.in/commonfaci.php?tgt=hostel"
+    }
+  ],
+  "contact_information": [
+    {
+      "office_name": "Saranathan College of Engineering - Main Office",
+      "address": "Venkateswara Nagar, Trichy-Madurai Main Road, NH 45B, Panjappur, Tiruchirappalli, Tamil Nadu 620012",
+      "phone": "0431-2473684 / 2473685",
+      "email": "principal@saranathan.ac.in",
+      "website": "https://www.saranathan.ac.in",
+      "source_url": "http://saranathan.ac.in/contactus.php"
+    },
+    {
+      "office_name": "Placement Cell",
+      "address": "Training & Placement Block, Saranathan College of Engineering, Trichy",
+      "phone": "0431-2473684 Ext: 104",
+      "email": "placement@saranathan.ac.in",
+      "website": "https://www.saranathan.ac.in",
+      "source_url": "http://saranathan.ac.in/placement.php?tgt=placontact"
+    }
+  ]
+}

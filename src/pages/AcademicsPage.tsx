@@ -1,16 +1,32 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { GraduationCap, Clock, Calendar, AlertTriangle, CheckCircle2, BookOpen, Award, Sparkles, UserCheck, ChevronRight } from 'lucide-react';
-import { academicSubjects, timetableSlots, currentUser, OFFICIAL_DEPARTMENTS } from '../data/mockData';
+import { OFFICIAL_DEPARTMENTS, currentUser, academicSubjects, timetableSlots } from '../data/mockData';
+import { CourseSubject } from '../types';
+import { apiService } from '../services/apiService';
 
 export const AcademicsPage: React.FC = () => {
   const [selectedDept, setSelectedDept] = useState<string>('Computer Science & Engineering');
   const [selectedSemester, setSelectedSemester] = useState<number>(6);
   const [activeTab, setActiveTab] = useState<'attendance' | 'timetable' | 'cgpa'>('attendance');
+  const [coursesList, setCoursesList] = useState<CourseSubject[]>([]);
 
-  const filteredSubjects = academicSubjects.filter((sub) => {
+  useEffect(() => {
+    async function loadCourses() {
+      try {
+        const data = await apiService.getCourses();
+        if (data && data.length > 0) {
+          setCoursesList(data);
+        }
+      } catch (err) {
+        console.error("Failed to load courses from SQLite:", err);
+      }
+    }
+    loadCourses();
+  }, []);
+
+  const filteredSubjects = coursesList.filter((sub) => {
     const matchesDept = selectedDept === 'All Departments' || sub.department === selectedDept;
-    const matchesSem = sub.semester === selectedSemester;
-    return matchesDept && matchesSem;
+    return matchesDept;
   });
 
   return (
