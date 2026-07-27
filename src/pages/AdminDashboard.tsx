@@ -19,9 +19,7 @@ export const AdminDashboard: React.FC = () => {
   // Navigation tab: 'students' (Student Database) | 'tables' (Raw Table Explorer)
   const [activeTab, setActiveTab] = useState<'students' | 'tables'>('students');
 
-  // ==========================================
   // STUDENT DATABASE STATE
-  // ==========================================
   const [students, setStudents] = useState<StudentProfile[]>([]);
   const [studentStats, setStudentStats] = useState<StudentDatabaseStats | null>(null);
   const [loadingStudents, setLoadingStudents] = useState<boolean>(true);
@@ -36,9 +34,7 @@ export const AdminDashboard: React.FC = () => {
   const [filterScholarship, setFilterScholarship] = useState('All');
   const [filterFirstGrad, setFilterFirstGrad] = useState('All');
 
-  // ==========================================
   // RAW SQLITE TABLES EXPLORER STATE
-  // ==========================================
   const [tablesList, setTablesList] = useState<{ name: string; count: number }[]>([]);
   const [activeTable, setActiveTable] = useState<string>('announcements');
   const [tableData, setTableData] = useState<Record<string, any>[]>([]);
@@ -273,80 +269,78 @@ export const AdminDashboard: React.FC = () => {
   const columns = tableData.length > 0 ? Object.keys(tableData[0]) : [];
 
   return (
-    <div className="max-w-7xl mx-auto p-4 sm:p-6 space-y-8">
+    <div className="max-w-7xl mx-auto p-3 sm:p-6 space-y-6 sm:space-y-8 w-full">
       
       {/* Admin Control Center Header */}
-      <div className="p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-emerald-950 via-slate-900 to-indigo-950 border border-emerald-800/80 text-white shadow-2xl flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+      <div className="p-5 sm:p-8 rounded-3xl bg-[#3B6064] border border-[#55828B]/30 text-white shadow-md flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
         <div>
-          <span className="text-xs font-bold text-emerald-400 uppercase tracking-widest flex items-center gap-1.5 mb-1">
-            <ShieldCheck className="w-4 h-4 text-emerald-400" /> SSE FESTA Institutional Portal
+          <span className="text-xs font-bold text-[#C9E4CA] uppercase tracking-widest flex items-center gap-1.5 mb-1">
+            <ShieldCheck className="w-4 h-4 text-[#C9E4CA]" /> SSE FESTA Institutional Portal
           </span>
           <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight flex items-center gap-2">
             Student Profile Management System
           </h1>
-          <p className="text-xs sm:text-sm text-emerald-200 mt-1 font-medium max-w-2xl leading-relaxed">
+          <p className="text-xs sm:text-sm text-[#C9E4CA] mt-1 font-medium max-w-2xl leading-relaxed">
             Comprehensive database of registered students, onboarding responses, academic records, and skills. Real-time updates & notifications enabled.
           </p>
         </div>
 
-        <div className="flex flex-wrap items-center gap-3">
+        <div className="flex flex-wrap items-center gap-3 w-full md:w-auto">
           <button
             onClick={() => setShowBroadcastModal(true)}
-            className="px-5 py-3 rounded-2xl bg-gradient-to-r from-amber-500 to-rose-600 hover:from-amber-600 hover:to-rose-700 text-white font-extrabold text-xs shadow-lg flex items-center gap-2 transition-all hover:scale-105"
+            className="flex-1 md:flex-initial px-5 py-3 rounded-2xl bg-[#87BBA2] hover:bg-[#55828B] text-[#364958] hover:text-white font-extrabold text-xs shadow-sm flex items-center justify-center gap-2 transition-all cursor-pointer border-none min-h-[44px]"
           >
-            <Megaphone className="w-4 h-4" /> Send Instant Broadcast
+            <Megaphone className="w-4 h-4 text-[#364958]" /> Send Instant Broadcast
           </button>
           <button
             onClick={() => activeTab === 'students' ? loadStudentDatabase() : loadRawDatabaseTables(activeTable)}
-            className="p-3 rounded-2xl bg-slate-800 hover:bg-slate-700 text-emerald-400 border border-emerald-500/30 font-bold text-xs shadow-sm flex items-center gap-2 transition-all"
+            className="p-3 rounded-2xl bg-white border border-[#87BBA2] text-[#364958] hover:bg-[#C9E4CA] font-bold text-xs shadow-sm flex items-center justify-center gap-2 transition-all cursor-pointer min-w-[44px] min-h-[44px]"
             title="Refresh Database"
           >
-            <RefreshCw className={`w-4 h-4 ${loadingStudents || loadingTables ? 'animate-spin' : ''}`} />
+            <RefreshCw className={`w-4 h-4 text-[#55828B] ${loadingStudents || loadingTables ? 'animate-spin' : ''}`} />
           </button>
         </div>
       </div>
 
       {/* Success Notification Banner */}
       {actionSuccess && (
-        <div className="p-4 rounded-2xl bg-emerald-500/20 border border-emerald-500/50 text-emerald-300 text-xs font-bold flex items-center justify-between animate-in fade-in slide-in-from-top-2">
+        <div className="p-4 rounded-2xl bg-[#87BBA2] border border-[#3B6064] text-[#364958] text-xs font-bold flex items-center justify-between animate-in fade-in">
           <div className="flex items-center gap-2">
-            <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0" />
+            <CheckCircle2 className="w-5 h-5 text-[#364958] shrink-0" />
             <span>{actionSuccess}</span>
           </div>
-          <button onClick={() => setActionSuccess(null)} className="text-emerald-400 hover:text-white font-black">✕</button>
+          <button onClick={() => setActionSuccess(null)} className="text-[#364958] hover:text-black font-black border-none bg-transparent cursor-pointer">✕</button>
         </div>
       )}
 
       {/* Primary Navigation Tabs */}
-      <div className="flex items-center gap-3 border-b border-slate-200 dark:border-slate-800 pb-2">
+      <div className="flex flex-wrap items-center gap-2 border-b border-[#C9E4CA] pb-3">
         <button
           onClick={() => setActiveTab('students')}
-          className={`px-6 py-3 rounded-2xl font-extrabold text-xs flex items-center gap-2 transition-all shadow-sm ${
+          className={`px-5 py-2.5 rounded-2xl font-extrabold text-xs flex items-center gap-2 transition-all cursor-pointer border-none min-h-[44px] ${
             activeTab === 'students'
-              ? 'bg-emerald-600 text-white shadow-emerald-600/30 scale-105'
-              : 'bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-800 hover:bg-slate-100'
+              ? 'bg-[#3B6064] text-white shadow-sm'
+              : 'bg-white text-[#364958] border border-[#87BBA2] hover:bg-[#C9E4CA]/40'
           }`}
         >
-          <Users className="w-4 h-4" /> Student Database Module ({studentStats?.total_students || 0})
+          <Users className="w-4 h-4" /> Student Database ({studentStats?.total_students || 0})
         </button>
 
         <button
           onClick={() => setActiveTab('tables')}
-          className={`px-6 py-3 rounded-2xl font-extrabold text-xs flex items-center gap-2 transition-all shadow-sm ${
+          className={`px-5 py-2.5 rounded-2xl font-extrabold text-xs flex items-center gap-2 transition-all cursor-pointer border-none min-h-[44px] ${
             activeTab === 'tables'
-              ? 'bg-emerald-600 text-white shadow-emerald-600/30 scale-105'
-              : 'bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-800 hover:bg-slate-100'
+              ? 'bg-[#3B6064] text-white shadow-sm'
+              : 'bg-white text-[#364958] border border-[#87BBA2] hover:bg-[#C9E4CA]/40'
           }`}
         >
           <Database className="w-4 h-4" /> All SQLite Raw Tables ({tablesList.length})
         </button>
       </div>
 
-      {/* ========================================================================= */}
       {/* VIEW 1: STUDENT DATABASE MANAGEMENT PORTAL */}
-      {/* ========================================================================= */}
       {activeTab === 'students' && (
-        <div className="space-y-8">
+        <div className="space-y-6 sm:space-y-8">
           
           {/* Dashboard Statistics Top Cards */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
@@ -399,24 +393,24 @@ export const AdminDashboard: React.FC = () => {
 
           {/* Department-wise & Year-wise Visual Distribution */}
           {studentStats && (
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
               
               {/* Department Breakdown */}
-              <div className="p-5 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-lg space-y-3">
-                <h3 className="font-extrabold text-xs text-slate-500 uppercase tracking-widest flex items-center gap-1.5">
-                  <GraduationCap className="w-4 h-4 text-emerald-500" /> Department-wise Student Breakdown
+              <div className="p-4 sm:p-5 rounded-3xl bg-white border border-[#C9E4CA] shadow-sm space-y-3">
+                <h3 className="font-extrabold text-xs text-[#55828B] uppercase tracking-widest flex items-center gap-1.5">
+                  <GraduationCap className="w-4 h-4 text-[#55828B]" /> Department-wise Student Breakdown
                 </h3>
                 <div className="space-y-2">
                   {Object.entries(studentStats.department_wise || {}).map(([dept, count]) => {
                     const pct = Math.round((count / (studentStats.total_students || 1)) * 100);
                     return (
                       <div key={dept} className="space-y-1">
-                        <div className="flex items-center justify-between text-xs font-bold text-slate-800 dark:text-slate-200">
+                        <div className="flex items-center justify-between text-xs font-bold text-[#364958]">
                           <span className="truncate max-w-xs">{dept}</span>
                           <span>{count} Students ({pct}%)</span>
                         </div>
-                        <div className="h-2 rounded-full bg-slate-100 dark:bg-slate-800 overflow-hidden">
-                          <div className="h-full bg-gradient-to-r from-emerald-500 to-teal-400 rounded-full" style={{ width: `${pct}%` }} />
+                        <div className="h-2.5 rounded-full bg-[#C9E4CA] overflow-hidden">
+                          <div className="h-full bg-[#3B6064] rounded-full" style={{ width: `${pct}%` }} />
                         </div>
                       </div>
                     );
@@ -425,15 +419,15 @@ export const AdminDashboard: React.FC = () => {
               </div>
 
               {/* Year-wise Breakdown */}
-              <div className="p-5 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-lg space-y-3">
-                <h3 className="font-extrabold text-xs text-slate-500 uppercase tracking-widest flex items-center gap-1.5">
-                  <Calendar className="w-4 h-4 text-indigo-500" /> Year-wise Student Distribution
+              <div className="p-4 sm:p-5 rounded-3xl bg-white border border-[#C9E4CA] shadow-sm space-y-3">
+                <h3 className="font-extrabold text-xs text-[#55828B] uppercase tracking-widest flex items-center gap-1.5">
+                  <Calendar className="w-4 h-4 text-[#55828B]" /> Year-wise Student Distribution
                 </h3>
                 <div className="grid grid-cols-2 gap-3">
                   {Object.entries(studentStats.year_wise || {}).map(([yr, count]) => (
-                    <div key={yr} className="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-800 text-center">
-                      <span className="text-xl font-black text-indigo-400">{count}</span>
-                      <p className="text-xs font-bold text-slate-700 dark:text-slate-300 mt-0.5">{yr}</p>
+                    <div key={yr} className="p-3.5 rounded-2xl bg-[#F7FAF8] border border-[#87BBA2] text-center">
+                      <span className="text-xl font-black text-[#364958]">{count}</span>
+                      <p className="text-xs font-bold text-[#3B6064] mt-0.5">{yr}</p>
                     </div>
                   ))}
                 </div>
@@ -443,51 +437,51 @@ export const AdminDashboard: React.FC = () => {
           )}
 
           {/* Search & Multi-filter Control Bar */}
-          <div className="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xl space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
-              <h3 className="font-extrabold text-sm text-slate-900 dark:text-white flex items-center gap-2">
-                <Filter className="w-4 h-4 text-emerald-500" /> Search & Filter Registered Student Profiles
+          <div className="p-4 sm:p-6 rounded-3xl bg-white border border-[#C9E4CA] shadow-sm space-y-4">
+            <div className="flex items-center justify-between border-b border-[#C9E4CA] pb-3">
+              <h3 className="font-extrabold text-xs sm:text-sm text-[#364958] flex items-center gap-2">
+                <Filter className="w-4 h-4 text-[#55828B]" /> Search & Filter Registered Student Profiles
               </h3>
-              <span className="text-xs font-bold text-slate-400">
-                Showing {students.length} of {studentStats?.total_students || 0} Records
+              <span className="text-xs font-bold text-[#55828B]">
+                {students.length} Records
               </span>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
               {/* Search by Name */}
               <div className="space-y-1">
-                <label className="text-[10px] font-bold text-slate-400 uppercase">Search Name / Email</label>
+                <label className="text-[10px] font-bold text-[#55828B] uppercase">Search Name / Email</label>
                 <div className="relative">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400" />
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[#55828B]" />
                   <input
                     type="text"
                     placeholder="Search name..."
                     value={searchName}
                     onChange={(e) => setSearchName(e.target.value)}
-                    className="w-full pl-8 pr-3 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white"
+                    className="w-full pl-8 pr-3 py-2 text-xs rounded-xl border border-[#87BBA2] bg-white text-[#364958]"
                   />
                 </div>
               </div>
 
               {/* Search by Reg No */}
               <div className="space-y-1">
-                <label className="text-[10px] font-bold text-slate-400 uppercase">Register Number</label>
+                <label className="text-[10px] font-bold text-[#55828B] uppercase">Register Number</label>
                 <input
                   type="text"
                   placeholder="e.g. 21CS8042"
                   value={searchRegNo}
                   onChange={(e) => setSearchRegNo(e.target.value)}
-                  className="w-full px-3 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white"
+                  className="w-full px-3 py-2 text-xs rounded-xl border border-[#87BBA2] bg-white text-[#364958]"
                 />
               </div>
 
               {/* Filter Department */}
               <div className="space-y-1">
-                <label className="text-[10px] font-bold text-slate-400 uppercase">Department</label>
+                <label className="text-[10px] font-bold text-[#55828B] uppercase">Department</label>
                 <select
                   value={filterDept}
                   onChange={(e) => setFilterDept(e.target.value)}
-                  className="w-full px-3 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white font-semibold"
+                  className="w-full px-3 py-2 text-xs rounded-xl border border-[#87BBA2] bg-white text-[#364958] font-semibold"
                 >
                   <option value="All">All Departments</option>
                   <option value="Computer Science & Engineering">CSE</option>
@@ -501,11 +495,11 @@ export const AdminDashboard: React.FC = () => {
 
               {/* Filter Year */}
               <div className="space-y-1">
-                <label className="text-[10px] font-bold text-slate-400 uppercase">Year</label>
+                <label className="text-[10px] font-bold text-[#55828B] uppercase">Year</label>
                 <select
                   value={filterYear}
                   onChange={(e) => setFilterYear(e.target.value)}
-                  className="w-full px-3 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white font-semibold"
+                  className="w-full px-3 py-2 text-xs rounded-xl border border-[#87BBA2] bg-white text-[#364958] font-semibold"
                 >
                   <option value="All">All Years</option>
                   <option value="1st Year">1st Year</option>
@@ -517,11 +511,11 @@ export const AdminDashboard: React.FC = () => {
 
               {/* Filter Scholarship */}
               <div className="space-y-1">
-                <label className="text-[10px] font-bold text-slate-400 uppercase">Scholarship</label>
+                <label className="text-[10px] font-bold text-[#55828B] uppercase">Scholarship</label>
                 <select
                   value={filterScholarship}
                   onChange={(e) => setFilterScholarship(e.target.value)}
-                  className="w-full px-3 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white font-semibold"
+                  className="w-full px-3 py-2 text-xs rounded-xl border border-[#87BBA2] bg-white text-[#364958] font-semibold"
                 >
                   <option value="All">All</option>
                   <option value="true">Required (Yes)</option>
@@ -532,64 +526,60 @@ export const AdminDashboard: React.FC = () => {
           </div>
 
           {/* Student Table */}
-          <div className="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xl space-y-4">
+          <div className="p-4 sm:p-6 rounded-3xl bg-white border border-[#C9E4CA] shadow-sm space-y-4">
             <div className="flex items-center justify-between">
-              <h3 className="font-extrabold text-base text-slate-900 dark:text-white flex items-center gap-2">
-                <Users className="w-5 h-5 text-emerald-500" /> Registered Student Database Table
+              <h3 className="font-extrabold text-sm sm:text-base text-[#364958] flex items-center gap-2">
+                <Users className="w-5 h-5 text-[#55828B]" /> Registered Student Database Table
               </h3>
             </div>
 
             {loadingStudents ? (
-              <div className="py-16 text-center text-slate-400 text-xs font-bold flex flex-col items-center gap-2">
-                <RefreshCw className="w-6 h-6 animate-spin text-emerald-500" />
-                Querying Flask REST API for student profiles...
+              <div className="py-16 text-center text-[#55828B] text-xs font-bold flex flex-col items-center gap-2">
+                <RefreshCw className="w-6 h-6 animate-spin text-[#3B6064]" />
+                Querying REST API for student profiles...
               </div>
             ) : students.length === 0 ? (
-              <div className="py-12 text-center text-slate-400 text-xs font-medium border border-dashed border-slate-200 dark:border-slate-800 rounded-2xl">
+              <div className="py-12 text-center text-[#55828B] text-xs font-medium border border-dashed border-[#87BBA2] rounded-2xl">
                 No student profiles found matching the current search filters.
               </div>
             ) : (
-              <div className="overflow-x-auto border border-slate-200 dark:border-slate-800 rounded-2xl">
-                <table className="w-full text-left border-collapse text-xs">
+              <div className="overflow-x-auto w-full border border-[#87BBA2] rounded-2xl">
+                <table className="w-full text-left text-xs min-w-[700px]">
                   <thead>
-                    <tr className="bg-slate-100 dark:bg-slate-800/60 border-b border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 font-extrabold">
-                      <th className="p-3.5 whitespace-nowrap uppercase tracking-wider text-[11px]">ID</th>
+                    <tr className="bg-[#3B6064] text-white font-extrabold">
+                      <th className="p-3.5 whitespace-nowrap uppercase tracking-wider text-[11px] rounded-tl-xl">ID</th>
                       <th className="p-3.5 whitespace-nowrap uppercase tracking-wider text-[11px]">Full Name</th>
                       <th className="p-3.5 whitespace-nowrap uppercase tracking-wider text-[11px]">Register No</th>
                       <th className="p-3.5 whitespace-nowrap uppercase tracking-wider text-[11px]">Department</th>
                       <th className="p-3.5 whitespace-nowrap uppercase tracking-wider text-[11px]">Year / Sem</th>
                       <th className="p-3.5 whitespace-nowrap uppercase tracking-wider text-[11px]">Batch</th>
-                      <th className="p-3.5 whitespace-nowrap uppercase tracking-wider text-[11px]">Phone</th>
-                      <th className="p-3.5 whitespace-nowrap uppercase tracking-wider text-[11px]">Email</th>
                       <th className="p-3.5 whitespace-nowrap uppercase tracking-wider text-[11px]">Completion</th>
-                      <th className="p-3.5 text-right whitespace-nowrap uppercase tracking-wider text-[11px]">Actions</th>
+                      <th className="p-3.5 text-right whitespace-nowrap uppercase tracking-wider text-[11px] rounded-tr-xl">Actions</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-slate-100 dark:divide-slate-800/80">
+                  <tbody className="divide-y divide-[#87BBA2]">
                     {students.map((st) => (
                       <tr
                         key={st.student_id}
                         onClick={() => setSelectedStudent(st)}
-                        className="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors cursor-pointer group"
+                        className="hover:bg-[#C9E4CA]/40 transition-colors cursor-pointer group"
                       >
-                        <td className="p-3.5 font-bold text-slate-500">#{st.student_id}</td>
-                        <td className="p-3.5 font-extrabold text-slate-900 dark:text-white group-hover:text-emerald-400 transition-colors">
+                        <td className="p-3.5 font-bold text-[#364958]">#{st.student_id}</td>
+                        <td className="p-3.5 font-extrabold text-[#364958]">
                           {st.full_name}
                           {st.first_graduate && (
-                            <span className="ml-1.5 px-1.5 py-0.5 rounded text-[9px] bg-cyan-500/10 text-cyan-400 font-bold">1st Grad</span>
+                            <span className="ml-1.5 px-1.5 py-0.5 rounded text-[9px] bg-[#87BBA2] text-[#364958] font-bold">1st Grad</span>
                           )}
                         </td>
-                        <td className="p-3.5 font-mono text-emerald-400 font-bold">{st.register_number}</td>
-                        <td className="p-3.5 text-slate-700 dark:text-slate-300 font-medium max-w-xs truncate">{st.department}</td>
-                        <td className="p-3.5 font-bold text-slate-700 dark:text-slate-300">{st.year} (Sem {st.semester || 1})</td>
-                        <td className="p-3.5 font-semibold text-slate-400">{st.batch}</td>
-                        <td className="p-3.5 text-slate-700 dark:text-slate-300 font-medium">{st.phone_number || 'N/A'}</td>
-                        <td className="p-3.5 text-slate-700 dark:text-slate-300 font-medium">{st.college_email}</td>
+                        <td className="p-3.5 font-mono text-[#3B6064] font-bold">{st.register_number}</td>
+                        <td className="p-3.5 text-[#364958] font-medium max-w-xs truncate">{st.department}</td>
+                        <td className="p-3.5 font-bold text-[#364958]">{st.year} (Sem {st.semester || 1})</td>
+                        <td className="p-3.5 font-semibold text-[#55828B]">{st.batch}</td>
                         <td className="p-3.5">
                           <div className="flex items-center gap-2">
-                            <span className="font-bold text-emerald-400">{st.profile_completion_pct || 100}%</span>
-                            <div className="w-12 h-1.5 rounded-full bg-slate-200 dark:bg-slate-800 overflow-hidden">
-                              <div className="h-full bg-emerald-500 rounded-full" style={{ width: `${st.profile_completion_pct || 100}%` }} />
+                            <span className="font-bold text-[#3B6064]">{st.profile_completion_pct || 100}%</span>
+                            <div className="w-12 h-1.5 rounded-full bg-[#C9E4CA] overflow-hidden">
+                              <div className="h-full bg-[#3B6064] rounded-full" style={{ width: `${st.profile_completion_pct || 100}%` }} />
                             </div>
                           </div>
                         </td>
@@ -597,13 +587,13 @@ export const AdminDashboard: React.FC = () => {
                           <div className="flex items-center justify-end gap-2">
                             <button
                               onClick={() => setSelectedStudent(st)}
-                              className="px-2.5 py-1.5 rounded-xl bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 font-bold text-[11px] flex items-center gap-1"
+                              className="px-2.5 py-1.5 rounded-xl bg-white border border-[#55828B] text-[#364958] hover:bg-[#C9E4CA] font-bold text-[11px] flex items-center gap-1 cursor-pointer min-h-[36px]"
                             >
-                              <Eye className="w-3.5 h-3.5" /> View Profile
+                              <Eye className="w-3.5 h-3.5" /> View
                             </button>
                             <button
                               onClick={() => handleDeleteStudent(st.student_id!, st.full_name)}
-                              className="px-2.5 py-1.5 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 font-bold text-[11px] flex items-center gap-1"
+                              className="px-2.5 py-1.5 rounded-xl bg-red-100 border border-red-300 text-red-700 font-bold text-[11px] flex items-center gap-1 cursor-pointer min-h-[36px]"
                             >
                               <Trash2 className="w-3.5 h-3.5" /> Delete
                             </button>
@@ -619,22 +609,19 @@ export const AdminDashboard: React.FC = () => {
         </div>
       )}
 
-      {/* ========================================================================= */}
       {/* VIEW 2: RAW SQLITE TABLE EXPLORER */}
-      {/* ========================================================================= */}
       {activeTab === 'tables' && (
-        <div className="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xl space-y-6">
+        <div className="p-4 sm:p-6 rounded-3xl bg-white border border-[#C9E4CA] shadow-sm space-y-6">
           
           {/* Table Selector Pills */}
           <div>
             <div className="flex items-center justify-between mb-3">
-              <h3 className="text-xs font-bold text-slate-500 uppercase tracking-widest flex items-center gap-1.5">
-                <Database className="w-4 h-4 text-emerald-500" /> Select SQLite Table To Manage:
+              <h3 className="text-xs font-bold text-[#55828B] uppercase tracking-widest flex items-center gap-1.5">
+                <Database className="w-4 h-4 text-[#55828B]" /> Select SQLite Table To Manage:
               </h3>
-              <span className="text-xs text-slate-400 font-medium">Click a table to edit records</span>
             </div>
 
-            <div className="flex items-center gap-2 overflow-x-auto pb-2 no-scrollbar">
+            <div className="flex items-center gap-2 overflow-x-auto pb-2">
               {tablesList.map((t) => (
                 <button
                   key={t.name}
@@ -642,15 +629,15 @@ export const AdminDashboard: React.FC = () => {
                     setActiveTable(t.name);
                     setSearchQuery('');
                   }}
-                  className={`px-4 py-2.5 rounded-2xl text-xs font-bold shrink-0 transition-all flex items-center gap-2 shadow-sm ${
+                  className={`px-4 py-2 rounded-2xl text-xs font-bold shrink-0 transition-all flex items-center gap-2 cursor-pointer border-none ${
                     activeTable === t.name
-                      ? 'bg-gradient-to-r from-emerald-600 to-teal-500 text-white shadow-emerald-500/20 scale-105'
-                      : 'bg-slate-100 dark:bg-slate-800/80 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'
+                      ? 'bg-[#3B6064] text-white shadow-sm font-bold'
+                      : 'bg-white border border-[#87BBA2] text-[#364958] hover:bg-[#C9E4CA]/40'
                   }`}
                 >
                   <span>{t.name}</span>
                   <span className={`px-2 py-0.5 rounded-full text-[10px] font-black ${
-                    activeTable === t.name ? 'bg-white/20 text-white' : 'bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300'
+                    activeTable === t.name ? 'bg-white/20 text-white' : 'bg-[#87BBA2] text-[#364958]'
                   }`}>
                     {t.count}
                   </span>
@@ -660,41 +647,41 @@ export const AdminDashboard: React.FC = () => {
           </div>
 
           {/* Toolbar: Search & Add New Record button */}
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-2 border-t border-slate-100 dark:border-slate-800">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-2 border-t border-[#C9E4CA]">
             <div className="relative w-full sm:w-96">
-              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#55828B]" />
               <input
                 type="text"
                 placeholder={`Search in '${activeTable}' records...`}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-2.5 text-xs rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                className="w-full pl-10 pr-4 py-2.5 text-xs rounded-2xl border border-[#87BBA2] bg-white text-[#364958] focus:border-[#55828B]"
               />
             </div>
 
             <button
               onClick={openCreateModal}
-              className="w-full sm:w-auto px-5 py-2.5 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs shadow-md flex items-center justify-center gap-2 transition-all"
+              className="w-full sm:w-auto px-5 py-2.5 rounded-2xl bg-[#3B6064] hover:bg-[#364958] text-white font-extrabold text-xs shadow-sm flex items-center justify-center gap-2 transition-all cursor-pointer border-none min-h-[44px]"
             >
-              <Plus className="w-4 h-4" /> Add New Record to '{activeTable}'
+              <Plus className="w-4 h-4 text-[#C9E4CA]" /> Add New Record to '{activeTable}'
             </button>
           </div>
 
           {/* Table View */}
           {loadingTables ? (
-            <div className="py-16 text-center text-slate-400 text-xs font-bold flex flex-col items-center gap-2">
-              <RefreshCw className="w-6 h-6 animate-spin text-emerald-500" />
+            <div className="py-16 text-center text-[#55828B] text-xs font-bold flex flex-col items-center gap-2">
+              <RefreshCw className="w-6 h-6 animate-spin text-[#3B6064]" />
               Loading database table '{activeTable}'...
             </div>
           ) : filteredRawTableData.length === 0 ? (
-            <div className="py-12 text-center text-slate-400 text-xs font-medium border border-dashed border-slate-200 dark:border-slate-800 rounded-2xl">
+            <div className="py-12 text-center text-[#55828B] text-xs font-medium border border-dashed border-[#87BBA2] rounded-2xl">
               No records found in '{activeTable}' table.
             </div>
           ) : (
-            <div className="overflow-x-auto border border-slate-200 dark:border-slate-800 rounded-2xl">
-              <table className="w-full text-left border-collapse text-xs">
+            <div className="overflow-x-auto w-full border border-[#87BBA2] rounded-2xl">
+              <table className="w-full text-left text-xs min-w-[600px]">
                 <thead>
-                  <tr className="bg-slate-100 dark:bg-slate-800/60 border-b border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 font-extrabold">
+                  <tr className="bg-[#3B6064] text-white font-extrabold">
                     {columns.map((col) => (
                       <th key={col} className="p-3.5 whitespace-nowrap uppercase tracking-wider text-[11px]">
                         {col}
@@ -703,17 +690,17 @@ export const AdminDashboard: React.FC = () => {
                     <th className="p-3.5 text-right whitespace-nowrap uppercase tracking-wider text-[11px]">Actions</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-100 dark:divide-slate-800/80">
+                <tbody className="divide-y divide-[#87BBA2]">
                   {filteredRawTableData.map((row, idx) => (
-                    <tr key={idx} className="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors">
+                    <tr key={idx} className="hover:bg-[#C9E4CA]/40 transition-colors">
                       {columns.map((col) => {
                         const val = row[col];
                         return (
-                          <td key={col} className="p-3.5 text-slate-700 dark:text-slate-300 max-w-xs truncate font-medium">
+                          <td key={col} className="p-3.5 text-[#364958] max-w-xs truncate font-medium">
                             {val === null ? (
-                              <span className="text-slate-400 italic text-[10px]">NULL</span>
+                              <span className="text-[#55828B] italic text-[10px]">NULL</span>
                             ) : typeof val === 'string' && val.startsWith('http') ? (
-                              <a href={val} target="_blank" rel="noreferrer" className="text-indigo-400 underline hover:text-indigo-300 text-[11px]">
+                              <a href={val} target="_blank" rel="noreferrer" className="text-[#3B6064] underline font-bold text-[11px]">
                                 View Link 🔗
                               </a>
                             ) : (
@@ -726,13 +713,13 @@ export const AdminDashboard: React.FC = () => {
                         <div className="flex items-center justify-end gap-2">
                           <button
                             onClick={() => openEditModal(row)}
-                            className="px-2.5 py-1.5 rounded-xl bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-400 font-bold text-[11px] flex items-center gap-1 transition-all"
+                            className="px-2.5 py-1.5 rounded-xl bg-white border border-[#55828B] text-[#364958] hover:bg-[#C9E4CA] font-bold text-[11px] flex items-center gap-1 cursor-pointer min-h-[36px]"
                           >
                             <Edit className="w-3.5 h-3.5" /> Edit
                           </button>
                           <button
                             onClick={() => handleDeleteRecord(row)}
-                            className="px-2.5 py-1.5 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 font-bold text-[11px] flex items-center gap-1 transition-all"
+                            className="px-2.5 py-1.5 rounded-xl bg-red-100 border border-red-300 text-red-700 font-bold text-[11px] flex items-center gap-1 cursor-pointer min-h-[36px]"
                           >
                             <Trash2 className="w-3.5 h-3.5" /> Delete
                           </button>
@@ -747,33 +734,31 @@ export const AdminDashboard: React.FC = () => {
         </div>
       )}
 
-      {/* ========================================================================= */}
-      {/* DETAILED STUDENT PROFILE DRAWER / MODAL */}
-      {/* ========================================================================= */}
+      {/* DETAILED STUDENT PROFILE MODAL */}
       {selectedStudent && (
-        <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 sm:p-8 max-w-3xl w-full shadow-2xl space-y-6 max-h-[90vh] overflow-y-auto animate-in fade-in zoom-in-95">
+        <div className="fixed inset-0 z-50 bg-[#364958]/80 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white border border-[#C9E4CA] rounded-3xl p-5 sm:p-8 max-w-3xl w-full shadow-2xl space-y-6 max-h-[90vh] overflow-y-auto animate-in fade-in">
             
             {/* Modal Header */}
-            <div className="flex items-start justify-between border-b border-slate-100 dark:border-slate-800 pb-4">
+            <div className="flex items-start justify-between border-b border-[#C9E4CA] pb-4">
               <div className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-emerald-500 to-teal-400 text-white font-black flex items-center justify-center text-lg shadow-lg">
+                <div className="w-12 h-12 rounded-2xl bg-[#3B6064] text-[#C9E4CA] font-black flex items-center justify-center text-lg shadow-sm">
                   {selectedStudent.full_name.charAt(0)}
                 </div>
                 <div>
                   <div className="flex items-center gap-2">
-                    <h2 className="text-xl font-black text-slate-900 dark:text-white">{selectedStudent.full_name}</h2>
-                    <span className="px-2.5 py-0.5 rounded-full text-[10px] bg-emerald-500/10 text-emerald-400 font-extrabold">
+                    <h2 className="text-xl font-black text-[#364958]">{selectedStudent.full_name}</h2>
+                    <span className="px-2.5 py-0.5 rounded-full text-[10px] bg-[#87BBA2] text-[#364958] font-extrabold">
                       ID #{selectedStudent.student_id}
                     </span>
                   </div>
-                  <p className="text-xs text-slate-500 font-medium">
-                    Reg No: <span className="font-mono font-bold text-emerald-400">{selectedStudent.register_number}</span> • {selectedStudent.college_email}
+                  <p className="text-xs text-[#55828B] font-medium">
+                    Reg No: <span className="font-mono font-bold text-[#3B6064]">{selectedStudent.register_number}</span> • {selectedStudent.college_email}
                   </p>
                 </div>
               </div>
 
-              <button onClick={() => setSelectedStudent(null)} className="p-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-400 hover:text-white">
+              <button onClick={() => setSelectedStudent(null)} className="p-1 rounded-full bg-white text-[#364958] border-none cursor-pointer">
                 <X className="w-5 h-5" />
               </button>
             </div>
@@ -782,46 +767,46 @@ export const AdminDashboard: React.FC = () => {
             <div className="space-y-6">
               
               {/* 1. Academic & Personal Overview Card */}
-              <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-800 grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs">
+              <div className="p-4 rounded-2xl bg-[#F7FAF8] border border-[#87BBA2] grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs">
                 <div>
-                  <span className="text-[10px] font-bold text-slate-400 uppercase">Department</span>
-                  <p className="font-extrabold text-slate-900 dark:text-white mt-0.5">{selectedStudent.department}</p>
+                  <span className="text-[10px] font-bold text-[#55828B] uppercase">Department</span>
+                  <p className="font-extrabold text-[#364958] mt-0.5">{selectedStudent.department}</p>
                 </div>
                 <div>
-                  <span className="text-[10px] font-bold text-slate-400 uppercase">Year / Semester</span>
-                  <p className="font-extrabold text-slate-900 dark:text-white mt-0.5">{selectedStudent.year} (Sem {selectedStudent.semester || 1})</p>
+                  <span className="text-[10px] font-bold text-[#55828B] uppercase">Year / Semester</span>
+                  <p className="font-extrabold text-[#364958] mt-0.5">{selectedStudent.year} (Sem {selectedStudent.semester || 1})</p>
                 </div>
                 <div>
-                  <span className="text-[10px] font-bold text-slate-400 uppercase">Batch & Section</span>
-                  <p className="font-extrabold text-slate-900 dark:text-white mt-0.5">{selectedStudent.batch} (Sec {selectedStudent.section || 'A'})</p>
+                  <span className="text-[10px] font-bold text-[#55828B] uppercase">Batch & Section</span>
+                  <p className="font-extrabold text-[#364958] mt-0.5">{selectedStudent.batch} (Sec {selectedStudent.section || 'A'})</p>
                 </div>
                 <div>
-                  <span className="text-[10px] font-bold text-slate-400 uppercase">Gender & DOB</span>
-                  <p className="font-extrabold text-slate-900 dark:text-white mt-0.5">{selectedStudent.gender || 'N/A'} • {selectedStudent.dob || 'N/A'}</p>
+                  <span className="text-[10px] font-bold text-[#55828B] uppercase">Gender & DOB</span>
+                  <p className="font-extrabold text-[#364958] mt-0.5">{selectedStudent.gender || 'N/A'} • {selectedStudent.dob || 'N/A'}</p>
                 </div>
               </div>
 
               {/* 2. Contact & Family Economic Information */}
               <div className="space-y-2">
-                <h4 className="text-xs font-extrabold text-slate-400 uppercase tracking-widest flex items-center gap-1.5">
-                  <DollarSign className="w-4 h-4 text-emerald-500" /> Economic & Contact Details
+                <h4 className="text-xs font-extrabold text-[#55828B] uppercase tracking-widest flex items-center gap-1.5">
+                  <DollarSign className="w-4 h-4 text-[#55828B]" /> Economic & Contact Details
                 </h4>
-                <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-800 grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
+                <div className="p-4 rounded-2xl bg-[#F7FAF8] border border-[#87BBA2] grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
                   <div>
-                    <span className="text-[10px] text-slate-400 font-bold">Parent / Guardian</span>
-                    <p className="font-bold text-slate-900 dark:text-white mt-0.5">{selectedStudent.parent_name || 'N/A'} ({selectedStudent.parent_occupation || 'N/A'})</p>
+                    <span className="text-[10px] text-[#55828B] font-bold">Parent / Guardian</span>
+                    <p className="font-bold text-[#364958] mt-0.5">{selectedStudent.parent_name || 'N/A'} ({selectedStudent.parent_occupation || 'N/A'})</p>
                   </div>
                   <div>
-                    <span className="text-[10px] text-slate-400 font-bold">Annual Income</span>
-                    <p className="font-bold text-slate-900 dark:text-white mt-0.5">{selectedStudent.family_income || 'N/A'}</p>
+                    <span className="text-[10px] text-[#55828B] font-bold">Annual Income</span>
+                    <p className="font-bold text-[#364958] mt-0.5">{selectedStudent.family_income || 'N/A'}</p>
                   </div>
                   <div>
-                    <span className="text-[10px] text-slate-400 font-bold">Scholarship & First Grad</span>
+                    <span className="text-[10px] text-[#55828B] font-bold">Scholarship & First Grad</span>
                     <div className="flex gap-2 mt-0.5">
-                      <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${selectedStudent.scholarship_required ? 'bg-amber-500/20 text-amber-400' : 'bg-slate-700 text-slate-300'}`}>
+                      <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${selectedStudent.scholarship_required ? 'bg-[#87BBA2] text-[#364958]' : 'bg-[#C9E4CA] text-[#364958]'}`}>
                         Scholarship: {selectedStudent.scholarship_required ? 'YES' : 'NO'}
                       </span>
-                      <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${selectedStudent.first_graduate ? 'bg-cyan-500/20 text-cyan-400' : 'bg-slate-700 text-slate-300'}`}>
+                      <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${selectedStudent.first_graduate ? 'bg-[#87BBA2] text-[#364958]' : 'bg-[#C9E4CA] text-[#364958]'}`}>
                         1st Grad: {selectedStudent.first_graduate ? 'YES' : 'NO'}
                       </span>
                     </div>
@@ -829,100 +814,26 @@ export const AdminDashboard: React.FC = () => {
                 </div>
               </div>
 
-              {/* 3. Skills & Technical Badges */}
+              {/* 3. Skills */}
               <div className="space-y-2">
-                <h4 className="text-xs font-extrabold text-slate-400 uppercase tracking-widest flex items-center gap-1.5">
-                  <Brain className="w-4 h-4 text-indigo-400" /> Current Skills
+                <h4 className="text-xs font-extrabold text-[#55828B] uppercase tracking-widest flex items-center gap-1.5">
+                  <Brain className="w-4 h-4 text-[#55828B]" /> Current Skills
                 </h4>
                 <div className="flex flex-wrap gap-2">
                   {(selectedStudent.current_skills || []).map((sk, idx) => (
-                    <span key={idx} className="px-3 py-1 rounded-xl bg-indigo-500/10 border border-indigo-500/30 text-indigo-400 font-bold text-xs">
+                    <span key={idx} className="px-3 py-1 rounded-xl bg-[#87BBA2] text-[#364958] font-bold text-xs">
                       ⚡ {sk}
                     </span>
                   ))}
                 </div>
               </div>
 
-              {/* 4. Areas of Interest & Campus Activities */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <h4 className="text-xs font-extrabold text-slate-400 uppercase tracking-widest flex items-center gap-1.5">
-                    <Heart className="w-4 h-4 text-rose-500" /> Areas of Interest
-                  </h4>
-                  <div className="flex flex-wrap gap-1.5">
-                    {(selectedStudent.areas_of_interest || []).map((aoi, idx) => (
-                      <span key={idx} className="px-2.5 py-1 rounded-lg bg-rose-500/10 border border-rose-500/20 text-rose-400 font-semibold text-xs">
-                        🎯 {aoi}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <h4 className="text-xs font-extrabold text-slate-400 uppercase tracking-widest flex items-center gap-1.5">
-                    <Star className="w-4 h-4 text-amber-400" /> Campus Interests
-                  </h4>
-                  <div className="flex flex-wrap gap-1.5">
-                    {(selectedStudent.campus_interests || []).map((ci, idx) => (
-                      <span key={idx} className="px-2.5 py-1 rounded-lg bg-amber-500/10 border border-amber-500/20 text-amber-400 font-semibold text-xs">
-                        🏛️ {ci}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </div>
-
-              {/* 5. Self Assessment */}
-              <div className="space-y-2">
-                <h4 className="text-xs font-extrabold text-slate-400 uppercase tracking-widest flex items-center gap-1.5">
-                  <UserCheck className="w-4 h-4 text-cyan-400" /> Self Assessment Matrix
-                </h4>
-                <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-800 flex flex-wrap gap-3 text-xs">
-                  <span className={`px-3 py-1 rounded-xl font-bold ${selectedStudent.communication_skills ? 'bg-emerald-500/20 text-emerald-400' : 'bg-slate-700 text-slate-400'}`}>
-                    Communication: {selectedStudent.communication_skills ? 'Yes' : 'No'}
-                  </span>
-                  <span className={`px-3 py-1 rounded-xl font-bold ${selectedStudent.teamwork ? 'bg-emerald-500/20 text-emerald-400' : 'bg-slate-700 text-slate-400'}`}>
-                    Teamwork: {selectedStudent.teamwork ? 'Yes' : 'No'}
-                  </span>
-                  <span className={`px-3 py-1 rounded-xl font-bold ${selectedStudent.leadership ? 'bg-emerald-500/20 text-emerald-400' : 'bg-slate-700 text-slate-400'}`}>
-                    Leadership: {selectedStudent.leadership ? 'Yes' : 'No'}
-                  </span>
-                  <span className={`px-3 py-1 rounded-xl font-bold ${selectedStudent.problem_solving ? 'bg-emerald-500/20 text-emerald-400' : 'bg-slate-700 text-slate-400'}`}>
-                    Problem Solving: {selectedStudent.problem_solving ? 'Yes' : 'No'}
-                  </span>
-                  <span className="px-3 py-1 rounded-xl bg-purple-500/20 text-purple-300 font-bold">
-                    Confidence: {selectedStudent.confidence_level || 'Medium'}
-                  </span>
-                </div>
-              </div>
-
-              {/* 6. Personal Q&A */}
-              <div className="space-y-3">
-                <h4 className="text-xs font-extrabold text-slate-400 uppercase tracking-widest flex items-center gap-1.5">
-                  <FileText className="w-4 h-4 text-emerald-400" /> Personal Questions & Goals
-                </h4>
-                <div className="space-y-2 text-xs">
-                  <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800">
-                    <p className="font-bold text-emerald-400 mb-0.5">Why did you choose this department?</p>
-                    <p className="text-slate-700 dark:text-slate-300">{selectedStudent.reason_for_department || 'N/A'}</p>
-                  </div>
-                  <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800">
-                    <p className="font-bold text-emerald-400 mb-0.5">What are you most excited to learn in college?</p>
-                    <p className="text-slate-700 dark:text-slate-300">{selectedStudent.excited_to_learn || 'N/A'}</p>
-                  </div>
-                  <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800">
-                    <p className="font-bold text-emerald-400 mb-0.5">Which new skill would you like to learn during your first year?</p>
-                    <p className="text-slate-700 dark:text-slate-300">{selectedStudent.new_skill_first_year || 'N/A'}</p>
-                  </div>
-                </div>
-              </div>
-
             </div>
 
-            <div className="pt-4 border-t border-slate-100 dark:border-slate-800 flex justify-end">
+            <div className="pt-4 border-t border-[#C9E4CA] flex justify-end">
               <button
                 onClick={() => setSelectedStudent(null)}
-                className="px-6 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs shadow-md"
+                className="w-full sm:w-auto px-6 py-2.5 rounded-xl bg-[#3B6064] hover:bg-[#364958] text-white font-extrabold text-xs shadow-sm cursor-pointer border-none min-h-[44px]"
               >
                 Close Profile
               </button>
@@ -932,15 +843,15 @@ export const AdminDashboard: React.FC = () => {
         </div>
       )}
 
-      {/* CREATE RECORD MODAL FOR RAW TABLES */}
+      {/* CREATE RECORD MODAL */}
       {showCreateModal && (
-        <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 max-w-xl w-full shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto animate-in fade-in zoom-in-95">
-            <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
-              <h3 className="text-base font-extrabold text-slate-900 dark:text-white flex items-center gap-2">
-                <Plus className="w-5 h-5 text-emerald-500" /> Add New Record to '{activeTable}'
+        <div className="fixed inset-0 z-50 bg-[#364958]/80 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white border border-[#C9E4CA] rounded-3xl p-6 max-w-xl w-full shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto animate-in fade-in">
+            <div className="flex items-center justify-between border-b border-[#C9E4CA] pb-3">
+              <h3 className="text-base font-extrabold text-[#364958] flex items-center gap-2">
+                <Plus className="w-5 h-5 text-[#55828B]" /> Add New Record to '{activeTable}'
               </h3>
-              <button onClick={() => setShowCreateModal(false)} className="text-slate-400 hover:text-white font-bold p-1">
+              <button onClick={() => setShowCreateModal(false)} className="text-[#364958] p-1 border-none bg-transparent cursor-pointer">
                 <X className="w-5 h-5" />
               </button>
             </div>
@@ -948,30 +859,30 @@ export const AdminDashboard: React.FC = () => {
             <form onSubmit={handleCreateSubmit} className="space-y-4">
               {Object.keys(formData).map((key) => (
                 <div key={key} className="space-y-1">
-                  <label className="text-xs font-bold text-slate-700 dark:text-slate-300 capitalize">{key.replace('_', ' ')}</label>
+                  <label className="text-xs font-bold text-[#364958] capitalize">{key.replace('_', ' ')}</label>
                   <textarea
                     rows={key === 'description' || key === 'activities' ? 3 : 1}
                     value={formData[key] || ''}
                     onChange={(e) => setFormData({ ...formData, [key]: e.target.value })}
-                    className="w-full px-3.5 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    className="w-full px-3.5 py-2 text-xs rounded-xl border border-[#87BBA2] bg-white text-[#364958] focus:border-[#55828B]"
                     placeholder={`Enter ${key}...`}
                   />
                 </div>
               ))}
 
-              <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-100 dark:border-slate-800">
+              <div className="flex flex-col sm:flex-row items-center justify-end gap-3 pt-4 border-t border-[#C9E4CA]">
                 <button
                   type="button"
                   onClick={() => setShowCreateModal(false)}
-                  className="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-xs font-bold text-slate-600 dark:text-slate-400"
+                  className="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-white border border-[#55828B] text-xs font-bold text-[#364958] cursor-pointer min-h-[44px]"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-extrabold shadow-md flex items-center gap-1.5"
+                  className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-[#3B6064] hover:bg-[#364958] text-white text-xs font-extrabold shadow-sm flex items-center justify-center gap-1.5 border-none cursor-pointer min-h-[44px]"
                 >
-                  <Plus className="w-4 h-4" /> Save Record & Broadcast
+                  <Plus className="w-4 h-4 text-[#C9E4CA]" /> Save Record
                 </button>
               </div>
             </form>
@@ -979,15 +890,15 @@ export const AdminDashboard: React.FC = () => {
         </div>
       )}
 
-      {/* EDIT RECORD MODAL FOR RAW TABLES */}
+      {/* EDIT RECORD MODAL */}
       {showEditModal && editingRecord && (
-        <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 max-w-xl w-full shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto animate-in fade-in zoom-in-95">
-            <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
-              <h3 className="text-base font-extrabold text-slate-900 dark:text-white flex items-center gap-2">
-                <Edit className="w-5 h-5 text-indigo-400" /> Edit Record in '{activeTable}'
+        <div className="fixed inset-0 z-50 bg-[#364958]/80 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white border border-[#C9E4CA] rounded-3xl p-6 max-w-xl w-full shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto animate-in fade-in">
+            <div className="flex items-center justify-between border-b border-[#C9E4CA] pb-3">
+              <h3 className="text-base font-extrabold text-[#364958] flex items-center gap-2">
+                <Edit className="w-5 h-5 text-[#55828B]" /> Edit Record in '{activeTable}'
               </h3>
-              <button onClick={() => setShowEditModal(false)} className="text-slate-400 hover:text-white font-bold p-1">
+              <button onClick={() => setShowEditModal(false)} className="text-[#364958] p-1 border-none bg-transparent cursor-pointer">
                 <X className="w-5 h-5" />
               </button>
             </div>
@@ -995,29 +906,29 @@ export const AdminDashboard: React.FC = () => {
             <form onSubmit={handleEditSubmit} className="space-y-4">
               {Object.keys(formData).map((key) => (
                 <div key={key} className="space-y-1">
-                  <label className="text-xs font-bold text-slate-700 dark:text-slate-300 capitalize">{key.replace('_', ' ')}</label>
+                  <label className="text-xs font-bold text-[#364958] capitalize">{key.replace('_', ' ')}</label>
                   <textarea
                     rows={key === 'description' || key === 'activities' ? 3 : 1}
                     value={formData[key] !== null ? String(formData[key]) : ''}
                     onChange={(e) => setFormData({ ...formData, [key]: e.target.value })}
-                    className="w-full px-3.5 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    className="w-full px-3.5 py-2 text-xs rounded-xl border border-[#87BBA2] bg-white text-[#364958] focus:border-[#55828B]"
                   />
                 </div>
               ))}
 
-              <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-100 dark:border-slate-800">
+              <div className="flex flex-col sm:flex-row items-center justify-end gap-3 pt-4 border-t border-[#C9E4CA]">
                 <button
                   type="button"
                   onClick={() => setShowEditModal(false)}
-                  className="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-xs font-bold text-slate-600 dark:text-slate-400"
+                  className="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-white border border-[#55828B] text-xs font-bold text-[#364958] cursor-pointer min-h-[44px]"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-extrabold shadow-md flex items-center gap-1.5"
+                  className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-[#3B6064] hover:bg-[#364958] text-white text-xs font-extrabold shadow-sm flex items-center justify-center gap-1.5 border-none cursor-pointer min-h-[44px]"
                 >
-                  <CheckCircle2 className="w-4 h-4" /> Save Changes & Notify Students
+                  <CheckCircle2 className="w-4 h-4 text-[#C9E4CA]" /> Save Changes
                 </button>
               </div>
             </form>
@@ -1027,24 +938,24 @@ export const AdminDashboard: React.FC = () => {
 
       {/* EMERGENCY BROADCAST MODAL */}
       {showBroadcastModal && (
-        <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 max-w-lg w-full shadow-2xl space-y-4 animate-in fade-in zoom-in-95">
-            <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
-              <h3 className="text-base font-extrabold text-slate-900 dark:text-white flex items-center gap-2">
-                <Megaphone className="w-5 h-5 text-amber-500" /> Institutional Broadcast Notice
+        <div className="fixed inset-0 z-50 bg-[#364958]/80 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white border border-[#C9E4CA] rounded-3xl p-6 max-w-lg w-full shadow-2xl space-y-4 animate-in fade-in">
+            <div className="flex items-center justify-between border-b border-[#C9E4CA] pb-3">
+              <h3 className="text-base font-extrabold text-[#364958] flex items-center gap-2">
+                <Megaphone className="w-5 h-5 text-[#55828B]" /> Institutional Broadcast Notice
               </h3>
-              <button onClick={() => setShowBroadcastModal(false)} className="text-slate-400 hover:text-white font-bold p-1">
+              <button onClick={() => setShowBroadcastModal(false)} className="text-[#364958] p-1 border-none bg-transparent cursor-pointer">
                 <X className="w-5 h-5" />
               </button>
             </div>
 
             <form onSubmit={handleCreateBroadcast} className="space-y-4">
               <div className="space-y-1">
-                <label className="text-xs font-bold text-slate-700 dark:text-slate-300">Notice Category</label>
+                <label className="text-xs font-bold text-[#364958]">Notice Category</label>
                 <select
                   value={broadcastCategory}
                   onChange={(e) => setBroadcastCategory(e.target.value as any)}
-                  className="w-full px-3.5 py-2.5 text-xs rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white font-bold"
+                  className="w-full px-3.5 py-2.5 text-xs rounded-xl border border-[#87BBA2] bg-white text-[#364958] font-bold"
                 >
                   <option value="General">General Announcement</option>
                   <option value="Academic">Academic Notice</option>
@@ -1055,42 +966,42 @@ export const AdminDashboard: React.FC = () => {
               </div>
 
               <div className="space-y-1">
-                <label className="text-xs font-bold text-slate-700 dark:text-slate-300">Broadcast Title</label>
+                <label className="text-xs font-bold text-[#364958]">Broadcast Title</label>
                 <input
                   type="text"
                   required
                   placeholder="e.g. End Semester Exam Timetable Revised..."
                   value={broadcastTitle}
                   onChange={(e) => setBroadcastTitle(e.target.value)}
-                  className="w-full px-3.5 py-2.5 text-xs rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white"
+                  className="w-full px-3.5 py-2.5 text-xs rounded-xl border border-[#87BBA2] bg-white text-[#364958]"
                 />
               </div>
 
               <div className="space-y-1">
-                <label className="text-xs font-bold text-slate-700 dark:text-slate-300">Broadcast Description / Details</label>
+                <label className="text-xs font-bold text-[#364958]">Broadcast Description / Details</label>
                 <textarea
                   rows={4}
                   required
                   placeholder="Write official notice details to broadcast to all students..."
                   value={broadcastContent}
                   onChange={(e) => setBroadcastContent(e.target.value)}
-                  className="w-full px-3.5 py-2.5 text-xs rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white"
+                  className="w-full px-3.5 py-2.5 text-xs rounded-xl border border-[#87BBA2] bg-white text-[#364958]"
                 />
               </div>
 
-              <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-100 dark:border-slate-800">
+              <div className="flex flex-col sm:flex-row items-center justify-end gap-3 pt-3 border-t border-[#C9E4CA]">
                 <button
                   type="button"
                   onClick={() => setShowBroadcastModal(false)}
-                  className="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-xs font-bold text-slate-600 dark:text-slate-400"
+                  className="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-white border border-[#55828B] text-xs font-bold text-[#364958] cursor-pointer min-h-[44px]"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-rose-600 hover:from-amber-600 hover:to-rose-700 text-white text-xs font-extrabold shadow-lg flex items-center gap-2"
+                  className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-[#3B6064] hover:bg-[#364958] text-white text-xs font-extrabold shadow-sm flex items-center justify-center gap-2 border-none cursor-pointer min-h-[44px]"
                 >
-                  <Megaphone className="w-4 h-4" /> Broadcast & Notify All Students
+                  <Megaphone className="w-4 h-4 text-[#C9E4CA]" /> Broadcast & Notify Students
                 </button>
               </div>
             </form>
