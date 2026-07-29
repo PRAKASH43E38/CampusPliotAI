@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Sparkles, MapPin, Compass, CheckCircle2, User, Clock, Download, Share2 } from 'lucide-react';
-import { facultyMembers, OFFICIAL_DEPARTMENTS } from '../../data/mockData';
+import { Sparkles, MapPin, Compass, CheckCircle2, Clock, Download, Share2 } from 'lucide-react';
+import { OFFICIAL_DEPARTMENTS } from '../../data/staticData';
 
 export const FirstDayPlanner: React.FC = () => {
   const [department, setDepartment] = useState('Computer Science & Engineering');
@@ -38,16 +38,16 @@ export const FirstDayPlanner: React.FC = () => {
   };
 
   return (
-    <div className="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm transition-all space-y-6">
+    <div className="p-6 rounded-2xl bg-[#F4F8F4] dark:bg-[#1E293B] border border-[#DDE5DD] dark:border-[#334155] space-y-6">
       <div className="flex items-center gap-3">
-        <div className="w-10 h-10 rounded-2xl bg-emerald-600 flex items-center justify-center text-white shadow-sm shrink-0">
+        <div className="w-10 h-10 rounded-xl bg-[#2E7D32] dark:bg-[#4CAF50] flex items-center justify-center text-white shrink-0">
           <Compass className="w-5 h-5" />
         </div>
         <div>
-          <h3 className="text-lg font-extrabold text-slate-900 dark:text-white flex items-center gap-2">
-            AI First Day Planner <span className="text-xs px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-bold border border-emerald-500/20">AI Automated</span>
+          <h3 className="text-lg font-extrabold text-[#1F2937] dark:text-[#F8FAFC] flex items-center gap-2">
+            AI First Day Planner <span className="text-xs px-2.5 py-0.5 rounded-full bg-[#E8F5E9] dark:bg-[#162033] text-[#2E7D32] dark:text-[#81C784] font-bold border border-[#DDE5DD] dark:border-[#334155]">AI Automated</span>
           </h3>
-          <p className="text-xs text-slate-500 dark:text-slate-400 font-medium">
+          <p className="text-xs text-[#6B7280] dark:text-[#CBD5E1] font-medium">
             Generate an optimized first-day timetable, campus navigation route, and administrative checklist.
           </p>
         </div>
@@ -55,13 +55,13 @@ export const FirstDayPlanner: React.FC = () => {
 
       <form onSubmit={handleGenerate} className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div>
-          <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
+          <label className="block text-xs font-bold text-[#1F2937] dark:text-[#F8FAFC] mb-1.5">
             Department
           </label>
           <select
             value={department}
             onChange={(e) => setDepartment(e.target.value)}
-            className="w-full px-3.5 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs text-slate-900 dark:text-slate-100 font-bold focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+            className="w-full"
           >
             {OFFICIAL_DEPARTMENTS.filter(d => d !== 'All Departments').map(d => (
               <option key={d} value={d}>{d}</option>
@@ -70,13 +70,13 @@ export const FirstDayPlanner: React.FC = () => {
         </div>
 
         <div>
-          <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
+          <label className="block text-xs font-bold text-[#1F2937] dark:text-[#F8FAFC] mb-1.5">
             Academic Year
           </label>
           <select
             value={year}
             onChange={(e) => setYear(e.target.value)}
-            className="w-full px-3.5 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs text-slate-900 dark:text-slate-100 font-bold focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+            className="w-full"
           >
             <option>1st Year (Freshers)</option>
             <option>2nd Year (Sophomores)</option>
@@ -86,13 +86,13 @@ export const FirstDayPlanner: React.FC = () => {
         </div>
 
         <div>
-          <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
+          <label className="block text-xs font-bold text-[#1F2937] dark:text-[#F8FAFC] mb-1.5">
             Section
           </label>
           <select
             value={section}
             onChange={(e) => setSection(e.target.value)}
-            className="w-full px-3.5 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs text-slate-900 dark:text-slate-100 font-bold focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+            className="w-full"
           >
             <option>Section A</option>
             <option>Section B</option>
@@ -104,7 +104,7 @@ export const FirstDayPlanner: React.FC = () => {
           <button
             type="submit"
             disabled={isGenerating}
-            className="w-full py-3 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs shadow-sm flex items-center justify-center gap-2 transition-all"
+            className="w-full py-3 rounded-xl bg-[#2E7D32] hover:bg-[#1B5E20] dark:bg-[#4CAF50] dark:hover:bg-[#43A047] text-white font-bold text-xs flex items-center justify-center gap-2 border-none cursor-pointer transition-colors"
           >
             {isGenerating ? (
               <>
@@ -113,7 +113,7 @@ export const FirstDayPlanner: React.FC = () => {
               </>
             ) : (
               <>
-                <Sparkles className="w-4 h-4 text-emerald-200" />
+                <Sparkles className="w-4 h-4 text-white" />
                 Generate First Day Blueprint
               </>
             )}
@@ -123,19 +123,19 @@ export const FirstDayPlanner: React.FC = () => {
 
       {/* Generated Result */}
       {generatedPlan && (
-        <div className="space-y-6 pt-4 border-t border-slate-200 dark:border-slate-800 animate-in fade-in duration-200">
+        <div className="space-y-6 pt-4 border-t border-[#E5E7EB] dark:border-[#475569]">
           
-          <div className="p-4 rounded-2xl bg-emerald-950 text-white flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border border-emerald-800">
+          <div className="p-4 rounded-xl bg-[#F8FAF8] dark:bg-[#162033] text-[#1F2937] dark:text-[#F8FAFC] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border border-[#DDE5DD] dark:border-[#334155]">
             <div>
-              <span className="text-xs text-emerald-400 font-bold uppercase tracking-wider">Blueprint Ready</span>
-              <h4 className="text-base font-black text-white">{generatedPlan.department} • {generatedPlan.year}</h4>
-              <p className="text-xs text-emerald-200 mt-0.5">Customized for {generatedPlan.section}</p>
+              <span className="text-xs text-[#2E7D32] dark:text-[#4CAF50] font-bold uppercase tracking-wider">Blueprint Ready</span>
+              <h4 className="text-base font-extrabold text-[#1F2937] dark:text-[#F8FAFC]">{generatedPlan.department} • {generatedPlan.year}</h4>
+              <p className="text-xs text-[#6B7280] dark:text-[#CBD5E1] mt-0.5">Customized for {generatedPlan.section}</p>
             </div>
             <div className="flex items-center gap-2">
-              <button className="px-3.5 py-1.5 rounded-xl bg-emerald-900 hover:bg-emerald-800 text-xs font-bold text-white border border-emerald-700 flex items-center gap-1.5">
+              <button className="px-3.5 py-1.5 rounded-xl bg-white dark:bg-[#1E293B] text-xs font-bold text-[#1F2937] dark:text-[#F8FAFC] border border-[#DDE5DD] dark:border-[#334155] flex items-center gap-1.5 cursor-pointer">
                 <Download className="w-3.5 h-3.5" /> PDF
               </button>
-              <button className="px-3.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-xs font-extrabold text-white flex items-center gap-1.5">
+              <button className="px-3.5 py-1.5 rounded-xl bg-[#2E7D32] hover:bg-[#1B5E20] dark:bg-[#4CAF50] dark:hover:bg-[#43A047] text-xs font-bold text-white flex items-center gap-1.5 cursor-pointer border-none">
                 <Share2 className="w-3.5 h-3.5" /> Share
               </button>
             </div>
@@ -143,25 +143,25 @@ export const FirstDayPlanner: React.FC = () => {
 
           {/* Timetable timeline */}
           <div className="space-y-3">
-            <h4 className="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider flex items-center gap-2">
-              <Clock className="w-4 h-4 text-emerald-600" /> Optimized First Day Schedule
+            <h4 className="text-xs font-bold text-[#1F2937] dark:text-[#F8FAFC] uppercase tracking-wider flex items-center gap-2">
+              <Clock className="w-4 h-4 text-[#2E7D32] dark:text-[#4CAF50]" /> Optimized First Day Schedule
             </h4>
             <div className="space-y-2.5">
               {generatedPlan.schedule.map((item: any, idx: number) => (
-                <div key={idx} className="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-start justify-between gap-3">
+                <div key={idx} className="p-3.5 rounded-xl bg-white dark:bg-[#162033] border border-[#DDE5DD] dark:border-[#334155] flex items-start justify-between gap-3">
                   <div className="flex items-start gap-3">
-                    <span className="w-6 h-6 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-bold text-xs flex items-center justify-center shrink-0 mt-0.5">
+                    <span className="w-6 h-6 rounded-full bg-[#E8F5E9] dark:bg-[#1E293B] text-[#2E7D32] dark:text-[#81C784] font-bold text-xs flex items-center justify-center shrink-0 mt-0.5">
                       {idx + 1}
                     </span>
                     <div>
-                      <h5 className="font-bold text-xs sm:text-sm text-slate-900 dark:text-white">{item.task}</h5>
-                      <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Host: {item.host}</p>
+                      <h5 className="font-bold text-xs sm:text-sm text-[#1F2937] dark:text-[#F8FAFC]">{item.task}</h5>
+                      <p className="text-xs text-[#6B7280] dark:text-[#CBD5E1] mt-0.5">Host: {item.host}</p>
                     </div>
                   </div>
                   <div className="text-right shrink-0">
-                    <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400 block">{item.time}</span>
-                    <span className="text-[11px] text-slate-500 dark:text-slate-400 font-bold flex items-center justify-end gap-1 mt-0.5">
-                      <MapPin className="w-3 h-3 text-emerald-500" /> {item.location}
+                    <span className="text-xs font-bold text-[#2E7D32] dark:text-[#4CAF50] block">{item.time}</span>
+                    <span className="text-[11px] text-[#6B7280] dark:text-[#CBD5E1] font-bold flex items-center justify-end gap-1 mt-0.5">
+                      <MapPin className="w-3 h-3 text-[#2E7D32] dark:text-[#4CAF50]" /> {item.location}
                     </span>
                   </div>
                 </div>
@@ -171,13 +171,13 @@ export const FirstDayPlanner: React.FC = () => {
 
           {/* Required Checklist */}
           <div className="space-y-3">
-            <h4 className="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider flex items-center gap-2">
-              <CheckCircle2 className="w-4 h-4 text-emerald-600" /> Essential Day 1 Checklist
+            <h4 className="text-xs font-bold text-[#1F2937] dark:text-[#F8FAFC] uppercase tracking-wider flex items-center gap-2">
+              <CheckCircle2 className="w-4 h-4 text-[#2E7D32] dark:text-[#4CAF50]" /> Essential Day 1 Checklist
             </h4>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
               {generatedPlan.checklist.map((chk: string, i: number) => (
-                <div key={i} className="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center gap-2.5 text-xs text-slate-800 dark:text-slate-200 font-medium">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                <div key={i} className="p-3 rounded-xl bg-[#E8F5E9] dark:bg-[#162033] border border-[#DDE5DD] dark:border-[#334155] flex items-center gap-2.5 text-xs text-[#1F2937] dark:text-[#F8FAFC] font-medium">
+                  <CheckCircle2 className="w-4 h-4 text-[#2E7D32] dark:text-[#4CAF50] shrink-0" />
                   <span>{chk}</span>
                 </div>
               ))}

@@ -1,27 +1,40 @@
 import React, { useState, useEffect } from 'react';
-import { GraduationCap, Clock, Calendar, AlertTriangle, CheckCircle2, BookOpen, Award, Sparkles, UserCheck, ChevronRight } from 'lucide-react';
-import { OFFICIAL_DEPARTMENTS, currentUser, academicSubjects, timetableSlots } from '../data/mockData';
+import { GraduationCap, Calendar, AlertTriangle, CheckCircle2, BookOpen, Award, Sparkles } from 'lucide-react';
+import { academicSubjects, timetableSlots, OFFICIAL_DEPARTMENTS as fallbackDepts } from '../data/staticData';
 import { CourseSubject } from '../types';
 import { apiService } from '../services/apiService';
+import { useAuth } from '../context/AuthContext';
 
 export const AcademicsPage: React.FC = () => {
+  const { user } = useAuth();
   const [selectedDept, setSelectedDept] = useState<string>('Computer Science & Engineering');
   const [selectedSemester, setSelectedSemester] = useState<number>(6);
   const [activeTab, setActiveTab] = useState<'attendance' | 'timetable' | 'cgpa'>('attendance');
   const [coursesList, setCoursesList] = useState<CourseSubject[]>([]);
+  const [departments, setDepartments] = useState<string[]>([]);
 
   useEffect(() => {
-    async function loadCourses() {
+    async function loadDeptsAndCourses() {
       try {
-        const data = await apiService.getCourses();
+        const [rawDepts, data] = await Promise.all([
+          apiService.getDepartments(),
+          apiService.getCourses()
+        ]);
+        if (rawDepts && rawDepts.length > 0) {
+          const names = rawDepts.map(d => d.dept_name);
+          setDepartments(['All Departments', ...names]);
+        } else {
+          setDepartments(Array.from(fallbackDepts));
+        }
         if (data && data.length > 0) {
           setCoursesList(data);
         }
       } catch (err) {
-        console.error("Failed to load courses from SQLite:", err);
+        console.error("Failed to load data in AcademicsPage:", err);
+        setDepartments(Array.from(fallbackDepts));
       }
     }
-    loadCourses();
+    loadDeptsAndCourses();
   }, []);
 
   const filteredSubjects = coursesList.filter((sub) => {
@@ -30,57 +43,57 @@ export const AcademicsPage: React.FC = () => {
   });
 
   return (
-    <div className="max-w-7xl mx-auto p-4 sm:p-6 space-y-8">
+    <div className="max-w-7xl mx-auto p-4 sm:p-6 space-y-6">
       
       {/* Header */}
-      <div className="p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-indigo-900/40 via-slate-900 to-cyan-950/40 border border-indigo-500/30 text-white shadow-2xl flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+      <div className="p-6 sm:p-8 rounded-2xl bg-[#F8FAF8] dark:bg-[#162033] border border-[#DDE5DD] dark:border-[#334155] text-[#1F2937] dark:text-[#F8FAFC] flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
         <div>
-          <span className="text-xs font-bold text-cyan-400 uppercase tracking-widest flex items-center gap-1.5 mb-1">
-            <Sparkles className="w-4 h-4" /> Departmental Academic Intelligence
+          <span className="text-xs font-bold text-[#2E7D32] dark:text-[#4CAF50] uppercase tracking-wider flex items-center gap-1.5 mb-1">
+            <Sparkles className="w-4 h-4" /> Academic Intelligence
           </span>
-          <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-[#1F2937] dark:text-[#F8FAFC] tracking-tight">
             Academics, Attendance & CGPA Tracker
           </h1>
-          <p className="text-xs sm:text-sm text-slate-300 mt-1 max-w-xl">
-            Track real-time attendance thresholds, master timetable schedules, and target CGPA path calculators for your engineering department.
+          <p className="text-xs sm:text-sm text-[#6B7280] dark:text-[#CBD5E1] mt-1 max-w-xl">
+            Track real-time attendance thresholds, master timetable schedules, and target CGPA path calculators for your department.
           </p>
         </div>
 
         <div className="flex items-center gap-3 shrink-0">
-          <div className="p-4 rounded-2xl bg-slate-900/90 border border-slate-800 text-center">
-            <span className="text-2xl font-black text-emerald-400">{currentUser.attendancePct}%</span>
-            <span className="block text-[10px] text-slate-400 font-semibold uppercase">Overall Attendance</span>
+          <div className="p-4 rounded-xl bg-white dark:bg-[#1E293B] border border-[#DDE5DD] dark:border-[#334155] text-center">
+            <span className="text-2xl font-extrabold text-[#2E7D32] dark:text-[#4CAF50]">{user?.attendancePct || 88.5}%</span>
+            <span className="block text-[10px] text-[#6B7280] dark:text-[#CBD5E1] font-semibold uppercase">Overall Attendance</span>
           </div>
-          <div className="p-4 rounded-2xl bg-slate-900/90 border border-slate-800 text-center">
-            <span className="text-2xl font-black text-cyan-400">{currentUser.cgpa}</span>
-            <span className="block text-[10px] text-slate-400 font-semibold uppercase">Current CGPA</span>
+          <div className="p-4 rounded-xl bg-white dark:bg-[#1E293B] border border-[#DDE5DD] dark:border-[#334155] text-center">
+            <span className="text-2xl font-extrabold text-[#2E7D32] dark:text-[#4CAF50]">{user?.cgpa || 8.92}</span>
+            <span className="block text-[10px] text-[#6B7280] dark:text-[#CBD5E1] font-semibold uppercase">Current CGPA</span>
           </div>
         </div>
       </div>
 
       {/* Department & Semester Control Panel */}
-      <div className="p-4 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xl space-y-4">
+      <div className="p-4 rounded-2xl bg-[#F4F8F4] dark:bg-[#1E293B] border border-[#DDE5DD] dark:border-[#334155] space-y-4">
         
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 border-b border-slate-100 dark:border-slate-800 pb-3">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 border-b border-[#E5E7EB] dark:border-[#475569] pb-3">
           <div className="flex items-center gap-3">
-            <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Select Department:</span>
+            <span className="text-xs font-semibold text-[#6B7280] dark:text-[#CBD5E1] uppercase tracking-wider">Department:</span>
             <select
               value={selectedDept}
               onChange={(e) => setSelectedDept(e.target.value)}
-              className="px-3.5 py-2 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-extrabold text-indigo-600 dark:text-indigo-400"
+              className="px-3 py-1.5 bg-white dark:bg-[#162033] border border-[#DDE5DD] dark:border-[#334155] rounded-xl text-xs font-bold text-[#1F2937] dark:text-[#F8FAFC]"
             >
-              {OFFICIAL_DEPARTMENTS.map((d) => (
+              {departments.map((d) => (
                 <option key={d} value={d}>{d}</option>
               ))}
             </select>
           </div>
 
           <div className="flex items-center gap-3">
-            <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Semester:</span>
+            <span className="text-xs font-semibold text-[#6B7280] dark:text-[#CBD5E1] uppercase tracking-wider">Semester:</span>
             <select
               value={selectedSemester}
               onChange={(e) => setSelectedSemester(Number(e.target.value))}
-              className="px-3.5 py-2 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-extrabold text-slate-900 dark:text-slate-100"
+              className="px-3 py-1.5 bg-white dark:bg-[#162033] border border-[#DDE5DD] dark:border-[#334155] rounded-xl text-xs font-bold text-[#1F2937] dark:text-[#F8FAFC]"
             >
               {[1, 2, 3, 4, 5, 6, 7, 8].map((s) => (
                 <option key={s} value={s}>Semester {s}</option>
@@ -90,32 +103,32 @@ export const AcademicsPage: React.FC = () => {
         </div>
 
         {/* View Tabs */}
-        <div className="flex items-center justify-between">
-          <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">
-            Showing subjects for <strong className="text-indigo-500">{selectedDept}</strong> (Sem {selectedSemester})
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
+          <span className="text-xs text-[#6B7280] dark:text-[#CBD5E1]">
+            Showing subjects for <strong className="text-[#2E7D32] dark:text-[#4CAF50]">{selectedDept}</strong> (Sem {selectedSemester})
           </span>
 
-          <div className="flex items-center gap-1.5 p-1 bg-slate-100 dark:bg-slate-800 rounded-xl text-xs font-semibold">
+          <div className="flex items-center gap-1.5 p-1 bg-white dark:bg-[#162033] border border-[#DDE5DD] dark:border-[#334155] rounded-xl text-xs font-semibold">
             <button
               onClick={() => setActiveTab('attendance')}
-              className={`px-3.5 py-1.5 rounded-lg transition-all ${
-                activeTab === 'attendance' ? 'bg-indigo-600 text-white shadow-sm' : 'text-slate-600 dark:text-slate-400'
+              className={`px-3.5 py-1.5 rounded-lg transition-colors cursor-pointer border-none ${
+                activeTab === 'attendance' ? 'bg-[#2E7D32] dark:bg-[#4CAF50] text-white font-bold' : 'text-[#6B7280] dark:text-[#CBD5E1]'
               }`}
             >
               Subjects & Attendance
             </button>
             <button
               onClick={() => setActiveTab('timetable')}
-              className={`px-3.5 py-1.5 rounded-lg transition-all ${
-                activeTab === 'timetable' ? 'bg-indigo-600 text-white shadow-sm' : 'text-slate-600 dark:text-slate-400'
+              className={`px-3.5 py-1.5 rounded-lg transition-colors cursor-pointer border-none ${
+                activeTab === 'timetable' ? 'bg-[#2E7D32] dark:bg-[#4CAF50] text-white font-bold' : 'text-[#6B7280] dark:text-[#CBD5E1]'
               }`}
             >
               Timetable Grid
             </button>
             <button
               onClick={() => setActiveTab('cgpa')}
-              className={`px-3.5 py-1.5 rounded-lg transition-all ${
-                activeTab === 'cgpa' ? 'bg-indigo-600 text-white shadow-sm' : 'text-slate-600 dark:text-slate-400'
+              className={`px-3.5 py-1.5 rounded-lg transition-colors cursor-pointer border-none ${
+                activeTab === 'cgpa' ? 'bg-[#2E7D32] dark:bg-[#4CAF50] text-white font-bold' : 'text-[#6B7280] dark:text-[#CBD5E1]'
               }`}
             >
               CGPA Calculator
@@ -134,64 +147,64 @@ export const AcademicsPage: React.FC = () => {
             return (
               <div
                 key={sub.id}
-                className="p-5 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xl hover:shadow-2xl transition-all flex flex-col justify-between"
+                className="p-5 rounded-2xl bg-[#F4F8F4] dark:bg-[#1E293B] border border-[#DDE5DD] dark:border-[#334155] flex flex-col justify-between"
               >
                 <div>
-                  <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3 mb-3">
-                    <span className="text-xs font-extrabold text-indigo-600 dark:text-indigo-400">{sub.code}</span>
-                    <span className="text-[10px] px-2 py-0.5 rounded-full bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 font-bold">
+                  <div className="flex items-center justify-between border-b border-[#E5E7EB] dark:border-[#475569] pb-3 mb-3">
+                    <span className="text-xs font-bold text-[#2E7D32] dark:text-[#4CAF50]">{sub.code}</span>
+                    <span className="text-[10px] px-2 py-0.5 rounded-full bg-[#E8F5E9] dark:bg-[#162033] text-[#2E7D32] dark:text-[#81C784] font-bold">
                       {sub.credits} Credits
                     </span>
                   </div>
 
-                  <h3 className="font-extrabold text-sm sm:text-base text-slate-900 dark:text-white leading-snug">
+                  <h3 className="font-extrabold text-sm sm:text-base text-[#1F2937] dark:text-[#F8FAFC]">
                     {sub.name}
                   </h3>
-                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 font-medium">
+                  <p className="text-xs text-[#6B7280] dark:text-[#CBD5E1] mt-1">
                     Faculty: {sub.facultyName} ({sub.facultyCabin})
                   </p>
 
                   {/* Attendance Percentage Progress */}
-                  <div className="mt-4 p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800">
+                  <div className="mt-4 p-3.5 rounded-xl bg-white dark:bg-[#162033] border border-[#DDE5DD] dark:border-[#334155]">
                     <div className="flex items-center justify-between mb-1.5">
-                      <span className="text-xs font-semibold text-slate-600 dark:text-slate-300">
+                      <span className="text-xs font-semibold text-[#6B7280] dark:text-[#CBD5E1]">
                         Attendance Status
                       </span>
                       <span
                         className={`text-sm font-extrabold ${
-                          isWarning ? 'text-rose-500' : 'text-emerald-500'
+                          isWarning ? 'text-red-600 dark:text-red-400' : 'text-[#2E7D32] dark:text-[#4CAF50]'
                         }`}
                       >
                         {pct}% ({sub.attendedClasses}/{sub.totalClasses})
                       </span>
                     </div>
 
-                    <div className="w-full h-2.5 rounded-full bg-slate-200 dark:bg-slate-700 overflow-hidden">
+                    <div className="w-full h-2 rounded-full bg-[#E5E7EB] dark:bg-[#334155] overflow-hidden">
                       <div
                         style={{ width: `${pct}%` }}
-                        className={`h-full rounded-full transition-all duration-500 ${
-                          isWarning ? 'bg-rose-500' : 'bg-gradient-to-r from-indigo-500 to-emerald-400'
+                        className={`h-full rounded-full transition-all duration-300 ${
+                          isWarning ? 'bg-red-600 dark:bg-red-500' : 'bg-[#2E7D32] dark:bg-[#4CAF50]'
                         }`}
                       />
                     </div>
 
                     {isWarning ? (
-                      <div className="mt-2 text-[11px] text-rose-500 font-semibold flex items-center gap-1">
+                      <div className="mt-2 text-[11px] text-red-600 dark:text-red-400 font-semibold flex items-center gap-1">
                         <AlertTriangle className="w-3.5 h-3.5 shrink-0" />
-                        Warning: Attend next 3 classes to cross 75% threshold!
+                        Warning: Below 75% threshold!
                       </div>
                     ) : (
-                      <div className="mt-2 text-[11px] text-emerald-500 font-semibold flex items-center gap-1">
+                      <div className="mt-2 text-[11px] text-[#2E7D32] dark:text-[#4CAF50] font-semibold flex items-center gap-1">
                         <CheckCircle2 className="w-3.5 h-3.5 shrink-0" />
-                        Safe zone: Above university threshold!
+                        Safe zone: Above requirement.
                       </div>
                     )}
                   </div>
                 </div>
 
-                <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs">
-                  <span className="text-slate-500">Projected Grade: <strong className="text-slate-900 dark:text-white">{sub.grade}</strong></span>
-                  <button className="text-indigo-500 font-bold hover:underline">Syllabus PDF</button>
+                <div className="mt-4 pt-3 border-t border-[#E5E7EB] dark:border-[#475569] flex items-center justify-between text-xs">
+                  <span className="text-[#6B7280] dark:text-[#CBD5E1]">Projected Grade: <strong className="text-[#1F2937] dark:text-[#F8FAFC]">{sub.grade}</strong></span>
+                  <button className="text-[#2E7D32] dark:text-[#4CAF50] font-bold hover:underline cursor-pointer border-none bg-transparent">Syllabus PDF</button>
                 </div>
               </div>
             );
@@ -201,18 +214,18 @@ export const AcademicsPage: React.FC = () => {
 
       {/* Tab 2: Timetable Grid */}
       {activeTab === 'timetable' && (
-        <div className="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-2xl space-y-4">
+        <div className="p-6 rounded-2xl bg-[#F4F8F4] dark:bg-[#1E293B] border border-[#DDE5DD] dark:border-[#334155] space-y-4">
           <div className="flex items-center justify-between">
-            <h3 className="font-extrabold text-base text-slate-900 dark:text-white flex items-center gap-2">
-              <Calendar className="w-5 h-5 text-indigo-500" /> Weekly Master Class Schedule ({selectedDept})
+            <h3 className="font-extrabold text-base text-[#1F2937] dark:text-[#F8FAFC] flex items-center gap-2">
+              <Calendar className="w-5 h-5 text-[#2E7D32] dark:text-[#4CAF50]" /> Weekly Master Class Schedule ({selectedDept})
             </h3>
-            <span className="text-xs text-indigo-500 font-bold">Sem {selectedSemester}</span>
+            <span className="text-xs text-[#2E7D32] dark:text-[#4CAF50] font-bold">Sem {selectedSemester}</span>
           </div>
 
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
               <thead>
-                <tr className="border-b border-slate-200 dark:border-slate-800 text-slate-400 uppercase tracking-wider text-[10px]">
+                <tr className="border-b border-[#E5E7EB] dark:border-[#475569] text-[#6B7280] dark:text-[#CBD5E1] uppercase tracking-wider text-[10px]">
                   <th className="py-3 px-4">Day</th>
                   <th className="py-3 px-4">Time Slot</th>
                   <th className="py-3 px-4">Subject</th>
@@ -221,19 +234,19 @@ export const AcademicsPage: React.FC = () => {
                   <th className="py-3 px-4">Faculty</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100 dark:divide-slate-800/60 font-medium">
+              <tbody className="divide-y divide-[#E5E7EB] dark:divide-[#475569] font-medium">
                 {timetableSlots.slice(0, 12).map((slot) => (
-                  <tr key={slot.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors">
-                    <td className="py-3.5 px-4 font-bold text-indigo-600 dark:text-indigo-400">{slot.day}</td>
-                    <td className="py-3.5 px-4 text-slate-600 dark:text-slate-300">{slot.time}</td>
-                    <td className="py-3.5 px-4 text-slate-900 dark:text-white font-bold">{slot.subjectName}</td>
+                  <tr key={slot.id} className="hover:bg-white dark:hover:bg-[#162033] transition-colors">
+                    <td className="py-3.5 px-4 font-bold text-[#2E7D32] dark:text-[#4CAF50]">{slot.day}</td>
+                    <td className="py-3.5 px-4 text-[#6B7280] dark:text-[#CBD5E1]">{slot.time}</td>
+                    <td className="py-3.5 px-4 text-[#1F2937] dark:text-[#F8FAFC] font-bold">{slot.subjectName}</td>
                     <td className="py-3.5 px-4">
-                      <span className="px-2.5 py-0.5 rounded-full bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 text-[10px] font-bold">
+                      <span className="px-2.5 py-0.5 rounded-full bg-[#E8F5E9] dark:bg-[#162033] text-[#2E7D32] dark:text-[#81C784] text-[10px] font-bold">
                         {slot.type}
                       </span>
                     </td>
-                    <td className="py-3.5 px-4 text-slate-600 dark:text-slate-300">{slot.building} ({slot.room})</td>
-                    <td className="py-3.5 px-4 text-slate-600 dark:text-slate-300">{slot.facultyName}</td>
+                    <td className="py-3.5 px-4 text-[#6B7280] dark:text-[#CBD5E1]">{slot.building} ({slot.room})</td>
+                    <td className="py-3.5 px-4 text-[#6B7280] dark:text-[#CBD5E1]">{slot.facultyName}</td>
                   </tr>
                 ))}
               </tbody>
@@ -244,43 +257,43 @@ export const AcademicsPage: React.FC = () => {
 
       {/* Tab 3: CGPA Calculator */}
       {activeTab === 'cgpa' && (
-        <div className="p-6 sm:p-8 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-2xl max-w-2xl mx-auto space-y-6">
+        <div className="p-6 sm:p-8 rounded-2xl bg-[#F4F8F4] dark:bg-[#1E293B] border border-[#DDE5DD] dark:border-[#334155] max-w-2xl mx-auto space-y-6">
           <div className="text-center">
-            <Award className="w-10 h-10 text-amber-500 mx-auto mb-2" />
-            <h3 className="text-lg font-extrabold text-slate-900 dark:text-white">Target CGPA Calculator ({selectedDept})</h3>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">Calculate required grades in upcoming semesters to achieve your goal.</p>
+            <Award className="w-10 h-10 text-[#2E7D32] dark:text-[#4CAF50] mx-auto mb-2" />
+            <h3 className="text-lg font-extrabold text-[#1F2937] dark:text-[#F8FAFC]">Target CGPA Calculator ({selectedDept})</h3>
+            <p className="text-xs text-[#6B7280] dark:text-[#CBD5E1] mt-1">Calculate required grades in upcoming semesters to achieve your goal.</p>
           </div>
 
           <div className="grid grid-cols-2 gap-4">
-            <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800 text-center">
-              <span className="text-xs text-slate-400 font-semibold block">Current CGPA</span>
-              <span className="text-3xl font-black text-indigo-500">8.92</span>
+            <div className="p-4 rounded-xl bg-white dark:bg-[#162033] border border-[#DDE5DD] dark:border-[#334155] text-center">
+              <span className="text-xs text-[#6B7280] dark:text-[#CBD5E1] font-semibold block">Current CGPA</span>
+              <span className="text-3xl font-extrabold text-[#2E7D32] dark:text-[#4CAF50]">8.92</span>
             </div>
-            <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800 text-center">
-              <span className="text-xs text-slate-400 font-semibold block">Total Credits Earned</span>
-              <span className="text-3xl font-black text-cyan-500">114 / 160</span>
+            <div className="p-4 rounded-xl bg-white dark:bg-[#162033] border border-[#DDE5DD] dark:border-[#334155] text-center">
+              <span className="text-xs text-[#6B7280] dark:text-[#CBD5E1] font-semibold block">Total Credits Earned</span>
+              <span className="text-3xl font-extrabold text-[#2E7D32] dark:text-[#4CAF50]">114 / 160</span>
             </div>
           </div>
 
           <div className="space-y-3">
-            <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">Set Desired Target CGPA</label>
+            <label className="block text-xs font-bold text-[#1F2937] dark:text-[#F8FAFC] uppercase tracking-wider">Set Desired Target CGPA</label>
             <input
               type="range"
               min="7.0"
               max="10.0"
               step="0.05"
               defaultValue="9.2"
-              className="w-full accent-indigo-600"
+              className="w-full accent-[#2E7D32] dark:accent-[#4CAF50]"
             />
-            <div className="flex justify-between text-xs text-slate-400">
+            <div className="flex justify-between text-xs text-[#6B7280] dark:text-[#CBD5E1]">
               <span>7.0</span>
-              <span className="font-bold text-indigo-500">Target: 9.20</span>
+              <span className="font-bold text-[#2E7D32] dark:text-[#4CAF50]">Target: 9.20</span>
               <span>10.0</span>
             </div>
           </div>
 
-          <div className="p-4 rounded-2xl bg-indigo-500/10 border border-indigo-500/30 text-xs text-slate-700 dark:text-slate-300 leading-relaxed">
-            <strong className="text-indigo-600 dark:text-indigo-400 block mb-1">AI Grade Path:</strong>
+          <div className="p-4 rounded-xl bg-white dark:bg-[#162033] border border-[#DDE5DD] dark:border-[#334155] text-xs text-[#1F2937] dark:text-[#F8FAFC] leading-relaxed">
+            <strong className="text-[#2E7D32] dark:text-[#4CAF50] block mb-1">AI Grade Path:</strong>
             To reach 9.20 CGPA by graduation in {selectedDept}, you need a minimum GPA of <strong>9.45</strong> in Semester 7 and <strong>9.30</strong> in Semester 8 project work.
           </div>
         </div>

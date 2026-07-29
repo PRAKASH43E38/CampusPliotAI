@@ -10,6 +10,7 @@ from flask_cors import CORS
 import sqlite3
 import json
 import os
+import urllib.request
 
 app = Flask(__name__)
 CORS(app)
@@ -17,6 +18,23 @@ CORS(app)
 PORT = 8080
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 DB_FILE = os.path.join(SCRIPT_DIR, "sse_festa_db.sqlite")
+
+def load_env_file():
+    possible_paths = [
+        os.path.join(SCRIPT_DIR, "..", ".env"),
+        os.path.join(SCRIPT_DIR, ".env"),
+        ".env"
+    ]
+    for path in possible_paths:
+        if os.path.exists(path):
+            with open(path, 'r', encoding='utf-8') as f:
+                for line in f:
+                    line = line.strip()
+                    if line and not line.startswith('#') and '=' in line:
+                        k, v = line.split('=', 1)
+                        os.environ[k.strip()] = v.strip()
+
+load_env_file()
 
 def get_db_connection():
     conn = sqlite3.connect(DB_FILE)
@@ -441,6 +459,240 @@ def delete_table_row():
     except Exception as e:
         conn.close()
         return jsonify({"error": str(e)}), 500
+
+# ============================================================================
+# PRODUCTION RAG, SECURITY, DOMAIN SCOPE & DUAL MODEL FALLBACK ENGINE
+# ============================================================================
+
+# 1. SECURITY RESTRICTION PATTERNS
+SECURITY_RESTRICTED_KEYWORDS = [
+    'how many students', 'total students', 'registered students', 'all students',
+    'student list', 'student database', 'show registered', 'registration stat',
+    'database table', 'show tables', 'sql query', 'schema', 'internal id',
+    'password', 'secret', 'token', 'api key', 'env', 'hidden table', 'user id'
+]
+
+# 2. CAMPUS DOMAIN SCOPE KEYWORDS
+CAMPUS_KEYWORDS = [
+    'saranathan', 'college', 'dept', 'department', 'faculty', 'professor', 'staff',
+    'course', 'subject', 'syllabus', 'timetable', 'schedule', 'class', 'exam',
+    'test', 'mark', 'cgpa', 'credit', 'library', 'lab', 'canteen', 'hostel',
+    'bus', 'transport', 'fee', 'scholarship', 'event', 'festa', 'placement',
+    'drive', 'company', 'hod', 'principal', 'building', 'gate', 'nav', 'map',
+    'admission', 'notice', 'announcement', 'club', 'rules', 'freshers', 'study',
+    'pod', 'hall', 'auditorium', 'sports', 'ground', 'gym', 'contact', 'ranganayaki',
+    'maam', 'sir', 'timing', 'duration', 'intake', 'academic', 'calendar'
+]
+
+OUT_OF_SCOPE_RESPONSE = (
+    "I apologize, but I am the AI assistant for Saranathan College of Engineering. "
+    "I can only help with college-related academic information, campus facilities, "
+    "departments, faculty details, timetables, events, and other information available "
+    "within the college system. Please ask a question related to the college."
+)
+
+SECURITY_DENIED_RESPONSE = (
+    "Access Restricted: For privacy and security reasons, internal student statistics, "
+    "personal contact details, database schemas, and system information cannot be disclosed."
+)
+
+NOT_FOUND_RESPONSE = "I couldn't find any information related to your request in the SSE FESTA knowledge base."
+
+def is_security_restricted(prompt: str, role: str) -> bool:
+    """
+    Check if query requests restricted internal DB data or student lists.
+    Admin users are authorized to access analytics & registration statistics.
+    """
+    if role == 'admin':
+        # Admin is authorized for analytics, but passwords and tokens remain blocked
+        lower = prompt.lower()
+        return any(k in lower for k in ['password', 'secret', 'token', 'api key', 'env'])
+
+    lower = prompt.lower()
+    return any(keyword in lower for keyword in SECURITY_RESTRICTED_KEYWORDS)
+
+def is_college_related(prompt: str) -> bool:
+    """Classify if query is relevant to Saranathan College of Engineering"""
+    lower = prompt.lower()
+    non_college_patterns = [
+        'movie', 'actor', 'cinema', 'cricket score', 'football match', 'politics',
+        'recipe', 'how to code in', 'python tutorial', 'leetcode', 'math problem',
+        'solve 2+2', 'who is prime minister', 'president of', 'weather in'
+    ]
+    if any(p in lower for p in non_college_patterns):
+        return False
+    return any(k in lower for k in CAMPUS_KEYWORDS)
+
+def search_modular_campus_database(query: str, role: str):
+    """
+    Modular Search Engine: Interrogates ALL SQLite tables dynamically.
+    Future-ready: automatically discovers new database tables without code changes.
+    """
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+
+        # Discover all user tables in SQLite DB (excludes sqlite_internal)
+        cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%';")
+        tables = [row['name'] for row in cursor.fetchall()]
+
+        # Filter out sensitive internal tables for non-admin roles
+        if role != 'admin':
+            public_tables = [t for t in tables if t not in ['student_profiles', 'users', 'passwords', 'secrets']]
+        else:
+            public_tables = [t for t in tables if t not in ['passwords', 'secrets']]
+
+        terms = [t.strip().lower() for t in query.split() if len(t.strip()) > 2]
+        retrieved_facts = []
+
+        for table in public_tables:
+            cursor.execute(f"PRAGMA table_info({table})")
+            columns = [col['name'] for col in cursor.fetchall()]
+            text_columns = [c for c in columns if 'id' not in c and 'password' not in c]
+
+            if not text_columns:
+                continue
+
+            where_clauses = []
+            params = []
+            for term in terms:
+                for col in text_columns:
+                    where_clauses.append(f"LOWER({col}) LIKE ?")
+                    params.append(f"%{term}%")
+
+            if where_clauses:
+                sql = f"SELECT * FROM {table} WHERE {' OR '.join(where_clauses)} LIMIT 4;"
+                cursor.execute(sql, params)
+                rows = cursor.fetchall()
+                for r in rows:
+                    fact_dict = dict(r)
+                    cleaned = {k: v for k, v in fact_dict.items() if k not in ['password', 'token'] and v is not None}
+                    retrieved_facts.append(f"[{table.upper()}] {json.dumps(cleaned)}")
+
+        conn.close()
+        return retrieved_facts
+    except Exception as e:
+        print(f"Error in modular search: {e}")
+        return []
+
+def call_gemini_primary(prompt: str, context: str, api_key: str):
+    """Primary Generator: Google Gemini 1.5 Flash API"""
+    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={api_key}"
+    system_instruction = (
+        "You are CampusPilot AI, the official intelligent assistant for Saranathan College of Engineering (Trichy, Tamil Nadu).\n"
+        "Answer student questions accurately, politely, and concisely based ONLY on the provided college database context.\n"
+        "Do NOT hallucinate or guess. If the answer is not in the context, say: 'I couldn't find any information related to your request in the SSE FESTA knowledge base.'\n\n"
+        f"Retrieved College Knowledge Base:\n{context}"
+    )
+    payload = {
+        "contents": [
+            {
+                "parts": [
+                    {"text": f"{system_instruction}\n\nStudent Question: {prompt}"}
+                ]
+            }
+        ]
+    }
+    req_data = json.dumps(payload).encode('utf-8')
+    req = urllib.request.Request(url, data=req_data, headers={'Content-Type': 'application/json'})
+    with urllib.request.urlopen(req, timeout=10) as response:
+        res_body = json.loads(response.read().decode('utf-8'))
+        return res_body['candidates'][0]['content']['parts'][0]['text']
+
+def call_glm_fallback(prompt: str, context: str, api_key: str):
+    """Automatic Fallback Generator: GLM 4.7 Flash API"""
+    url = "https://open.bigmodel.cn/api/paas/v4/chat/completions"
+    system_instruction = (
+        "You are CampusPilot AI, the official intelligent assistant for Saranathan College of Engineering (Trichy, Tamil Nadu).\n"
+        "Answer student questions accurately based ONLY on the provided college database context.\n"
+        "If no information is found in context, reply: 'I couldn't find any information related to your request in the SSE FESTA knowledge base.'\n\n"
+        f"Retrieved College Knowledge Base:\n{context}"
+    )
+    payload = {
+        "model": "glm-4-flash",
+        "messages": [
+            {"role": "system", "content": system_instruction},
+            {"role": "user", "content": prompt}
+        ]
+    }
+    req_data = json.dumps(payload).encode('utf-8')
+    headers = {
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {api_key}"
+    }
+    req = urllib.request.Request(url, data=req_data, headers=headers)
+    with urllib.request.urlopen(req, timeout=10) as response:
+        res_body = json.loads(response.read().decode('utf-8'))
+        return res_body['choices'][0]['message']['content']
+
+@app.route('/api/copilot/chat', methods=['POST'])
+def copilot_chat():
+    load_env_file()
+    data = request.json or {}
+    prompt = data.get('prompt', '').strip()
+    user_role = data.get('role', 'student')
+
+    if not prompt:
+        return jsonify({"error": "Prompt is required"}), 400
+
+    # STEP 1: DATABASE SECURITY GUARD & RBAC
+    if is_security_restricted(prompt, user_role):
+        return jsonify({
+            "response": SECURITY_DENIED_RESPONSE,
+            "security_blocked": True
+        }), 200
+
+    # STEP 2: STRICT DOMAIN CLASSIFICATION
+    if not is_college_related(prompt):
+        return jsonify({
+            "response": OUT_OF_SCOPE_RESPONSE,
+            "out_of_scope": True
+        }), 200
+
+    # STEP 3: MODULAR DATABASE SEARCH (RAG)
+    retrieved_facts = search_modular_campus_database(prompt, user_role)
+    if not retrieved_facts:
+        return jsonify({
+            "response": NOT_FOUND_RESPONSE,
+            "not_found": True
+        }), 200
+
+    context_str = "\n".join(retrieved_facts)
+
+    gemini_key = os.getenv('GEMINI_API_KEY', '').strip()
+    glm_key = os.getenv('GLM_API_KEY', '').strip()
+
+    # STEP 4: PRIMARY MODEL GENERATION WITH AUTOMATIC FALLBACK
+    # 4a. Attempt Gemini Primary Model
+    if gemini_key:
+        try:
+            ai_text = call_gemini_primary(prompt, context_str, gemini_key)
+            return jsonify({
+                "response": ai_text,
+                "model_used": "Gemini 1.5 Flash (Primary)",
+                "success": True
+            }), 200
+        except Exception as e:
+            print(f"Gemini API failed or rate-limited: {e}. Initiating silent fallback to GLM 4.7 Flash...")
+
+    # 4b. Automatic Fallback to GLM 4.7 Flash Model
+    if glm_key:
+        try:
+            ai_text = call_glm_fallback(prompt, context_str, glm_key)
+            return jsonify({
+                "response": ai_text,
+                "model_used": "GLM 4.7 Flash (Automatic Fallback)",
+                "success": True
+            }), 200
+        except Exception as e:
+            print(f"GLM 4.7 API fallback failed: {e}")
+
+    # Fallback to direct context summary if API keys are missing or offline
+    return jsonify({
+        "response": f"Here is the verified information from our Saranathan College database:\n\n" + "\n".join(retrieved_facts[:3]),
+        "model_used": "Database Context Engine",
+        "success": True
+    }), 200
 
 # ============================================================================
 # SERVER LAUNCHER

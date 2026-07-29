@@ -138,29 +138,29 @@ export const StudentOnboardingModal: React.FC<Props> = ({ isOpen, onClose, onSuc
   const progressPct = Math.round((step / 8) * 100);
 
   return (
-    <div className="fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-4 overflow-hidden">
-      <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 sm:p-8 max-w-3xl w-full shadow-2xl space-y-6 max-h-[92vh] overflow-y-auto animate-in fade-in zoom-in-95">
+    <div className="fixed inset-0 z-50 bg-slate-900/80 flex items-center justify-center p-4 overflow-hidden">
+      <div className="bg-white dark:bg-[#1E293B] border border-[#DDE5DD] dark:border-[#334155] rounded-2xl p-6 sm:p-8 max-w-3xl w-full shadow-lg space-y-6 max-h-[92vh] overflow-y-auto">
         
         {/* Header & Progress Bar */}
-        <div className="space-y-3 border-b border-slate-100 dark:border-slate-800 pb-4">
+        <div className="space-y-3 border-b border-[#E5E7EB] dark:border-[#475569] pb-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-emerald-600 to-teal-400 text-white font-black flex items-center justify-center text-base shadow-md">
+              <div className="w-10 h-10 rounded-xl bg-[#2E7D32] dark:bg-[#4CAF50] text-white font-black flex items-center justify-center text-base">
                 🎓
               </div>
               <div>
-                <h2 className="text-lg font-black text-slate-900 dark:text-white">First-Time Student Onboarding</h2>
-                <p className="text-xs text-slate-500 font-medium">Step {step} of 8 — Required Permanent Database Registration</p>
+                <h2 className="text-lg font-bold text-[#1F2937] dark:text-[#F8FAFC]">Student Onboarding</h2>
+                <p className="text-xs text-[#6B7280] dark:text-[#CBD5E1]">Step {step} of 8 — Profile & Preference Setup</p>
               </div>
             </div>
-            <span className="px-3 py-1 rounded-full text-xs font-black bg-emerald-500/10 text-emerald-400">
+            <span className="px-3 py-1 rounded-full text-xs font-bold bg-[#E8F5E9] dark:bg-[#162033] text-[#2E7D32] dark:text-[#81C784]">
               {progressPct}% Completed
             </span>
           </div>
 
           {/* Progress Bar Track */}
-          <div className="w-full h-2 rounded-full bg-slate-100 dark:bg-slate-800 overflow-hidden">
-            <div className="h-full bg-gradient-to-r from-emerald-500 to-teal-400 transition-all duration-300 rounded-full" style={{ width: `${progressPct}%` }} />
+          <div className="w-full h-2 rounded-full bg-[#E5E7EB] dark:bg-[#334155] overflow-hidden">
+            <div className="h-full bg-[#2E7D32] dark:bg-[#4CAF50] transition-all duration-300 rounded-full" style={{ width: `${progressPct}%` }} />
           </div>
         </div>
 
@@ -393,15 +393,15 @@ export const StudentOnboardingModal: React.FC<Props> = ({ isOpen, onClose, onSuc
             {/* STEP 4: Current Skills */}
             {step === 4 && (
               <div className="space-y-4 text-xs animate-in fade-in">
-                <div className="flex items-center gap-2 text-xs font-extrabold text-slate-400 uppercase tracking-widest border-b border-slate-100 dark:border-slate-800 pb-2">
-                  <Brain className="w-4 h-4 text-indigo-400" /> Step 4: Current Technical & Software Skills
+                <div className="flex items-center gap-2 text-xs font-extrabold text-[#6B7280] uppercase tracking-widest border-b border-[#E5E7EB] dark:border-[#475569] pb-2">
+                  <Brain className="w-4 h-4 text-[#2E7D32] dark:text-[#4CAF50]" /> Step 4: Current Technical & Software Skills
                 </div>
 
-                <p className="text-slate-400 text-[11px]">
+                <p className="text-[#6B7280] dark:text-[#CBD5E1] text-[11px]">
                   Select all programming languages, tools, and technical skills you currently possess:
                 </p>
 
-                <div className="flex flex-wrap gap-2 max-h-64 overflow-y-auto p-3 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950">
+                <div className="flex flex-wrap gap-2 max-h-64 overflow-y-auto p-3 rounded-2xl border border-[#DDE5DD] dark:border-[#334155] bg-[#F4F8F4] dark:bg-[#1E293B]">
                   {AVAILABLE_SKILLS.map((sk) => {
                     const selected = (form.current_skills || []).includes(sk);
                     return (
@@ -411,8 +411,8 @@ export const StudentOnboardingModal: React.FC<Props> = ({ isOpen, onClose, onSuc
                         onClick={() => toggleArrayItem('current_skills', sk)}
                         className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
                           selected
-                            ? 'bg-emerald-600 text-white shadow-md scale-105'
-                            : 'bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-300 dark:hover:bg-slate-700'
+                            ? 'bg-[#2E7D32] dark:bg-[#4CAF50] text-white'
+                            : 'bg-white dark:bg-[#273449] text-[#1F2937] dark:text-[#F8FAFC] border border-[#DDE5DD] dark:border-[#334155]'
                         }`}
                       >
                         {selected ? <Check className="w-3.5 h-3.5" /> : '+'} {sk}
@@ -426,15 +426,15 @@ export const StudentOnboardingModal: React.FC<Props> = ({ isOpen, onClose, onSuc
             {/* STEP 5: Areas of Interest */}
             {step === 5 && (
               <div className="space-y-4 text-xs animate-in fade-in">
-                <div className="flex items-center gap-2 text-xs font-extrabold text-slate-400 uppercase tracking-widest border-b border-slate-100 dark:border-slate-800 pb-2">
-                  <Heart className="w-4 h-4 text-rose-500" /> Step 5: Professional & Technical Areas of Interest
+                <div className="flex items-center gap-2 text-xs font-extrabold text-[#6B7280] uppercase tracking-widest border-b border-[#E5E7EB] dark:border-[#475569] pb-2">
+                  <Heart className="w-4 h-4 text-[#2E7D32] dark:text-[#4CAF50]" /> Step 5: Professional & Technical Areas of Interest
                 </div>
 
-                <p className="text-slate-400 text-[11px]">
+                <p className="text-[#6B7280] dark:text-[#CBD5E1] text-[11px]">
                   Choose domains you want to specialize in or explore during your studies:
                 </p>
 
-                <div className="flex flex-wrap gap-2 max-h-64 overflow-y-auto p-3 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950">
+                <div className="flex flex-wrap gap-2 max-h-64 overflow-y-auto p-3 rounded-2xl border border-[#DDE5DD] dark:border-[#334155] bg-[#F4F8F4] dark:bg-[#1E293B]">
                   {AVAILABLE_AREAS_OF_INTEREST.map((aoi) => {
                     const selected = (form.areas_of_interest || []).includes(aoi);
                     return (
@@ -444,8 +444,8 @@ export const StudentOnboardingModal: React.FC<Props> = ({ isOpen, onClose, onSuc
                         onClick={() => toggleArrayItem('areas_of_interest', aoi)}
                         className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
                           selected
-                            ? 'bg-indigo-600 text-white shadow-md scale-105'
-                            : 'bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-300 dark:hover:bg-slate-700'
+                            ? 'bg-[#2E7D32] dark:bg-[#4CAF50] text-white'
+                            : 'bg-white dark:bg-[#273449] text-[#1F2937] dark:text-[#F8FAFC] border border-[#DDE5DD] dark:border-[#334155]'
                         }`}
                       >
                         {selected ? <Check className="w-3.5 h-3.5" /> : '+'} {aoi}
@@ -609,7 +609,7 @@ export const StudentOnboardingModal: React.FC<Props> = ({ isOpen, onClose, onSuc
                 <button
                   type="submit"
                   disabled={loading}
-                  className="px-6 py-3 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-700 hover:to-teal-600 text-white font-black text-xs shadow-xl flex items-center gap-2"
+                  className="px-6 py-3 rounded-xl bg-[#2E7D32] hover:bg-[#1B5E20] dark:bg-[#4CAF50] dark:hover:bg-[#43A047] text-white font-bold text-xs flex items-center gap-2 border-none cursor-pointer"
                 >
                   {loading ? 'Saving Profile...' : 'Save & Finish Onboarding'}
                   <CheckCircle2 className="w-4 h-4" />

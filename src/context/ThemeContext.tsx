@@ -11,21 +11,29 @@ interface ThemeContextType {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [theme, setThemeState] = useState<Theme>('dark');
+  const [theme, setThemeState] = useState<Theme>(() => {
+    const saved = localStorage.getItem('campuspilot_theme') as Theme;
+    return saved === 'dark' || saved === 'light' ? saved : 'light';
+  });
 
   useEffect(() => {
     const root = document.documentElement;
-    root.classList.add('dark');
-    root.classList.remove('light');
-    localStorage.setItem('campuspilot_theme', 'dark');
-  }, []);
+    if (theme === 'dark') {
+      root.classList.add('dark');
+      root.classList.remove('light');
+    } else {
+      root.classList.remove('dark');
+      root.classList.add('light');
+    }
+    localStorage.setItem('campuspilot_theme', theme);
+  }, [theme]);
 
   const toggleTheme = () => {
-    // Permanent Dark Mode as requested
+    setThemeState((prev) => (prev === 'light' ? 'dark' : 'light'));
   };
 
-  const setTheme = (_newTheme: Theme) => {
-    // Permanent Dark Mode as requested
+  const setTheme = (newTheme: Theme) => {
+    setThemeState(newTheme);
   };
 
   return (

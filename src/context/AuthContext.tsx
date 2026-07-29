@@ -1,6 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { UserProfile, Role } from '../types';
-import { currentUser as mockStudent } from '../data/mockData';
 import { apiService } from '../services/apiService';
 
 const mockAdmin: UserProfile = {
@@ -17,7 +16,7 @@ interface AuthContextType {
   user: UserProfile | null;
   role: Role;
   profileCompleted: boolean;
-  loginAsStudent: () => void;
+  loginAsStudent: (email?: string) => Promise<void>;
   loginAsAdmin: () => void;
   logout: () => void;
   switchRole: (role: Role) => void;
@@ -28,8 +27,52 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<UserProfile | null>(mockStudent);
+  const [user, setUser] = useState<UserProfile | null>(null);
   const [profileCompleted, setProfileCompleted] = useState<boolean>(false);
+
+  const loginAsStudent = async (email: string = 'astrabyte@gmail.com') => {
+    try {
+      const res = await apiService.getStudentProfiles({ search: email });
+      if (res && res.length > 0) {
+        const student = res[0];
+        const studentProfile: UserProfile = {
+          id: `usr_${student.student_id}`,
+          name: student.full_name,
+          email: student.college_email,
+          role: 'student',
+          avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=300',
+          department: student.department,
+          year: student.year,
+          section: student.section,
+          rollNumber: student.register_number,
+          cgpa: 8.92,
+          attendancePct: 88.5,
+          bio: student.reason_for_department || 'Engineering Student'
+        };
+        setUser(studentProfile);
+        setProfileCompleted(!!student.profile_completed);
+      } else {
+        const studentProfile: UserProfile = {
+          id: 'usr_new',
+          name: email.split('@')[0],
+          email: email,
+          role: 'student',
+          avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=300',
+          department: 'Computer Science & Engineering',
+          year: '1st Year',
+          section: 'A',
+          rollNumber: 'PENDING',
+          cgpa: 0,
+          attendancePct: 0,
+          bio: 'New Onboarding Student'
+        };
+        setUser(studentProfile);
+        setProfileCompleted(false);
+      }
+    } catch (err) {
+      console.error("Error logging in student:", err);
+    }
+  };
 
   const checkOnboardingStatus = async (): Promise<boolean> => {
     if (!user || user.role !== 'student') {
@@ -53,12 +96,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   useEffect(() => {
-    checkOnboardingStatus();
-  }, [user]);
+    // Perform initial default login for astrabyte@gmail.com so student starts logged in
+    loginAsStudent('astrabyte@gmail.com');
+  }, []);
 
-  const loginAsStudent = () => {
-    setUser(mockStudent);
-  };
+  useEffect(() => {
+    if (user) {
+      checkOnboardingStatus();
+    }
+  }, [user?.email, user?.role]);
 
   const loginAsAdmin = () => {
     setUser(mockAdmin);
@@ -75,7 +121,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setUser(mockAdmin);
       setProfileCompleted(true);
     } else if (newRole === 'student') {
-      setUser(mockStudent);
+      loginAsStudent('astrabyte@gmail.com');
     } else {
       setUser(null);
       setProfileCompleted(false);

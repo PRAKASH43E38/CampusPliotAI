@@ -301,6 +301,19 @@ export const apiService = {
       console.error("Error fetching student database stats:", err);
       return null;
     }
+  },
+
+  async sendCopilotMessage(prompt: string, model: 'gemini' | 'glm' = 'gemini', role: string = 'student'): Promise<{ response: string; model_used?: string; key_missing?: boolean }> {
+    try {
+      const response = await axios.post(`${API_BASE_URL}/copilot/chat`, { prompt, model, role });
+      return response.data;
+    } catch (err: any) {
+      console.error("Error calling Copilot AI API:", err);
+      return {
+        response: `⚠️ AI Backend connection error: ${err.message || 'Unable to connect to AI server'}`,
+        model_used: 'error'
+      };
+    }
   }
 };
 

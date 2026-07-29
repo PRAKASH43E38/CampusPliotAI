@@ -116,13 +116,12 @@ export const ClubMatcher: React.FC = () => {
             className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex flex-col justify-between group"
           >
             <div>
-              <div className="relative h-36 rounded-xl overflow-hidden mb-3">
-                <img src={club.image} alt={club.name} className="w-full h-full object-cover" />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent" />
-                <span className="absolute top-2.5 right-2.5 px-2.5 py-0.5 rounded-full bg-emerald-600 text-white font-extrabold text-[11px] shadow-sm flex items-center gap-1">
-                  <Sparkles className="w-3 h-3" /> {club.matchPercentage}% Match
+              <div className="relative h-36 rounded-xl overflow-hidden mb-3 bg-[#1F2937]">
+                <img src={club.image} alt={club.name} className="w-full h-full object-cover opacity-90" />
+                <span className="absolute top-2.5 right-2.5 px-2.5 py-0.5 rounded-full bg-[#2E7D32] dark:bg-[#4CAF50] text-white font-bold text-[11px]">
+                  <Sparkles className="w-3 h-3 inline mr-1" /> {club.matchPercentage}% Match
                 </span>
-                <span className="absolute bottom-2 left-2.5 text-xs text-slate-200 font-bold">
+                <span className="absolute bottom-2 left-2.5 text-xs text-white font-bold bg-[#1F2937]/80 px-2 py-0.5 rounded-md">
                   {club.category}
                 </span>
               </div>

@@ -98,20 +98,20 @@ export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({ 
 
       {/* Global Live Toast Notification Popup */}
       {toastMessage && (
-        <div className="fixed bottom-6 right-6 z-50 max-w-md w-full bg-slate-900 text-white border border-emerald-500/40 rounded-2xl shadow-2xl p-4 flex items-start justify-between gap-4 animate-in slide-in-from-bottom-5 fade-in duration-300">
+        <div className="fixed bottom-6 right-6 z-50 max-w-md w-full bg-[#162033] text-white border border-[#334155] rounded-xl shadow-md p-4 flex items-start justify-between gap-4">
           <div className="flex gap-3">
-            <div className="w-9 h-9 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-black shrink-0">
+            <div className="w-9 h-9 rounded-xl bg-[#2E7D32] dark:bg-[#4CAF50] text-white flex items-center justify-center font-bold shrink-0">
               🔔
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 font-extrabold uppercase">
+                <span className="text-[10px] px-2 py-0.5 rounded-full bg-[#E8F5E9] dark:bg-[#1E293B] text-[#2E7D32] dark:text-[#81C784] font-extrabold uppercase">
                   {toastMessage.category}
                 </span>
-                <span className="text-[10px] text-slate-400">{toastMessage.timestamp}</span>
+                <span className="text-[10px] text-[#CBD5E1]">{toastMessage.timestamp}</span>
               </div>
               <h4 className="font-bold text-sm text-white mt-1">{toastMessage.title}</h4>
-              <p className="text-xs text-slate-300 mt-0.5 line-clamp-2">{toastMessage.message}</p>
+              <p className="text-xs text-[#CBD5E1] mt-0.5 line-clamp-2">{toastMessage.message}</p>
             </div>
           </div>
           <button
