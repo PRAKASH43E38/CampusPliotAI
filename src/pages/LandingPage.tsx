@@ -44,8 +44,7 @@ export const LandingPage: React.FC = () => {
       </header>
 
       {/* Hero Section */}
-      <section className="py-16 sm:py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 bg-[#F8FAF8] dark:bg-[#162033] rounded-2xl my-6 border border-[#DDE5DD] dark:border-[#334155]">
-
+      <section className="py-16 sm:py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div className="text-center lg:text-left space-y-6">
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#E8F5E9] dark:bg-[#1E293B] border border-[#DDE5DD] dark:border-[#334155] text-xs font-bold text-[#2E7D32] dark:text-[#81C784]">
@@ -77,14 +76,12 @@ export const LandingPage: React.FC = () => {
             </div>
           </div>
 
-          <div className="relative">
-            <div className="rounded-2xl overflow-hidden border border-[#DDE5DD] dark:border-[#334155] bg-white dark:bg-[#1E293B] p-2">
-              <img
-                src={welcomeImg}
-                alt="University Platform Welcome"
-                className="w-full h-auto rounded-xl object-cover"
-              />
-            </div>
+          <div>
+            <img
+              src={welcomeImg}
+              alt="University Platform Welcome"
+              className="w-full h-auto rounded-2xl border border-[#DDE5DD] dark:border-[#334155] object-cover"
+            />
           </div>
         </div>
       </section>
