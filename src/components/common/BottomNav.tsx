@@ -24,8 +24,9 @@ export const BottomNav: React.FC = () => {
   ];
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 block md:hidden bg-white dark:bg-[#131314] border-t border-[#DADCE0] dark:border-[#444746] shadow-lg pb-safe">
-      <div className="flex justify-around items-center h-16 px-2">
+    <nav className="fixed bottom-0 left-0 right-0 z-50 block lg:hidden px-3 pb-[calc(env(safe-area-inset-bottom)+0.5rem)]">
+      <div className="material-surface-glass mx-auto max-w-2xl border-t-0 rounded-t-[28px] shadow-lg">
+        <div className="flex justify-around items-center h-16 px-2">
         {navItems.map((item) => {
           const Icon = item.icon;
           return (
@@ -35,18 +36,17 @@ export const BottomNav: React.FC = () => {
               className={({ isActive }) =>
                 `flex flex-col items-center justify-center flex-1 h-full py-1 text-center transition-all ${
                   isActive
-                    ? 'text-[#1a73e8] dark:text-[#a8c7fa] font-bold'
-                    : 'text-[#5F6368] dark:text-[#9E9E9E]'
+                    ? 'text-[color:var(--cp-primary)] font-medium'
+                    : 'text-[color:var(--cp-text-muted)]'
                 }`
               }
             >
               {({ isActive }) => (
                 <div className="flex flex-col items-center gap-1">
-                  {/* Highlight pill behind active icon */}
                   <div
                     className={`px-4 py-1 rounded-full transition-all flex items-center justify-center ${
                       isActive
-                        ? 'bg-[#E8F0FE] dark:bg-[#1e2b3c]'
+                        ? 'bg-[color:var(--cp-primary-container)]'
                         : 'bg-transparent'
                     }`}
                   >
@@ -58,6 +58,7 @@ export const BottomNav: React.FC = () => {
             </NavLink>
           );
         })}
+        </div>
       </div>
     </nav>
   );

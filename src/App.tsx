@@ -1,7 +1,7 @@
-import React from 'react';
-import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { ThemeProvider } from './context/ThemeContext';
-import { AuthProvider, useAuth } from './context/AuthContext';
+import { AuthProvider } from './context/AuthContext';
 import { NotificationProvider } from './context/NotificationContext';
 import { Navbar } from './components/common/Navbar';
 import { Sidebar } from './components/common/Sidebar';
@@ -28,19 +28,33 @@ import { UnauthorizedPage } from './pages/UnauthorizedPage';
 import { NotFoundPage } from './pages/NotFoundPage';
 
 const AppLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(() => localStorage.getItem('cp_sidebarCollapsed') === 'true');
+  const location = useLocation();
+  const mainRef = React.useRef<HTMLElement | null>(null);
+
+  useEffect(() => {
+    localStorage.setItem('cp_sidebarCollapsed', String(sidebarCollapsed));
+  }, [sidebarCollapsed]);
+
+  useEffect(() => {
+    mainRef.current?.scrollTo({ top: 0, behavior: 'auto' });
+  }, [location.pathname]);
+
   return (
-    <div className="min-h-screen bg-transparent text-slate-100 flex flex-col font-sans transition-colors duration-300">
-      <Navbar />
-      <div className="flex-1 flex max-w-full">
-        <Sidebar />
-        <main className="flex-1 min-w-0 overflow-y-auto pb-20 md:pb-12">
-          {children}
+    <div className="app-shell" style={{ ['--sidebar-width' as any]: sidebarCollapsed ? '88px' : '296px' }}>
+      <Navbar onToggleSidebar={() => setSidebarCollapsed((prev) => !prev)} sidebarCollapsed={sidebarCollapsed} />
+      <div className="app-shell__viewport">
+        <Sidebar collapsed={sidebarCollapsed} />
+        <main ref={mainRef} className="app-shell__content">
+          <div className="min-h-full px-4 py-4 sm:px-6 lg:px-8 xl:px-10">
+            {children}
+          </div>
+          <div className="hidden md:block app-shell__footer">
+            <Footer />
+          </div>
         </main>
       </div>
       <BottomNav />
-      <div className="hidden md:block">
-        <Footer />
-      </div>
     </div>
   );
 };

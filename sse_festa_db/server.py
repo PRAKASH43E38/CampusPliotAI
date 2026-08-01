@@ -7,9 +7,11 @@ Database: SQLite3 (sse_festa_db.sqlite)
 
 from flask import Flask, request, jsonify
 from flask_cors import CORS
+import logging
 import sqlite3
 import json
 import os
+import re
 import urllib.request
 import urllib.error
 
@@ -19,6 +21,12 @@ CORS(app)
 PORT = 8080
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 DB_FILE = os.path.join(SCRIPT_DIR, "sse_festa_db.sqlite")
+
+logging.basicConfig(
+    level=os.getenv("LOG_LEVEL", "INFO").upper(),
+    format="%(asctime)s %(levelname)s %(name)s %(message)s",
+)
+logger = logging.getLogger("campuspilot.ai")
 
 def load_env_file():
     possible_paths = [
@@ -33,9 +41,20 @@ def load_env_file():
                     line = line.strip()
                     if line and not line.startswith('#') and '=' in line:
                         k, v = line.split('=', 1)
-                        os.environ[k.strip()] = v.strip()
+                        key = k.strip()
+                        value = v.strip()
+                        if (value.startswith('"') and value.endswith('"')) or (value.startswith("'") and value.endswith("'")):
+                            value = value[1:-1].strip()
+                        os.environ[key] = value
 
 load_env_file()
+logger.info(
+    "Environment loaded. Provider availability: gemini=%s grok=%s glm=%s default_model=%s",
+    bool(os.getenv('GEMINI_API_KEY', '').strip()),
+    bool((os.getenv('GROK_API_KEY') or os.getenv('XAI_API_KEY') or '').strip()),
+    bool(os.getenv('GLM_API_KEY', '').strip()),
+    os.getenv('DEFAULT_MODEL', 'auto'),
+)
 
 def get_db_connection():
     conn = sqlite3.connect(DB_FILE)
@@ -86,7 +105,9 @@ def init_session_db():
                 title TEXT DEFAULT 'New Chat',
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                is_pinned BOOLEAN DEFAULT 0
+                is_pinned BOOLEAN DEFAULT 0,
+                last_message_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                message_count INTEGER DEFAULT 0
             )
         """)
         
@@ -102,6 +123,48 @@ def init_session_db():
                 FOREIGN KEY (conversation_id) REFERENCES conversations (conversation_id) ON DELETE CASCADE
             )
         """)
+
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS ai_provider_settings (
+                id INTEGER PRIMARY KEY CHECK (id = 1),
+                preferred_provider TEXT DEFAULT 'auto',
+                grok_model TEXT DEFAULT 'grok-4.5',
+                gemini_model TEXT DEFAULT 'gemini-2.5-pro',
+                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        """)
+
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS user_preferences (
+                user_id TEXT PRIMARY KEY,
+                theme TEXT DEFAULT 'system',
+                language TEXT DEFAULT 'english',
+                ai_response_mode TEXT DEFAULT 'structured',
+                preferred_provider TEXT DEFAULT 'auto',
+                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        """)
+
+        cursor.execute("INSERT OR IGNORE INTO ai_provider_settings (id) VALUES (1)")
+
+        for table_name, columns in {
+            "conversations": {
+                "last_message_at": "TIMESTAMP DEFAULT CURRENT_TIMESTAMP",
+                "message_count": "INTEGER DEFAULT 0"
+            },
+            "messages": {
+                "metadata": "TEXT"
+            }
+        }.items():
+            cursor.execute(f"PRAGMA table_info({table_name})")
+            existing_columns = {row[1] for row in cursor.fetchall()}
+            for column_name, column_def in columns.items():
+                if column_name not in existing_columns:
+                    cursor.execute(f"ALTER TABLE {table_name} ADD COLUMN {column_name} {column_def}")
+
+        cursor.execute("CREATE INDEX IF NOT EXISTS idx_conversations_user_updated ON conversations(user_id, updated_at DESC)")
+        cursor.execute("CREATE INDEX IF NOT EXISTS idx_conversations_user_pinned ON conversations(user_id, is_pinned DESC, updated_at DESC)")
+        cursor.execute("CREATE INDEX IF NOT EXISTS idx_messages_conversation_ts ON messages(conversation_id, timestamp ASC)")
         
         conn.commit()
         conn.close()
@@ -681,11 +744,11 @@ def get_request_role():
         return role_hdr
     auth_hdr = request.headers.get('Authorization', '')
     if auth_hdr.startswith('Bearer '):
-        token = auth_hdr.split(' ')[1]
+        token = auth_hdr.replace('Bearer ', '', 1).strip()
         try:
             conn = get_db_connection()
             cursor = conn.cursor()
-            cursor.execute("SELECT role FROM user_sessions WHERE token = ?", (token,))
+            cursor.execute("SELECT role FROM user_sessions WHERE session_token = ?", (token,))
             row = cursor.fetchone()
             conn.close()
             if row and row['role']:
@@ -806,7 +869,10 @@ def create_conversation():
     
     conn = get_db_connection()
     cursor = conn.cursor()
-    cursor.execute("INSERT INTO conversations (conversation_id, user_id) VALUES (?, ?)", (conv_id, user_id))
+    cursor.execute(
+        "INSERT INTO conversations (conversation_id, user_id, title, last_message_at, message_count) VALUES (?, ?, ?, CURRENT_TIMESTAMP, 0)",
+        (conv_id, user_id, "New Chat")
+    )
     conn.commit()
     conn.close()
     
@@ -818,6 +884,8 @@ def list_conversations():
     token = request.cookies.get('session_token') or request.headers.get('Authorization', '').replace('Bearer ', '')
     if not token:
         return jsonify({"error": "Unauthorized"}), 401
+
+    search = (request.args.get('search') or '').strip().lower()
     
     conn = get_db_connection()
     cursor = conn.cursor()
@@ -830,8 +898,28 @@ def list_conversations():
     
     user_info = json.loads(session['user_data'])
     user_id = user_info['id']
-    
-    cursor.execute("SELECT * FROM conversations WHERE user_id = ? ORDER BY updated_at DESC", (user_id,))
+
+    query = """
+        SELECT
+            c.*,
+            COALESCE((
+                SELECT content
+                FROM messages m
+                WHERE m.conversation_id = c.conversation_id
+                ORDER BY timestamp DESC
+                LIMIT 1
+            ), '') AS last_message_preview
+        FROM conversations c
+        WHERE c.user_id = ?
+    """
+    params = [user_id]
+    if search:
+        query += " AND (LOWER(c.title) LIKE ? OR EXISTS (SELECT 1 FROM messages m WHERE m.conversation_id = c.conversation_id AND LOWER(m.content) LIKE ?))"
+        term = f"%{search}%"
+        params.extend([term, term])
+    query += " ORDER BY c.is_pinned DESC, c.updated_at DESC, c.created_at DESC"
+
+    cursor.execute(query, params)
     convs = [dict(row) for row in cursor.fetchall()]
     conn.close()
     
@@ -840,8 +928,26 @@ def list_conversations():
 @app.route('/api/chat/conversations/<conv_id>', methods=['GET'])
 def get_conversation_messages(conv_id):
     """Fetch all messages for a specific conversation"""
+    token = request.cookies.get('session_token') or request.headers.get('Authorization', '').replace('Bearer ', '')
+    if not token:
+        return jsonify({"error": "Unauthorized"}), 401
+
     conn = get_db_connection()
     cursor = conn.cursor()
+    cursor.execute("SELECT user_data FROM user_sessions WHERE session_token = ?", (token,))
+    session = cursor.fetchone()
+    if not session:
+        conn.close()
+        return jsonify({"error": "Invalid session"}), 401
+
+    user_info = json.loads(session['user_data'])
+    user_id = user_info['id']
+    cursor.execute("SELECT 1 FROM conversations WHERE conversation_id = ? AND user_id = ?", (conv_id, user_id))
+    owned = cursor.fetchone()
+    if not owned:
+        conn.close()
+        return jsonify({"error": "Conversation not found"}), 404
+
     cursor.execute("SELECT * FROM messages WHERE conversation_id = ? ORDER BY timestamp ASC", (conv_id,))
     msgs = [dict(row) for row in cursor.fetchall()]
     conn.close()
@@ -853,13 +959,31 @@ def update_conversation(conv_id):
     data = request.json or {}
     title = data.get('title')
     is_pinned = data.get('is_pinned')
+
+    token = request.cookies.get('session_token') or request.headers.get('Authorization', '').replace('Bearer ', '')
+    if not token:
+        return jsonify({"error": "Unauthorized"}), 401
     
     conn = get_db_connection()
     cursor = conn.cursor()
+    cursor.execute("SELECT user_data FROM user_sessions WHERE session_token = ?", (token,))
+    session = cursor.fetchone()
+    if not session:
+        conn.close()
+        return jsonify({"error": "Invalid session"}), 401
+
+    user_info = json.loads(session['user_data'])
+    user_id = user_info['id']
+    cursor.execute("SELECT 1 FROM conversations WHERE conversation_id = ? AND user_id = ?", (conv_id, user_id))
+    owned = cursor.fetchone()
+    if not owned:
+        conn.close()
+        return jsonify({"error": "Conversation not found"}), 404
+
     if title is not None:
-        cursor.execute("UPDATE conversations SET title = ?, updated_at = CURRENT_TIMESTAMP WHERE conversation_id = ?", (title, conv_id))
+        cursor.execute("UPDATE conversations SET title = ?, updated_at = CURRENT_TIMESTAMP WHERE conversation_id = ?", (title.strip() or "New Chat", conv_id))
     if is_pinned is not None:
-        cursor.execute("UPDATE conversations SET is_pinned = ? WHERE conversation_id = ?", (1 if is_pinned else 0, conv_id))
+        cursor.execute("UPDATE conversations SET is_pinned = ?, updated_at = CURRENT_TIMESTAMP WHERE conversation_id = ?", (1 if is_pinned else 0, conv_id))
     conn.commit()
     conn.close()
     return jsonify({"success": True}), 200
@@ -867,8 +991,25 @@ def update_conversation(conv_id):
 @app.route('/api/chat/conversations/<conv_id>', methods=['DELETE'])
 def delete_conversation(conv_id):
     """Delete a conversation and its messages"""
+    token = request.cookies.get('session_token') or request.headers.get('Authorization', '').replace('Bearer ', '')
+    if not token:
+        return jsonify({"error": "Unauthorized"}), 401
+
     conn = get_db_connection()
     cursor = conn.cursor()
+    cursor.execute("SELECT user_data FROM user_sessions WHERE session_token = ?", (token,))
+    session = cursor.fetchone()
+    if not session:
+        conn.close()
+        return jsonify({"error": "Invalid session"}), 401
+
+    user_info = json.loads(session['user_data'])
+    user_id = user_info['id']
+    cursor.execute("SELECT conversation_id FROM conversations WHERE conversation_id = ? AND user_id = ?", (conv_id, user_id))
+    owned = cursor.fetchone()
+    if not owned:
+        conn.close()
+        return jsonify({"error": "Conversation not found"}), 404
     cursor.execute("DELETE FROM conversations WHERE conversation_id = ?", (conv_id,))
     conn.commit()
     conn.close()
@@ -885,8 +1026,6 @@ SECURITY_RESTRICTED_KEYWORDS = [
 
 SECURITY_DENIED_RESPONSE = "⚠️ Security Alert: You are requesting sensitive system information. Access to administrative credentials and private keys is strictly prohibited for security reasons."
 OUT_OF_SCOPE_RESPONSE = "I am specifically trained as the CampusPilot AI for Saranathan College of Engineering. While I'd love to help, I cannot answer questions unrelated to campus life, academics, or college administration. Please ask me something about the college!"
-
-DEFAULT_CAMPUS_KNOWLEDGE = (
 
 DEFAULT_CAMPUS_KNOWLEDGE = (
     "Saranathan College of Engineering (SCE) is a premier engineering institution located in Venkateswara Nagar, Panjappur, Tiruchirappalli (Trichy), Tamil Nadu.\n"
@@ -959,9 +1098,55 @@ def search_modular_campus_database(query: str, role: str):
         print(f"Error in modular search: {e}")
         return []
 
+def call_grok_primary(prompt: str, context: str, api_key: str, role: str = 'student'):
+    """Primary / Provider Generator: xAI Grok API"""
+    url = "https://api.x.ai/v1/chat/completions"
+    system_instruction = (
+        f"You are CampusPilot AI, the official intelligent assistant for Saranathan College of Engineering (Trichy, Tamil Nadu). User Role: {role.capitalize()}.\n"
+        "Answer questions accurately, politely, and comprehensively using the provided college knowledge base.\n\n"
+        f"College Knowledge Base:\n{context}"
+    )
+    models_to_try = ["grok-4.5", "grok-4.5-latest", "grok-build-latest", "grok-2-1212", "grok-beta"]
+    last_error = None
+
+    for model_name in models_to_try:
+        payload = {
+            "model": model_name,
+            "messages": [
+                {"role": "system", "content": system_instruction},
+                {"role": "user", "content": prompt}
+            ],
+            "temperature": 0.7
+        }
+        req_data = json.dumps(payload).encode('utf-8')
+        headers = {
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {api_key}"
+        }
+        req = urllib.request.Request(url, data=req_data, headers=headers)
+        try:
+            with urllib.request.urlopen(req, timeout=30.0) as response:
+                res_body = json.loads(response.read().decode('utf-8'))
+                choice = (res_body.get('choices') or [{}])[0]
+                message = choice.get('message') or {}
+                content = message.get('content')
+                if content:
+                    return content, f"Grok ({model_name})"
+                raise RuntimeError(f"Grok API returned an empty response for {model_name}")
+        except urllib.error.HTTPError as e:
+            err_body = e.read().decode('utf-8') if e.fp else ''
+            print(f"[Grok API {model_name} HTTP Error {e.code}]: {err_body}")
+            last_error = RuntimeError(f"Grok API {model_name} status {e.code}: {err_body}")
+        except Exception as e:
+            print(f"[Grok API {model_name} Error]: {e}")
+            last_error = e
+
+    if last_error:
+        raise last_error
+
 def call_gemini_primary(prompt: str, context: str, api_key: str, role: str = 'student'):
     """Primary Generator: Google Gemini API with Role-Based Prompt Alignment"""
-    models_to_try = ["gemini-1.5-flash", "gemini-2.0-flash"]
+    models_to_try = ["gemini-2.5-flash", "gemini-2.5-pro", "gemini-2.0-flash", "gemini-2.0-flash-lite"]
     
     if role == 'faculty':
         role_desc = "You are interacting with a FACULTY MEMBER. Focus on teaching schedule, timetables, subjects handled, classroom allocations, and academic resource management."
@@ -977,10 +1162,16 @@ def call_gemini_primary(prompt: str, context: str, api_key: str, role: str = 'st
         f"College Knowledge Base:\n{context}"
     )
     payload = {
+        "systemInstruction": {
+            "parts": [
+                {"text": system_instruction}
+            ]
+        },
         "contents": [
             {
+                "role": "user",
                 "parts": [
-                    {"text": f"{system_instruction}\n\nUser ({role.capitalize()}) Question: {prompt}"}
+                    {"text": prompt}
                 ]
             }
         ]
@@ -989,13 +1180,29 @@ def call_gemini_primary(prompt: str, context: str, api_key: str, role: str = 'st
     
     last_error = None
     for model_name in models_to_try:
-        url = f"https://generativelanguage.googleapis.com/v1beta/models/{model_name}:generateContent?key={api_key}"
-        req = urllib.request.Request(url, data=req_data, headers={'Content-Type': 'application/json'})
+        url = f"https://generativelanguage.googleapis.com/v1beta/models/{model_name}:generateContent"
+        req = urllib.request.Request(
+            url,
+            data=req_data,
+            headers={
+                'Content-Type': 'application/json',
+                'x-goog-api-key': api_key
+            }
+        )
         try:
-                with urllib.request.urlopen(req, timeout=30.0) as response:
-
+            with urllib.request.urlopen(req, timeout=30.0) as response:
                 res_body = json.loads(response.read().decode('utf-8'))
-                return res_body['candidates'][0]['content']['parts'][0]['text']
+                candidates = res_body.get('candidates') or []
+                text_parts = []
+                if candidates:
+                    content = candidates[0].get('content') or {}
+                    for part in content.get('parts', []):
+                        if 'text' in part and part['text']:
+                            text_parts.append(part['text'])
+                text = "\n".join(text_parts).strip()
+                if not text:
+                    raise RuntimeError(f"Gemini API returned no text for {model_name}")
+                return text, f"Gemini ({model_name})"
         except urllib.error.HTTPError as e:
             err_body = e.read().decode('utf-8') if e.fp else ''
             print(f"[Gemini API {model_name} HTTP Error {e.code}]: {err_body}")
@@ -1008,7 +1215,7 @@ def call_gemini_primary(prompt: str, context: str, api_key: str, role: str = 'st
         raise last_error
 
 def call_glm_fallback(prompt: str, context: str, api_key: str, role: str = 'student'):
-    """Automatic Fallback Generator: GLM 4.7 Flash API"""
+    """Fallback Generator: GLM 4.7 Flash API"""
     url = "https://open.bigmodel.cn/api/paas/v4/chat/completions"
     system_instruction = (
         f"You are CampusPilot AI, the official intelligent assistant for Saranathan College of Engineering (Trichy, Tamil Nadu). User Role: {role}.\n"
@@ -1028,23 +1235,28 @@ def call_glm_fallback(prompt: str, context: str, api_key: str, role: str = 'stud
     }
     req = urllib.request.Request(url, data=req_data, headers=headers)
     with urllib.request.urlopen(req, timeout=30.0) as response:
-
         res_body = json.loads(response.read().decode('utf-8'))
-        return res_body['choices'][0]['message']['content']
+        choice = (res_body.get('choices') or [{}])[0]
+        message = choice.get('message') or {}
+        content = message.get('content')
+        if not content:
+            raise RuntimeError("GLM API returned an empty response")
+        return content, "GLM 4.7 Flash"
 
 @app.route('/api/chat', methods=['POST'])
 @app.route('/api/copilot/chat', methods=['POST'])
 def copilot_chat():
     """
-    Central AI Chatbot Endpoint
-    Accepts: { "message" or "prompt": "...", "model": "gemini" | "glm", "role": "student" | "faculty" | "admin", "conversation_id": "..." }
+    Central AI Chatbot Endpoint with Grok & Gemini Provider Fallback
+    Accepts: { "message" or "prompt": "...", "model": "grok" | "gemini" | "glm", "role": "student" | "faculty" | "admin", "conversation_id": "..." }
     """
     load_env_file()
     data = request.json or {}
     prompt = (data.get('prompt') or data.get('message') or '').strip()
     user_role = data.get('role', 'student')
-    requested_model = data.get('model', 'gemini')
+    requested_model = (data.get('model') or os.getenv('DEFAULT_MODEL') or 'auto').lower()
     conversation_id = data.get('conversation_id')
+    request_id = f"req_{os.urandom(4).hex()}"
 
     if not prompt:
         return jsonify({"error": "Prompt or message is required"}), 400
@@ -1072,53 +1284,48 @@ def copilot_chat():
     
     # Load provider keys
     gemini_key = os.getenv('GEMINI_API_KEY', '').strip()
+    grok_key = (os.getenv('GROK_API_KEY') or os.getenv('XAI_API_KEY') or '').strip()
     glm_key = os.getenv('GLM_API_KEY', '').strip()
-    
-    key_missing = []
-    if not gemini_key:
-        key_missing.append('gemini')
-    if not glm_key:
-        key_missing.append('glm')
-
-    # STEP 4: MODEL GENERATION WITH AUTOMATIC FALLBACK
-    if requested_model == 'glm' and not glm_key:
-        return jsonify({
-            "response": "⚠️ GLM API key not configured. Please set GLM_API_KEY in .env.",
-            "model_used": "none",
-            "key_missing": True,
-            "success": False
-        }), 200
-    if requested_model == 'gemini' and not gemini_key:
-        return jsonify({
-            "response": "⚠️ Gemini API key not configured. Please set GEMINI_API_KEY in .env.",
-            "model_used": "none",
-            "key_missing": True,
-            "success": False
-        }), 200
 
     ai_text = None
     model_used = "Unknown"
+    errors = []
+    provider_order = []
+    if requested_model == 'grok':
+        provider_order = ['grok', 'gemini']
+    elif requested_model == 'gemini':
+        provider_order = ['gemini', 'grok']
+    elif requested_model == 'glm':
+        provider_order = ['glm', 'grok', 'gemini']
+    else:
+        provider_order = ['grok', 'gemini', 'glm']
 
-    if requested_model == 'glm' and glm_key:
-        try:
-            ai_text = call_glm_fallback(prompt, context_str, glm_key, user_role)
-            model_used = "GLM 4.7 Flash"
-        except Exception as e:
-            print(f"GLM API failed: {e}. Trying Gemini...")
+    provider_attempts = []
+    logger.info(
+        "Chat request %s received. requested_model=%s conversation_id=%s provider_order=%s",
+        request_id,
+        requested_model,
+        conversation_id,
+        provider_order,
+    )
 
-    if not ai_text and gemini_key:
+    for provider_name in provider_order:
+        if ai_text:
+            break
         try:
-            ai_text = call_gemini_primary(prompt, context_str, gemini_key, user_role)
-            model_used = "Gemini 1.5 Flash"
+            if provider_name == 'grok' and grok_key:
+                ai_text, model_used = call_grok_primary(prompt, context_str, grok_key, user_role)
+                provider_attempts.append({"provider": "grok", "status": "success", "model": model_used})
+            elif provider_name == 'gemini' and gemini_key:
+                ai_text, model_used = call_gemini_primary(prompt, context_str, gemini_key, user_role)
+                provider_attempts.append({"provider": "gemini", "status": "success", "model": model_used})
+            elif provider_name == 'glm' and glm_key:
+                ai_text, model_used = call_glm_fallback(prompt, context_str, glm_key, user_role)
+                provider_attempts.append({"provider": "glm", "status": "success", "model": model_used})
         except Exception as e:
-            print(f"Gemini API failed: {e}. Trying GLM fallback...")
-
-    if not ai_text and glm_key:
-        try:
-            ai_text = call_glm_fallback(prompt, context_str, glm_key, user_role)
-            model_used = "GLM 4.7 Flash (Fallback)"
-        except Exception as e:
-            print(f"GLM API fallback failed: {e}")
+            errors.append(f"{provider_name.upper()} failed: {e}")
+            provider_attempts.append({"provider": provider_name, "status": "error", "error": str(e)})
+            logger.exception("Provider failure in %s for %s", provider_name, request_id)
 
     if ai_text:
         # PERSISTENCE: Save message to DB if conversation_id is provided
@@ -1132,10 +1339,10 @@ def copilot_chat():
             # Save AI Message
             cursor.execute("INSERT INTO messages (message_id, conversation_id, sender, content, model_used) VALUES (?, ?, ?, ?, ?)",
                            (f"msg_{uuid.uuid4().hex[:12]}", conversation_id, 'ai', ai_text, model_used))
-            # Update Conversation Title if it's new (simple logic: use first prompt as title)
+            # Update Conversation Title if it's new
             cursor.execute("UPDATE conversations SET title = ? WHERE conversation_id = ? AND title = 'New Chat'", 
-                           (prompt[:50], conversation_id))
-            cursor.execute("UPDATE conversations SET updated_at = CURRENT_TIMESTAMP WHERE conversation_id = ?", (conversation_id,))
+                           (prompt[:40] + ('...' if len(prompt) > 40 else ''), conversation_id))
+            cursor.execute("UPDATE conversations SET updated_at = CURRENT_TIMESTAMP, last_message_at = CURRENT_TIMESTAMP, message_count = COALESCE(message_count, 0) + 2 WHERE conversation_id = ?", (conversation_id,))
             conn.commit()
             conn.close()
 
@@ -1145,30 +1352,48 @@ def copilot_chat():
             "success": True
         }), 200
 
-    # Fallback to direct context engine
-    if retrieved_facts:
-        summary_text = "Here is the verified information from the Saranathan College database:\n\n" + "\n".join(retrieved_facts[:3])
-    else:
-        summary_text = (
-            "Welcome to CampusPilot AI! I am the intelligent virtual assistant for Saranathan College of Engineering, Trichy.\n\n"
-            "You can ask me about:\n"
-            "• Department details & HOD contact cabins\n"
-            "• Lecture schedules & exam timetables\n"
-            "• Placement drives & campus events\n"
-            "• Freshers guide & campus navigation map"
-        )
-
+    logger.error("All AI providers failed for %s. Attempts: %s", request_id, provider_attempts)
     return jsonify({
-        "response": summary_text,
-        "model_used": "Campus Database Engine",
-        "success": True,
-        "key_missing": bool(key_missing)
-    }), 200
+        "error": "All configured AI providers failed.",
+        "success": False,
+        "request_id": request_id,
+        "provider_attempts": provider_attempts,
+        "errors": errors
+    }), 503
+
+
+@app.route('/api/ollama/health', methods=['GET'])
+def ollama_health_check():
+    """
+    Ollama Health Check endpoint using GET /api/tags (GET supported)
+    Fallback POST /api/me if requested with application/json header & empty body {}
+    10000ms (10s) timeout for codex/openclaw integrations.
+    """
+    ollama_url = os.getenv('OLLAMA_HEALTH_ENDPOINT', 'http://127.0.0.1:11434/api/tags')
+    try:
+        req = urllib.request.Request(ollama_url)
+        with urllib.request.urlopen(req, timeout=10.0) as resp:
+            data = json.loads(resp.read().decode('utf-8'))
+            return jsonify({"status": "healthy", "models": data.get('models', [])}), 200
+    except Exception as e:
+        # Fallback to POST http://127.0.0.1:11434/api/me with application/json header
+        try:
+            me_req = urllib.request.Request(
+                'http://127.0.0.1:11434/api/me',
+                data=json.dumps({}).encode('utf-8'),
+                headers={'Content-Type': 'application/json'}
+            )
+            with urllib.request.urlopen(me_req, timeout=10.0) as resp:
+                data = json.loads(resp.read().decode('utf-8'))
+                return jsonify({"status": "healthy", "data": data}), 200
+        except Exception as me_err:
+            return jsonify({"status": "error", "message": str(e), "me_error": str(me_err)}), 500
 
 
 # ============================================================================
 # SERVER LAUNCHER
 # ============================================================================
+
 if __name__ == '__main__':
     print(f"============================================================")
     print(f"🚀 SSE FESTA Flask Backend & Student Database Server Started!")

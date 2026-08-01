@@ -568,8 +568,10 @@ export const SettingsPage: React.FC = () => {
                       onChange={(e) => setAiModel(e.target.value)}
                       className="w-full text-xs"
                     >
-                      <option value="gemini">Google Gemini 1.5 Flash (Recommended)</option>
-                      <option value="glm">GLM 4.7 Flash Engine</option>
+                      <option value="auto">Auto fallback: Grok then Gemini</option>
+                      <option value="grok">Grok first, Gemini fallback</option>
+                      <option value="gemini">Gemini first, Grok fallback</option>
+                      <option value="glm">GLM fallback</option>
                     </select>
                   </div>
                 </div>

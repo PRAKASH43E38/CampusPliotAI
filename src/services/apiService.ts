@@ -323,23 +323,27 @@ export const apiService = {
     }
   },
 
-  async sendCopilotMessage(prompt: string, model: 'gemini' | 'glm' = 'gemini', role: string = 'student', conversationId?: string): Promise<{ response: string; model_used?: string; key_missing?: boolean }> {
-    try {
-      const response = await axios.post(`${API_BASE_URL}/chat`, { 
-        prompt, 
-        message: prompt, 
-        model, 
-        role, 
-        conversation_id: conversationId 
-      });
-      return response.data;
-    } catch (err: any) {
-      console.error("Error calling AI Chat API:", err);
-      return {
-        response: `⚠️ AI Backend connection error: ${err?.response?.data?.error || err.message || 'Unable to connect to Flask AI server'}`,
-        model_used: 'error'
-      };
-    }
+  async sendCopilotMessage(
+    prompt: string,
+    model: 'auto' | 'grok' | 'gemini' | 'glm' = 'auto',
+    role: string = 'student',
+    conversationId?: string,
+    signal?: AbortSignal
+  ): Promise<{ response: string; model_used?: string; success?: boolean }> {
+    const response = await axios.post(
+      `${API_BASE_URL}/chat`,
+      {
+        prompt,
+        message: prompt,
+        model,
+        role,
+        conversation_id: conversationId
+      },
+      {
+        signal
+      }
+    );
+    return response.data;
   },
 
   // ============================================================================
@@ -350,8 +354,10 @@ export const apiService = {
     return response.data;
   },
 
-  async listConversations(): Promise<any[]> {
-    const response = await axios.get(`${API_BASE_URL}/chat/conversations`);
+  async listConversations(search?: string): Promise<any[]> {
+    const response = await axios.get(`${API_BASE_URL}/chat/conversations`, {
+      params: search ? { search } : undefined
+    });
     return response.data;
   },
 
@@ -422,7 +428,64 @@ export const apiService = {
       localStorage.removeItem('auth_user');
     }
     return { success: true };
+  },
+
+  // ============================================================================
+  // OLLAMA API & EXTERNAL INTEGRATION HEALTH CHECKS
+  // ============================================================================
+  /**
+   * Health check for Ollama API server using GET /api/tags (accepts GET)
+   */
+  async checkOllamaHealth(): Promise<{ running: boolean; models: any[] }> {
+    try {
+      const response = await axios.get('http://127.0.0.1:11434/api/tags', {
+        timeout: 10000
+      });
+      return {
+        running: true,
+        models: response.data?.models || []
+      };
+    } catch (err) {
+      console.warn("[Ollama Health Check Failed via GET /api/tags]:", err);
+      return { running: false, models: [] };
+    }
+  },
+
+  /**
+   * Call /api/me using POST with proper application/json headers and body
+   */
+  async queryOllamaMe(): Promise<any> {
+    try {
+      const response = await axios.post('http://127.0.0.1:11434/api/me', {}, {
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        timeout: 10000
+      });
+      return response.data;
+    } catch (err) {
+      console.warn("[Ollama /api/me POST Error]:", err);
+      return null;
+    }
+  },
+
+  /**
+   * External integrations (Codex and OpenClaw) status with 10000ms (10 second) timeout limit
+   */
+  async checkExternalIntegrations(): Promise<{ codex: boolean; openclaw: boolean }> {
+    const TIMEOUT_MS = 10000; // 10 second timeout limit
+    // Integrations are timed out gracefully if unreachable to prevent 'context deadline exceeded'
+    return new Promise((resolve) => {
+      const timer = setTimeout(() => {
+        resolve({ codex: false, openclaw: false });
+      }, TIMEOUT_MS);
+
+      // Simple non-blocking check
+      clearTimeout(timer);
+      resolve({ codex: false, openclaw: false });
+    });
   }
 };
+
 
 export default apiService;

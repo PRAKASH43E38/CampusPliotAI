@@ -8,10 +8,10 @@ import {
   Users,
   FolderKanban,
   Calendar,
-  Compass,
   Settings,
   Send,
   BookOpen,
+  Search,
   LucideIcon
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
@@ -23,8 +23,9 @@ interface SidebarLink {
   badge?: string;
 }
 
-export const Sidebar: React.FC = () => {
+export const Sidebar: React.FC<{ collapsed?: boolean }> = ({ collapsed = false }) => {
   const { role } = useAuth();
+  const [search, setSearch] = React.useState('');
 
   const studentLinks: SidebarLink[] = [
     { to: '/student', label: 'Dashboard', icon: LayoutDashboard },
@@ -58,48 +59,73 @@ export const Sidebar: React.FC = () => {
 
   const links = role === 'admin' ? adminLinks : role === 'faculty' ? facultyLinks : studentLinks;
 
+  const filteredLinks = links.filter((link) => {
+    const value = `${link.label} ${link.badge || ''}`.toLowerCase();
+    return value.includes(search.toLowerCase());
+  });
+
   return (
-    <aside className="w-64 shrink-0 hidden md:block border-r border-[#DDE5DD] dark:border-[#334155] bg-[#F7FAF7] dark:bg-[#172235] min-h-[calc(100vh-4rem)] p-4 transition-colors">
-      <div className="space-y-6">
+    <aside
+      className="app-shell__sidebar hidden lg:block transition-[width] duration-300 ease-out"
+    >
+      <div className="p-4 space-y-4">
         
-        {/* Role badge / Status */}
-        <div className="px-3.5 py-2.5 rounded-xl bg-white dark:bg-[#1E293B] border border-[#DDE5DD] dark:border-[#334155] flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <span className="w-2.5 h-2.5 rounded-full bg-[#2E7D32] dark:bg-[#4CAF50]" />
-            <span className="text-xs font-bold text-[#1F2937] dark:text-[#F8FAFC] capitalize">
-              {role} Workspace
-            </span>
+        <div className={`material-surface p-3 ${collapsed ? 'space-y-3' : 'space-y-4'}`}>
+          <div className="flex items-center justify-between gap-2">
+            <div className="flex items-center gap-2 min-w-0">
+              <span className="w-2.5 h-2.5 rounded-full bg-[color:var(--cp-primary)] shrink-0" />
+              {!collapsed && (
+                <span className="text-xs font-medium text-[color:var(--cp-text-strong)] capitalize">
+                  {role} Workspace
+                </span>
+              )}
+            </div>
+            {!collapsed && (
+              <span className="text-[10px] text-[color:var(--cp-text-muted)] font-medium">v3.0</span>
+            )}
           </div>
-          <span className="text-[10px] text-[#6B7280] dark:text-[#CBD5E1] font-semibold">v2.4</span>
+
+          {!collapsed && (
+            <label className="flex items-center gap-2 rounded-full border border-[color:var(--cp-outline)] bg-[color:var(--cp-surface-variant)] px-3 py-2">
+              <Search className="w-4 h-4 text-[color:var(--cp-text-muted)]" />
+              <input
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="Search navigation"
+                className="w-full bg-transparent text-sm placeholder:text-[color:var(--cp-text-muted)] focus:outline-none"
+              />
+            </label>
+          )}
         </div>
 
-        {/* Navigation Items */}
         <nav className="space-y-1.5">
-          {links.map((link) => {
+          {filteredLinks.map((link) => {
             const Icon = link.icon;
             return (
               <NavLink
                 key={link.to}
                 to={link.to}
+                title={link.label}
+                aria-label={link.label}
                 className={({ isActive }) =>
-                  `flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-colors ${
+                  `group flex items-center justify-between min-h-11 px-3.5 py-2.5 rounded-2xl text-xs font-medium transition-all ${
                     isActive
-                      ? 'bg-[#2E7D32] dark:bg-[#4CAF50] text-white font-bold'
-                      : 'text-[#6B7280] dark:text-[#CBD5E1] hover:text-[#2E7D32] dark:hover:text-[#81C784] hover:bg-[#E8F5E9] dark:hover:bg-[#1E293B]'
+                      ? 'bg-[color:var(--cp-secondary-container)] text-[color:var(--cp-text-strong)] shadow-sm'
+                      : 'text-[color:var(--cp-text-muted)] hover:text-[color:var(--cp-text-strong)] hover:bg-[color:var(--cp-surface-variant)]'
                   }`
                 }
               >
                 {({ isActive }) => (
                   <>
                     <div className="flex items-center gap-3">
-                      <Icon className={`w-4 h-4 ${isActive ? 'text-white' : 'text-[#6B7280] dark:text-[#CBD5E1]'}`} />
-                      <span className={isActive ? 'text-white' : ''}>{link.label}</span>
+                      <Icon className={`w-4 h-4 ${isActive ? 'text-[color:var(--cp-primary)]' : 'text-current'}`} />
+                      {!collapsed && <span>{link.label}</span>}
                     </div>
-                    {link.badge && (
-                      <span className={`text-[9px] px-2 py-0.5 rounded-full font-bold ${
-                        isActive 
-                          ? 'bg-white/20 text-white' 
-                          : 'bg-[#E8F5E9] dark:bg-[#162033] text-[#2E7D32] dark:text-[#81C784]'
+                    {!collapsed && link.badge && (
+                      <span className={`text-[9px] px-2 py-0.5 rounded-full font-medium ${
+                        isActive
+                          ? 'bg-white/70 text-[color:var(--cp-text-strong)]'
+                          : 'bg-[color:var(--cp-surface-variant)] text-[color:var(--cp-primary)]'
                       }`}>
                         {link.badge}
                       </span>
@@ -111,38 +137,38 @@ export const Sidebar: React.FC = () => {
           })}
         </nav>
 
-        {/* Professional CTA Box */}
-        <div className="p-4 rounded-xl bg-white dark:bg-[#1E293B] border border-[#DDE5DD] dark:border-[#334155] space-y-3">
-          <p className="text-xs font-bold text-[#1F2937] dark:text-[#F8FAFC]">
-            University Assistant
-          </p>
-          <p className="text-[11px] text-[#6B7280] dark:text-[#CBD5E1] leading-relaxed">
-            Instant help with timetable, course materials, or map routes.
-          </p>
-          <NavLink
-            to="/copilot"
-            className="w-full py-2 px-3 rounded-lg bg-[#2E7D32] hover:bg-[#1B5E20] dark:bg-[#4CAF50] dark:hover:bg-[#43A047] text-white text-xs font-bold flex items-center justify-center gap-1.5 transition-colors border-none"
-          >
-            Ask Copilot <Send className="w-3 h-3" />
-          </NavLink>
-        </div>
+        {!collapsed && (
+          <div className="material-surface p-4 space-y-3">
+            <p className="text-xs font-medium text-[color:var(--cp-text-strong)]">University Assistant</p>
+            <p className="text-[11px] text-[color:var(--cp-text-muted)] leading-relaxed">
+              Instant help with timetable, course materials, or map routes.
+            </p>
+            <NavLink
+              to="/copilot"
+              className="material-button w-full py-2 px-3 text-xs"
+            >
+              Ask Copilot <Send className="w-3 h-3" />
+            </NavLink>
+          </div>
+        )}
 
-        {/* System Settings & Help */}
-        <div className="pt-4 border-t border-[#E5E7EB] dark:border-[#475569] space-y-1">
+        <div className="pt-4 border-t border-[color:var(--cp-outline)] space-y-1">
           <NavLink
             to="/settings"
+            title="Settings"
+            aria-label="Settings"
             className={({ isActive }) =>
-              `flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-colors ${
+              `flex items-center gap-3 min-h-11 px-3.5 py-2.5 rounded-2xl text-xs font-medium transition-colors ${
                 isActive
-                  ? 'bg-[#2E7D32] dark:bg-[#4CAF50] text-white font-bold'
-                  : 'text-[#6B7280] dark:text-[#CBD5E1] hover:text-[#2E7D32] dark:hover:text-[#81C784] hover:bg-[#E8F5E9] dark:hover:bg-[#1E293B]'
+                  ? 'bg-[color:var(--cp-secondary-container)] text-[color:var(--cp-text-strong)]'
+                  : 'text-[color:var(--cp-text-muted)] hover:text-[color:var(--cp-text-strong)] hover:bg-[color:var(--cp-surface-variant)]'
               }`
             }
           >
             {({ isActive }) => (
               <>
-                <Settings className={`w-4 h-4 ${isActive ? 'text-white' : 'text-[#6B7280] dark:text-[#CBD5E1]'}`} />
-                <span>Settings</span>
+                <Settings className={`w-4 h-4 ${isActive ? 'text-[color:var(--cp-primary)]' : 'text-current'}`} />
+                {!collapsed && <span>Settings</span>}
               </>
             )}
           </NavLink>

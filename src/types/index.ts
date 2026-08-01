@@ -184,6 +184,9 @@ export interface Conversation {
   created_at: string;
   updated_at: string;
   is_pinned: boolean;
+  last_message_at?: string;
+  message_count?: number;
+  last_message_preview?: string;
 }
 
 export interface ChatMessage {
@@ -193,6 +196,7 @@ export interface ChatMessage {
   content: string;
   timestamp: string;
   model_used?: string;
+  metadata?: string;
 }
 
 export interface AICardData {
@@ -207,6 +211,8 @@ export interface AIMessage {
   timestamp: string;
   cards?: AICardData[];
   suggestedActions?: string[];
+  status?: 'sending' | 'sent' | 'error' | 'stopped';
+  modelUsed?: string;
 }
 
 export interface StudentProfile {
