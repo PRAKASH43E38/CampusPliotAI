@@ -77,10 +77,36 @@ def init_session_db():
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )
         """)
+        
+        # Conversations Table
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS conversations (
+                conversation_id TEXT PRIMARY KEY,
+                user_id TEXT NOT NULL,
+                title TEXT DEFAULT 'New Chat',
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                is_pinned BOOLEAN DEFAULT 0
+            )
+        """)
+        
+        # Messages Table
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS messages (
+                message_id TEXT PRIMARY KEY,
+                conversation_id TEXT NOT NULL,
+                sender TEXT NOT NULL,
+                content TEXT NOT NULL,
+                timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                model_used TEXT,
+                FOREIGN KEY (conversation_id) REFERENCES conversations (conversation_id) ON DELETE CASCADE
+            )
+        """)
+        
         conn.commit()
         conn.close()
     except Exception as e:
-        print(f"Error initializing session table: {e}")
+        print(f"Error initializing session/chat tables: {e}")
 
 init_session_db()
 
@@ -753,6 +779,102 @@ def delete_table_row():
         return jsonify({"error": str(e)}), 500
 
 # ============================================================================
+# CONVERSATION & MEMORY MANAGEMENT API
+# ============================================================================
+
+@app.route('/api/chat/conversations', methods=['POST'])
+def create_conversation():
+    """Create a new chat conversation"""
+    token = request.cookies.get('session_token') or request.headers.get('Authorization', '').replace('Bearer ', '')
+    if not token:
+        return jsonify({"error": "Unauthorized"}), 401
+    
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT user_data FROM user_sessions WHERE session_token = ?", (token,))
+    session = cursor.fetchone()
+    conn.close()
+    
+    if not session:
+        return jsonify({"error": "Invalid session"}), 401
+    
+    user_info = json.loads(session['user_data'])
+    user_id = user_info['id']
+    
+    import uuid
+    conv_id = f"conv_{uuid.uuid4().hex[:12]}"
+    
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("INSERT INTO conversations (conversation_id, user_id) VALUES (?, ?)", (conv_id, user_id))
+    conn.commit()
+    conn.close()
+    
+    return jsonify({"success": True, "conversation_id": conv_id}), 201
+
+@app.route('/api/chat/conversations', methods=['GET'])
+def list_conversations():
+    """List all conversations for the current user"""
+    token = request.cookies.get('session_token') or request.headers.get('Authorization', '').replace('Bearer ', '')
+    if not token:
+        return jsonify({"error": "Unauthorized"}), 401
+    
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT user_data FROM user_sessions WHERE session_token = ?", (token,))
+    session = cursor.fetchone()
+    
+    if not session:
+        conn.close()
+        return jsonify({"error": "Invalid session"}), 401
+    
+    user_info = json.loads(session['user_data'])
+    user_id = user_info['id']
+    
+    cursor.execute("SELECT * FROM conversations WHERE user_id = ? ORDER BY updated_at DESC", (user_id,))
+    convs = [dict(row) for row in cursor.fetchall()]
+    conn.close()
+    
+    return jsonify(convs), 200
+
+@app.route('/api/chat/conversations/<conv_id>', methods=['GET'])
+def get_conversation_messages(conv_id):
+    """Fetch all messages for a specific conversation"""
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM messages WHERE conversation_id = ? ORDER BY timestamp ASC", (conv_id,))
+    msgs = [dict(row) for row in cursor.fetchall()]
+    conn.close()
+    return jsonify(msgs), 200
+
+@app.route('/api/chat/conversations/<conv_id>', methods=['PUT'])
+def update_conversation(conv_id):
+    """Rename or pin conversation"""
+    data = request.json or {}
+    title = data.get('title')
+    is_pinned = data.get('is_pinned')
+    
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    if title is not None:
+        cursor.execute("UPDATE conversations SET title = ?, updated_at = CURRENT_TIMESTAMP WHERE conversation_id = ?", (title, conv_id))
+    if is_pinned is not None:
+        cursor.execute("UPDATE conversations SET is_pinned = ? WHERE conversation_id = ?", (1 if is_pinned else 0, conv_id))
+    conn.commit()
+    conn.close()
+    return jsonify({"success": True}), 200
+
+@app.route('/api/chat/conversations/<conv_id>', methods=['DELETE'])
+def delete_conversation(conv_id):
+    """Delete a conversation and its messages"""
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("DELETE FROM conversations WHERE conversation_id = ?", (conv_id,))
+    conn.commit()
+    conn.close()
+    return jsonify({"success": True}), 200
+
+# ============================================================================
 # PRODUCTION RAG, SECURITY, DOMAIN SCOPE & DUAL MODEL FALLBACK ENGINE
 # ============================================================================
 
@@ -760,6 +882,11 @@ def delete_table_row():
 SECURITY_RESTRICTED_KEYWORDS = [
     'password_hash', 'admin_secret_key', 'root_token', 'private_key', 'dump_api_keys', 'database_password'
 ]
+
+SECURITY_DENIED_RESPONSE = "⚠️ Security Alert: You are requesting sensitive system information. Access to administrative credentials and private keys is strictly prohibited for security reasons."
+OUT_OF_SCOPE_RESPONSE = "I am specifically trained as the CampusPilot AI for Saranathan College of Engineering. While I'd love to help, I cannot answer questions unrelated to campus life, academics, or college administration. Please ask me something about the college!"
+
+DEFAULT_CAMPUS_KNOWLEDGE = (
 
 DEFAULT_CAMPUS_KNOWLEDGE = (
     "Saranathan College of Engineering (SCE) is a premier engineering institution located in Venkateswara Nagar, Panjappur, Tiruchirappalli (Trichy), Tamil Nadu.\n"
@@ -865,7 +992,8 @@ def call_gemini_primary(prompt: str, context: str, api_key: str, role: str = 'st
         url = f"https://generativelanguage.googleapis.com/v1beta/models/{model_name}:generateContent?key={api_key}"
         req = urllib.request.Request(url, data=req_data, headers={'Content-Type': 'application/json'})
         try:
-            with urllib.request.urlopen(req, timeout=1.2) as response:
+                with urllib.request.urlopen(req, timeout=30.0) as response:
+
                 res_body = json.loads(response.read().decode('utf-8'))
                 return res_body['candidates'][0]['content']['parts'][0]['text']
         except urllib.error.HTTPError as e:
@@ -899,7 +1027,8 @@ def call_glm_fallback(prompt: str, context: str, api_key: str, role: str = 'stud
         "Authorization": f"Bearer {api_key}"
     }
     req = urllib.request.Request(url, data=req_data, headers=headers)
-    with urllib.request.urlopen(req, timeout=1.5) as response:
+    with urllib.request.urlopen(req, timeout=30.0) as response:
+
         res_body = json.loads(response.read().decode('utf-8'))
         return res_body['choices'][0]['message']['content']
 
@@ -908,74 +1037,113 @@ def call_glm_fallback(prompt: str, context: str, api_key: str, role: str = 'stud
 def copilot_chat():
     """
     Central AI Chatbot Endpoint
-    Accepts: { "message" or "prompt": "...", "model": "gemini" | "glm", "role": "student" | "faculty" | "admin" }
+    Accepts: { "message" or "prompt": "...", "model": "gemini" | "glm", "role": "student" | "faculty" | "admin", "conversation_id": "..." }
     """
     load_env_file()
     data = request.json or {}
     prompt = (data.get('prompt') or data.get('message') or '').strip()
     user_role = data.get('role', 'student')
     requested_model = data.get('model', 'gemini')
+    conversation_id = data.get('conversation_id')
 
     if not prompt:
         return jsonify({"error": "Prompt or message is required"}), 400
-
+    
     # STEP 1: SECURITY GUARD
     if is_security_restricted(prompt, user_role):
         return jsonify({
             "response": SECURITY_DENIED_RESPONSE,
             "security_blocked": True
         }), 200
-
+    
     # STEP 2: DOMAIN CLASSIFICATION
     if not is_college_related(prompt):
         return jsonify({
             "response": OUT_OF_SCOPE_RESPONSE,
             "out_of_scope": True
         }), 200
-
+    
     # STEP 3: DATABASE SEARCH & CONTEXT PREPARATION
     retrieved_facts = search_modular_campus_database(prompt, user_role)
     if retrieved_facts:
         context_str = DEFAULT_CAMPUS_KNOWLEDGE + "\nDirect Records:\n" + "\n".join(retrieved_facts)
     else:
         context_str = DEFAULT_CAMPUS_KNOWLEDGE
-
+    
+    # Load provider keys
     gemini_key = os.getenv('GEMINI_API_KEY', '').strip()
     glm_key = os.getenv('GLM_API_KEY', '').strip()
+    
+    key_missing = []
+    if not gemini_key:
+        key_missing.append('gemini')
+    if not glm_key:
+        key_missing.append('glm')
 
     # STEP 4: MODEL GENERATION WITH AUTOMATIC FALLBACK
+    if requested_model == 'glm' and not glm_key:
+        return jsonify({
+            "response": "⚠️ GLM API key not configured. Please set GLM_API_KEY in .env.",
+            "model_used": "none",
+            "key_missing": True,
+            "success": False
+        }), 200
+    if requested_model == 'gemini' and not gemini_key:
+        return jsonify({
+            "response": "⚠️ Gemini API key not configured. Please set GEMINI_API_KEY in .env.",
+            "model_used": "none",
+            "key_missing": True,
+            "success": False
+        }), 200
+
+    ai_text = None
+    model_used = "Unknown"
+
     if requested_model == 'glm' and glm_key:
         try:
             ai_text = call_glm_fallback(prompt, context_str, glm_key, user_role)
-            return jsonify({
-                "response": ai_text,
-                "model_used": "GLM 4.7 Flash",
-                "success": True
-            }), 200
+            model_used = "GLM 4.7 Flash"
         except Exception as e:
             print(f"GLM API failed: {e}. Trying Gemini...")
 
-    if gemini_key:
+    if not ai_text and gemini_key:
         try:
             ai_text = call_gemini_primary(prompt, context_str, gemini_key, user_role)
-            return jsonify({
-                "response": ai_text,
-                "model_used": "Gemini 1.5 Flash (Primary)",
-                "success": True
-            }), 200
+            model_used = "Gemini 1.5 Flash"
         except Exception as e:
             print(f"Gemini API failed: {e}. Trying GLM fallback...")
 
-    if glm_key:
+    if not ai_text and glm_key:
         try:
             ai_text = call_glm_fallback(prompt, context_str, glm_key, user_role)
-            return jsonify({
-                "response": ai_text,
-                "model_used": "GLM 4.7 Flash (Fallback)",
-                "success": True
-            }), 200
+            model_used = "GLM 4.7 Flash (Fallback)"
         except Exception as e:
             print(f"GLM API fallback failed: {e}")
+
+    if ai_text:
+        # PERSISTENCE: Save message to DB if conversation_id is provided
+        if conversation_id:
+            conn = get_db_connection()
+            cursor = conn.cursor()
+            import uuid
+            # Save User Message
+            cursor.execute("INSERT INTO messages (message_id, conversation_id, sender, content) VALUES (?, ?, ?, ?)",
+                           (f"msg_{uuid.uuid4().hex[:12]}", conversation_id, 'user', prompt))
+            # Save AI Message
+            cursor.execute("INSERT INTO messages (message_id, conversation_id, sender, content, model_used) VALUES (?, ?, ?, ?, ?)",
+                           (f"msg_{uuid.uuid4().hex[:12]}", conversation_id, 'ai', ai_text, model_used))
+            # Update Conversation Title if it's new (simple logic: use first prompt as title)
+            cursor.execute("UPDATE conversations SET title = ? WHERE conversation_id = ? AND title = 'New Chat'", 
+                           (prompt[:50], conversation_id))
+            cursor.execute("UPDATE conversations SET updated_at = CURRENT_TIMESTAMP WHERE conversation_id = ?", (conversation_id,))
+            conn.commit()
+            conn.close()
+
+        return jsonify({
+            "response": ai_text,
+            "model_used": model_used,
+            "success": True
+        }), 200
 
     # Fallback to direct context engine
     if retrieved_facts:
@@ -993,8 +1161,10 @@ def copilot_chat():
     return jsonify({
         "response": summary_text,
         "model_used": "Campus Database Engine",
-        "success": True
+        "success": True,
+        "key_missing": bool(key_missing)
     }), 200
+
 
 # ============================================================================
 # SERVER LAUNCHER

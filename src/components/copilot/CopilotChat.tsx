@@ -13,8 +13,77 @@ export const CopilotChat: React.FC = () => {
   const { user, role } = useAuth();
   const [activeTab, setActiveTab] = useState<'chat' | 'planner' | 'matcher' | 'qa'>('chat');
   const [selectedModel, setSelectedModel] = useState<'gemini' | 'glm'>('gemini');
+  const [activeConversation, setActiveConversation] = useState<string | null>(null);
+  const [conversations, setConversations] = useState<any[]>([]);
+  const [messages, setMessages] = useState<AIMessage[]>([]);
+  const [inputValue, setInputValue] = useState('');
+  const [isTyping, setIsTyping] = useState(false);
+  const chatEndRef = useRef<HTMLDivElement>(null);
 
-  // Dynamic initial message based on authenticated user role
+  useEffect(() => {
+    loadConversations();
+  }, []);
+
+  const loadConversations = async () => {
+    try {
+      const list = await apiService.listConversations();
+      setConversations(list);
+      if (list.length > 0 && !activeConversation) {
+        setActiveConversation(list[0].conversation_id);
+        loadMessages(list[0].conversation_id);
+      } else if (list.length === 0) {
+        startNewChat();
+      }
+    } catch (err) {
+      console.error("Error loading conversations:", err);
+    }
+  };
+
+  const loadMessages = async (convId: string) => {
+    try {
+      const msgs = await apiService.getConversationMessages(convId);
+      const formattedMsgs = msgs.map((m: any) => ({
+        id: m.message_id,
+        sender: m.sender,
+        text: m.content,
+        timestamp: new Date(m.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      }));
+      setMessages(formattedMsgs.length > 0 ? formattedMsgs : [getInitialMessage()]);
+    } catch (err) {
+      console.error("Error loading messages:", err);
+      setMessages([getInitialMessage()]);
+    }
+  };
+
+  const startNewChat = async () => {
+    try {
+      const { conversation_id } = await apiService.createConversation();
+      setActiveConversation(conversation_id);
+      setMessages([getInitialMessage()]);
+      const list = await apiService.listConversations();
+      setConversations(list);
+    } catch (err) {
+      console.error("Error starting new chat:", err);
+    }
+  };
+
+  const deleteChat = async (convId: string) => {
+    try {
+      await apiService.deleteConversation(convId);
+      setConversations(prev => prev.filter(c => c.conversation_id !== convId));
+      if (activeConversation === convId) {
+        startNewChat();
+      }
+    } catch (err) {
+      console.error("Error deleting chat:", err);
+    }
+  };
+
+
+  useEffect(() => {
+    loadConversations();
+  }, []);
+
   const getInitialMessage = (): AIMessage => {
     if (role === 'faculty') {
       return {
@@ -60,15 +129,11 @@ export const CopilotChat: React.FC = () => {
     }
   };
 
-  const [messages, setMessages] = useState<AIMessage[]>([getInitialMessage()]);
-  const [inputValue, setInputValue] = useState('');
-  const [isTyping, setIsTyping] = useState(false);
-  const chatEndRef = useRef<HTMLDivElement>(null);
-
-  // Update initial message when role changes
   useEffect(() => {
-    setMessages([getInitialMessage()]);
-  }, [role, user?.name]);
+    if (activeConversation) {
+      loadMessages(activeConversation);
+    }
+  }, [activeConversation]);
 
   const scrollToBottom = () => {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -98,37 +163,8 @@ export const CopilotChat: React.FC = () => {
       let responseText = '';
       let cards: AICardData[] = [];
 
-      // FACULTY ROLE CUSTOM QUERY HANDLER
-      if (role === 'faculty') {
-        if (
-          lower.includes('class') || lower.includes('timetable') || lower.includes('schedule') || 
-          lower.includes('dsa') || lower.includes('teach') || lower.includes('subject') || lower.includes('hour')
-        ) {
-          if (lower.includes('dsa') || lower.includes('data structure')) {
-            responseText = `📍 **DSA (Data Structures & Algorithms - CS301) Schedule**:
-- **Day**: Monday & Tuesday
-- **Hour 1 (09:00 AM - 10:00 AM)**: Lecture in **LH-101** (Alan Turing CSE Block) for **CSE 2nd Year - Sec A**.
-- **Hour 2 (10:15 AM - 11:15 AM)**: Tutorial Session in **LH-101**.`;
-          } else if (lower.includes('subject') || lower.includes('handling')) {
-            responseText = `📚 **Subjects Handled by Dr. Rajesh Sharma**:
-1. **CS301**: Data Structures & Algorithms (CSE 2nd Year - Sec A)
-2. **CS601**: Artificial Intelligence & Neural Nets (CSE 3rd Year - Sec B)
-3. **CS601L**: AI & Agentic Systems Lab (CSE 3rd Year - Sec B)`;
-          } else {
-            responseText = `🗓️ **Today's Teaching Schedule for Dr. Rajesh Sharma**:
-1. **Hour 1 (09:00 AM - 10:00 AM)**: Data Structures & Algorithms (CS301) → **LH-101** (CSE 2nd Year - Sec A)
-2. **Hour 3 (11:30 AM - 12:30 PM)**: Artificial Intelligence & Neural Nets (CS601) → **LH-201** (CSE 3rd Year - Sec B)
-3. **Hour 5 (02:45 PM - 04:45 PM)**: AI & Agentic Systems Lab (CS601L) → **AI-304** (Neural Networks Lab)`;
-          }
-          cards = [{ type: 'timetable', data: facultyScheduleSlots[0] }];
-        }
-      }
-
-      // If response text was not handled locally, call backend API
-      if (!responseText) {
-        const result = await apiService.sendCopilotMessage(text, selectedModel, role);
-        responseText = result.response || "Here is the information from CampusPilot AI.";
-      }
+      const result = await apiService.sendCopilotMessage(text, selectedModel, role, activeConversation || undefined);
+      responseText = result.response || "Here is the information from CampusPilot AI.";
 
       if (cards.length === 0) {
         if (lower.includes('class') || lower.includes('next') || lower.includes('schedule') || lower.includes('timetable')) {
@@ -171,6 +207,9 @@ export const CopilotChat: React.FC = () => {
       };
 
       setMessages((prev) => [...prev, aiMsg]);
+      
+      // Refresh conversation list to update titles
+      loadConversations();
     } catch (err: any) {
       console.error("Chat error:", err);
       const errorMsg: AIMessage = {
@@ -184,6 +223,7 @@ export const CopilotChat: React.FC = () => {
       setIsTyping(false);
     }
   };
+
 
   return (
     <div className="max-w-7xl mx-auto p-4 sm:p-6 space-y-6">
@@ -277,78 +317,79 @@ export const CopilotChat: React.FC = () => {
       {activeTab === 'chat' && (
         <div className="rounded-2xl bg-white dark:bg-[#1E293B] border border-[#DDE5DD] dark:border-[#334155] shadow-sm overflow-hidden flex flex-col h-[640px]">
           
-          {/* Messages List */}
-          <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4">
-            {messages.map((msg) => (
-              <div
-                key={msg.id}
-                className={`flex gap-3 ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}
-              >
-                {msg.sender === 'ai' && (
-                  <div className="w-8 h-8 rounded-xl bg-[#2E7D32] dark:bg-[#4CAF50] flex items-center justify-center text-white shrink-0">
-                    <Bot className="w-4 h-4" />
-                  </div>
-                )}
+      {/* Messages List */}
+           <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4">
+             {messages.map((msg) => (
+               <div
+                 key={msg.id}
+                 className={`flex gap-3 ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}
+               >
+                 {msg.sender === 'ai' && (
+                   <div className="w-8 h-8 rounded-xl bg-[#2E7D32] dark:bg-[#4CAF50] flex items-center justify-center text-white shrink-0">
+                     <Bot className="w-4 h-4" />
+                   </div>
+                 )}
+ 
+                 <div className={`max-w-2xl ${msg.sender === 'user' ? 'order-1' : 'order-2'}`}>
+                   <div
+                     className={`p-4 rounded-xl text-xs sm:text-sm leading-relaxed ${
+                       msg.sender === 'user'
+                         ? 'bg-[#2E7D32] dark:bg-[#4CAF50] text-white font-medium'
+                         : 'bg-[#F4F8F4] dark:bg-[#162033] text-[#1F2937] dark:text-[#F8FAFC] border border-[#DDE5DD] dark:border-[#334155] font-medium'
+                     }`}
+                   >
+                     <p className="whitespace-pre-line">{msg.text}</p>
+                     
+                     {/* Render Structured AI Cards */}
+                     {msg.cards && <AICardRenderer cards={msg.cards} />}
+                   </div>
+ 
+                   <div className="mt-1 flex items-center justify-between text-[10px] text-[#6B7280] dark:text-[#CBD5E1] px-1 font-medium">
+                     <span>{msg.timestamp}</span>
+                     {msg.sender === 'ai' && (
+                       <span className="flex items-center gap-1 text-[#2E7D32] dark:text-[#4CAF50] font-bold">
+                         <Sparkles className="w-3 h-3" /> AI Response
+                       </span>
+                     )}
+                   </div>
+ 
+                   {msg.suggestedActions && (
+                     <div className="mt-3 flex flex-wrap gap-2">
+                       {msg.suggestedActions.map((action, idx) => (
+                         <button
+                           key={idx}
+                           onClick={() => handleSendMessage(action)}
+                           className="px-3 py-1.5 rounded-xl bg-[#E8F5E9] dark:bg-[#162033] hover:bg-[#2E7D32] hover:text-white dark:hover:bg-[#4CAF50] text-[#2E7D32] dark:text-[#81C784] text-xs font-semibold border border-[#DDE5DD] dark:border-[#334155] flex items-center gap-1 transition-colors cursor-pointer"
+                         >
+                           {action} <ArrowUpRight className="w-3 h-3" />
+                         </button>
+                       ))}
+                     </div>
+                   )}
+                 </div>
+ 
+                 {msg.sender === 'user' && (
+                   <div className="w-8 h-8 rounded-xl bg-[#1F2937] dark:bg-[#273449] text-white flex items-center justify-center shrink-0">
+                     <User className="w-4 h-4 text-white" />
+                   </div>
+                 )}
+               </div>
+             ))}
+ 
+             {isTyping && (
+               <div className="flex items-center gap-3">
+                 <div className="w-8 h-8 rounded-xl bg-[#2E7D32] dark:bg-[#4CAF50] flex items-center justify-center text-white shrink-0">
+                   <Bot className="w-4 h-4" />
+                 </div>
+                 <div className="p-3 rounded-xl bg-[#F4F8F4] dark:bg-[#162033] border border-[#DDE5DD] dark:border-[#334155] text-xs text-[#6B7280] dark:text-[#CBD5E1] flex items-center gap-2 font-semibold">
+                   <span className="w-2 h-2 rounded-full bg-[#2E7D32] dark:bg-[#4CAF50]" />
+                   <span>Thinking...</span>
+                 </div>
+               </div>
+             )}
+             <div ref={chatEndRef} />
+           </div>
 
-                <div className={`max-w-2xl ${msg.sender === 'user' ? 'order-1' : 'order-2'}`}>
-                  <div
-                    className={`p-4 rounded-xl text-xs sm:text-sm leading-relaxed ${
-                      msg.sender === 'user'
-                        ? 'bg-[#2E7D32] dark:bg-[#4CAF50] text-white font-medium'
-                        : 'bg-[#F4F8F4] dark:bg-[#162033] text-[#1F2937] dark:text-[#F8FAFC] border border-[#DDE5DD] dark:border-[#334155] font-medium'
-                    }`}
-                  >
-                    <p className="whitespace-pre-line">{msg.text}</p>
-                    
-                    {/* Render Structured AI Cards */}
-                    {msg.cards && <AICardRenderer cards={msg.cards} />}
-                  </div>
-
-                  <div className="mt-1 flex items-center justify-between text-[10px] text-[#6B7280] dark:text-[#CBD5E1] px-1 font-medium">
-                    <span>{msg.timestamp}</span>
-                    {msg.sender === 'ai' && (
-                      <span className="flex items-center gap-1 text-[#2E7D32] dark:text-[#4CAF50] font-bold">
-                        <Sparkles className="w-3 h-3" /> AI Response
-                      </span>
-                    )}
-                  </div>
-
-                  {msg.suggestedActions && (
-                    <div className="mt-3 flex flex-wrap gap-2">
-                      {msg.suggestedActions.map((action, idx) => (
-                        <button
-                          key={idx}
-                          onClick={() => handleSendMessage(action)}
-                          className="px-3 py-1.5 rounded-xl bg-[#E8F5E9] dark:bg-[#162033] hover:bg-[#2E7D32] hover:text-white dark:hover:bg-[#4CAF50] text-[#2E7D32] dark:text-[#81C784] text-xs font-semibold border border-[#DDE5DD] dark:border-[#334155] flex items-center gap-1 transition-colors cursor-pointer"
-                        >
-                          {action} <ArrowUpRight className="w-3 h-3" />
-                        </button>
-                      ))}
-                    </div>
-                  )}
-                </div>
-
-                {msg.sender === 'user' && (
-                  <div className="w-8 h-8 rounded-xl bg-[#1F2937] dark:bg-[#273449] text-white flex items-center justify-center shrink-0">
-                    <User className="w-4 h-4 text-white" />
-                  </div>
-                )}
-              </div>
-            ))}
-
-            {isTyping && (
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-xl bg-[#2E7D32] dark:bg-[#4CAF50] flex items-center justify-center text-white shrink-0">
-                  <Bot className="w-4 h-4" />
-                </div>
-                <div className="p-3 rounded-xl bg-[#F4F8F4] dark:bg-[#162033] border border-[#DDE5DD] dark:border-[#334155] text-xs text-[#6B7280] dark:text-[#CBD5E1] flex items-center gap-2 font-semibold">
-                  <span className="w-2 h-2 rounded-full bg-[#2E7D32] dark:bg-[#4CAF50]" />
-                  <span>Thinking...</span>
-                </div>
-              </div>
-            )}
-            <div ref={chatEndRef} />
-          </div>
 
           {/* Quick Prompts Bar */}
           <div className="px-4 py-2 border-t border-[#E5E7EB] dark:border-[#475569] bg-[#F8FAF8] dark:bg-[#162033] flex items-center gap-2 overflow-x-auto">

@@ -323,9 +323,15 @@ export const apiService = {
     }
   },
 
-  async sendCopilotMessage(prompt: string, model: 'gemini' | 'glm' = 'gemini', role: string = 'student'): Promise<{ response: string; model_used?: string; key_missing?: boolean }> {
+  async sendCopilotMessage(prompt: string, model: 'gemini' | 'glm' = 'gemini', role: string = 'student', conversationId?: string): Promise<{ response: string; model_used?: string; key_missing?: boolean }> {
     try {
-      const response = await axios.post(`${API_BASE_URL}/chat`, { prompt, message: prompt, model, role });
+      const response = await axios.post(`${API_BASE_URL}/chat`, { 
+        prompt, 
+        message: prompt, 
+        model, 
+        role, 
+        conversation_id: conversationId 
+      });
       return response.data;
     } catch (err: any) {
       console.error("Error calling AI Chat API:", err);
@@ -336,8 +342,32 @@ export const apiService = {
     }
   },
 
-  async sendChatMessage(message: string, model: 'gemini' | 'glm' = 'gemini', role: string = 'student'): Promise<{ response: string; model_used?: string }> {
-    return this.sendCopilotMessage(message, model, role);
+  // ============================================================================
+  // CONVERSATION MANAGEMENT
+  // ============================================================================
+  async createConversation(): Promise<{ success: boolean; conversation_id: string }> {
+    const response = await axios.post(`${API_BASE_URL}/chat/conversations`);
+    return response.data;
+  },
+
+  async listConversations(): Promise<any[]> {
+    const response = await axios.get(`${API_BASE_URL}/chat/conversations`);
+    return response.data;
+  },
+
+  async getConversationMessages(convId: string): Promise<any[]> {
+    const response = await axios.get(`${API_BASE_URL}/chat/conversations/${convId}`);
+    return response.data;
+  },
+
+  async updateConversation(convId: string, data: { title?: string; is_pinned?: boolean }): Promise<{ success: boolean }> {
+    const response = await axios.put(`${API_BASE_URL}/chat/conversations/${convId}`, data);
+    return response.data;
+  },
+
+  async deleteConversation(convId: string): Promise<{ success: boolean }> {
+    const response = await axios.delete(`${API_BASE_URL}/chat/conversations/${convId}`);
+    return response.data;
   },
 
   // ============================================================================

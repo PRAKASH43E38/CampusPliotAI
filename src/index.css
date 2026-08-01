@@ -1,57 +1,69 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap');
 @import "tailwindcss";
 
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-  /* Professional University Design System - Light Mode Defaults */
-  --color-emerald-50: #E8F5E9;   /* Light Green */
-  --color-emerald-100: #C8E6C9;
-  --color-emerald-200: #A5D6A7;
-  --color-emerald-300: #81C784;
-  --color-emerald-400: #66BB6A;
-  --color-emerald-500: #4CAF50;  /* Primary Green Dark Mode */
-  --color-emerald-600: #2E7D32;  /* Primary Green Light Mode */
-  --color-emerald-700: #1B5E20;  /* Hover Green Light Mode */
-  --color-emerald-800: #145120;
-  --color-emerald-900: #0D3314;
-  --color-emerald-950: #051C0B;
+  --font-sans: 'Poppins', 'Inter', system-ui, -apple-system, sans-serif;
 
-  --color-slate-50: #FFFFFF;     /* Main BG Light */
-  --color-slate-100: #F8FAF8;    /* Section BG Light */
-  --color-slate-200: #F4F8F4;    /* Cards Light */
-  --color-slate-300: #DDE5DD;    /* Border Light */
-  --color-slate-400: #E5E7EB;    /* Divider Light */
-  --color-slate-500: #6B7280;    /* Secondary Text Light */
-  --color-slate-600: #4B5563;
-  --color-slate-700: #334155;    /* Border Dark */
-  --color-slate-800: #1E293B;    /* Cards Dark */
-  --color-slate-900: #162033;    /* Section BG Dark / Navbar Dark */
-  --color-slate-950: #0F172A;    /* Main BG Dark */
+  /* Google Design Theme Colors - Emerald/Green Accent */
+  --color-emerald-50: #E8F0FE;   /* Light Accent */
+  --color-emerald-100: #CEE0D0;
+  --color-emerald-200: #A8DAB5;  /* Dark Mode active green */
+  --color-emerald-300: #81C995;  /* Dark Mode primary green */
+  --color-emerald-400: #34A853;  /* Google Green */
+  --color-emerald-500: #1E8E3E;  /* Google Green Medium */
+  --color-emerald-600: #137333;  /* Google Green Dark (Primary Light Mode) */
+  --color-emerald-700: #0C5A25;  /* Google Green Extra Dark */
+  --color-emerald-800: #073B18;
+  --color-emerald-900: #03210D;
+  --color-emerald-950: #011106;
+
+  /* Google Design Theme Colors - Slate/Gray Scale */
+  --color-slate-50: #FFFFFF;     /* Page Background Light */
+  --color-slate-100: #F8F9FA;    /* Container Background Light */
+  --color-slate-200: #F1F3F4;    /* Cards / Inputs Light */
+  --color-slate-300: #DADCE0;    /* Border / Divider Light */
+  --color-slate-400: #BDC1C6;    /* Secondary border Light */
+  --color-slate-500: #5F6368;    /* Secondary Text Light */
+  --color-slate-600: #3C4043;    /* Tertiary Text Light */
+  --color-slate-700: #3C4043;    /* Border Dark */
+  --color-slate-800: #1F1F1F;    /* Cards / Surfaces Dark */
+  --color-slate-900: #202124;    /* Secondary Surfaces Dark */
+  --color-slate-950: #121212;    /* Page Background Dark */
 }
 
 /* Global Reset & Base Styles */
 :root {
-  --primary-green: #2E7D32;
-  --primary-green-hover: #1B5E20;
+  --primary-green: #1a73e8;      /* Google Blue */
+  --primary-green-hover: #1557b0;
   --bg-main: #FFFFFF;
-  --text-primary: #1F2937;
-  --text-secondary: #6B7280;
-  --border-color: #DDE5DD;
+  --bg-card: #FFFFFF;
+  --bg-card-elevated: #FFFFFF;
+  --bg-nav: #FFFFFF;
+  --bg-input: #F1F3F4;
+  --text-primary: #202124;
+  --text-secondary: #5F6368;
+  --border-color: #DADCE0;
 }
 
 .dark {
-  --primary-green: #4CAF50;
-  --primary-green-hover: #43A047;
-  --bg-main: #0F172A;
-  --text-primary: #F8FAFC;
-  --text-secondary: #CBD5E1;
-  --border-color: #334155;
+  --primary-green: #a8c7fa;      /* Google Dark Blue */
+  --primary-green-hover: #8ab4f8;
+  --bg-main: #131314;            /* Google Dark BG */
+  --bg-card: #1e1f20;            /* Google Dark Card */
+  --bg-card-elevated: #282a2d;   /* Google Dark Card Elevated */
+  --bg-nav: #131314;             /* Google Dark Navbar */
+  --bg-input: #2c2e30;           /* Google Dark Input */
+  --text-primary: #e3e3e3;
+  --text-secondary: #c4c7c5;
+  --border-color: #444746;
 }
 
 body {
   background-color: var(--bg-main);
   color: var(--text-primary);
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-family: var(--font-sans);
   margin: 0;
   overflow-x: hidden;
   position: relative;
@@ -59,21 +71,19 @@ body {
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* Removed all radial glows and !important hacks */
-
 /* Solid Card Surfaces */
 .solid-card, .bg-white, .bg-slate-50, .bg-slate-100, .bg-slate-900, .bg-slate-950 {
-  background-color: var(--bg-card, #F4F8F4) !important;
+  background-color: var(--bg-card, #FFFFFF) !important;
   border: 1px solid var(--border-color) !important;
   border-radius: 12px !important;
   color: var(--text-primary) !important;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06) !important;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05) !important;
 }
 
 .dark .solid-card, .dark .bg-white, .dark .bg-slate-50, .dark .bg-slate-100, .dark .bg-slate-900, .dark .bg-slate-950 {
-  background-color: #1E293B !important;
-  border: 1px solid #334155 !important;
-  color: #F8FAFC !important;
+  background-color: #1F1F1F !important;
+  border: 1px solid #3C4043 !important;
+  color: #E3E3E3 !important;
 }
 
 /* Elevated Card Surfaces */
@@ -82,13 +92,13 @@ body {
   border: 1px solid var(--border-color) !important;
   border-radius: 12px !important;
   color: var(--text-primary) !important;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.06) !important;
 }
 
 .dark .solid-card-elevated, .dark .bg-slate-800 {
-  background-color: #273449 !important;
-  border: 1px solid #475569 !important;
-  color: #F8FAFC !important;
+  background-color: #2D2D2D !important;
+  border: 1px solid #3C4043 !important;
+  color: #E3E3E3 !important;
 }
 
 /* Navbars, Sidebars & Top Headers */
@@ -99,16 +109,16 @@ header, nav, aside {
 }
 
 .dark header, .dark nav, .dark aside {
-  background-color: #162033 !important;
-  border-color: #334155 !important;
+  background-color: #1F1F1F !important;
+  border-color: #3C4043 !important;
 }
 
 /* Form Inputs & Select Controls */
 input, select, textarea {
-  background-color: var(--bg-input, #F4F8F4) !important;
+  background-color: var(--bg-input, #F1F3F4) !important;
   border: 1px solid var(--border-color) !important;
   color: var(--text-primary) !important;
-  border-radius: 12px !important;
+  border-radius: 8px !important;
   padding: 0.5rem 0.75rem;
 }
 
@@ -119,9 +129,9 @@ input:focus, select:focus, textarea:focus {
 }
 
 .dark input, .dark select, .dark textarea {
-  background-color: #1E293B !important;
-  border-color: #334155 !important;
-  color: #F8FAFC !important;
+  background-color: #2D2D2D !important;
+  border-color: #3C4043 !important;
+  color: #E3E3E3 !important;
 }
 
 /* Primary Action Buttons - REMOVED GRADIENTS */
@@ -133,7 +143,7 @@ input:focus, select:focus, textarea:focus {
   background: var(--primary-green) !important;
   color: #ffffff !important;
   border: none !important;
-  border-radius: 12px !important;
+  border-radius: 8px !important;
   transition: background 0.2s ease, transform 0.1s ease;
 }
 
@@ -147,7 +157,7 @@ input:focus, select:focus, textarea:focus {
 /* Multi-Stat Banner Ribbon - REMOVED GRADIENTS */
 .stat-banner-ribbon {
   background: var(--primary-green) !important;
-  border-radius: 12px;
+  border-radius: 8px;
   color: #ffffff;
 }
 
@@ -192,4 +202,152 @@ input:focus, select:focus, textarea:focus {
 
 ::-webkit-scrollbar-thumb:hover {
   background: var(--text-secondary);
+}
+
+/* ============================================================================
+   GOOGLE SITES BLUE THEME OVERRIDES (LIGHT MODE ONLY)
+   ============================================================================ */
+
+/* Map Tailwind generated classes with hardcoded green hexes to Google Blue in Light Mode */
+html:not(.dark) .text-\[\#2E7D32\] {
+  color: #1a73e8 !important;
+}
+html:not(.dark) .bg-\[\#2E7D32\] {
+  background-color: #1a73e8 !important;
+}
+html:not(.dark) .border-\[\#2E7D32\] {
+  border-color: #1a73e8 !important;
+}
+html:not(.dark) .bg-\[\#E8F5E9\] {
+  background-color: #e8f0fe !important;
+}
+html:not(.dark) .text-\[\#81C784\] {
+  color: #1a73e8 !important;
+}
+html:not(.dark) .text-\[\#1B5E20\] {
+  color: #1557b0 !important;
+}
+html:not(.dark) .hover\:bg-\[\#1B5E20\]:hover {
+  background-color: #1557b0 !important;
+}
+html:not(.dark) .hover\:text-\[\#2E7D32\]:hover {
+  color: #1a73e8 !important;
+}
+html:not(.dark) .hover\:border-\[\#2E7D32\]:hover {
+  border-color: #1a73e8 !important;
+}
+html:not(.dark) .group-hover\:text-\[\#2E7D32\]:hover,
+html:not(.dark) .group:hover .group-hover\:text-\[\#2E7D32\] {
+  color: #1a73e8 !important;
+}
+html:not(.dark) .group-hover\:bg-\[\#2E7D32\]:hover,
+html:not(.dark) .group:hover .group-hover\:bg-\[\#2E7D32\] {
+  background-color: #1a73e8 !important;
+}
+
+/* Additional hardcoded light green text or bg classes used in components */
+html:not(.dark) .text-\[\#1e8e3e\] {
+  color: #1a73e8 !important;
+}
+html:not(.dark) .bg-\[\#1e8e3e\] {
+  background-color: #1a73e8 !important;
+}
+html:not(.dark) .border-\[\#1e8e3e\] {
+  border-color: #1a73e8 !important;
+}
+html:not(.dark) .hover\:bg-\[\#137333\]:hover {
+  background-color: #1557b0 !important;
+}
+
+/* Also map Tailwind's standard emerald classes to Google Blue in Light Mode */
+html:not(.dark) .text-emerald-500,
+html:not(.dark) .text-emerald-600,
+html:not(.dark) .text-emerald-700 {
+  color: #1a73e8 !important;
+}
+html:not(.dark) .bg-emerald-50 {
+  background-color: #e8f0fe !important;
+}
+html:not(.dark) .bg-emerald-500,
+html:not(.dark) .bg-emerald-600,
+html:not(.dark) .bg-emerald-700 {
+  background-color: #1a73e8 !important;
+}
+html:not(.dark) .hover\:bg-emerald-600:hover,
+html:not(.dark) .hover\:bg-emerald-700:hover {
+  background-color: #1557b0 !important;
+}
+
+/* ============================================================================
+   GOOGLE SITES/MY ACTIVITY BLUE THEME OVERRIDES (DARK MODE ONLY)
+   ============================================================================ */
+
+/* Map Tailwind generated classes with hardcoded green hexes to Google Dark Blue in Dark Mode */
+html.dark .text-\[\#2E7D32\] {
+  color: #a8c7fa !important;
+}
+html.dark .bg-\[\#2E7D32\] {
+  background-color: #a8c7fa !important;
+}
+html.dark .border-\[\#2E7D32\] {
+  border-color: #a8c7fa !important;
+}
+html.dark .bg-\[\#E8F5E9\] {
+  background-color: #1e2b3c !important;
+}
+html.dark .text-\[\#81C784\] {
+  color: #a8c7fa !important;
+}
+html.dark .text-\[\#1B5E20\] {
+  color: #8ab4f8 !important;
+}
+html.dark .hover\:bg-\[\#1B5E20\]:hover {
+  background-color: #2a3b50 !important;
+}
+html.dark .hover\:text-\[\#2E7D32\]:hover {
+  color: #a8c7fa !important;
+}
+html.dark .hover\:border-\[\#2E7D32\]:hover {
+  border-color: #a8c7fa !important;
+}
+html.dark .group-hover\:text-\[\#2E7D32\]:hover,
+html.dark .group:hover .group-hover\:text-\[\#2E7D32\] {
+  color: #a8c7fa !important;
+}
+html.dark .group-hover\:bg-\[\#2E7D32\]:hover,
+html.dark .group:hover .group-hover\:bg-\[\#2E7D32\] {
+  background-color: #a8c7fa !important;
+}
+
+/* Additional hardcoded light green text or bg classes used in components */
+html.dark .text-\[\#1e8e3e\] {
+  color: #a8c7fa !important;
+}
+html.dark .bg-\[\#1e8e3e\] {
+  background-color: #a8c7fa !important;
+}
+html.dark .border-\[\#1e8e3e\] {
+  border-color: #a8c7fa !important;
+}
+html.dark .hover\:bg-\[\#137333\]:hover {
+  background-color: #2a3b50 !important;
+}
+
+/* Also map Tailwind's standard emerald classes to Google Dark Blue in Dark Mode */
+html.dark .text-emerald-500,
+html.dark .text-emerald-600,
+html.dark .text-emerald-700 {
+  color: #a8c7fa !important;
+}
+html.dark .bg-emerald-50 {
+  background-color: #1e2b3c !important;
+}
+html.dark .bg-emerald-500,
+html.dark .bg-emerald-600,
+html.dark .bg-emerald-700 {
+  background-color: #a8c7fa !important;
+}
+html.dark .hover\:bg-emerald-600:hover,
+html.dark .hover\:bg-emerald-700:hover {
+  background-color: #2a3b50 !important;
 }

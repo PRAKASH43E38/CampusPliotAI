@@ -178,6 +178,23 @@ export interface FreshersItem {
   location?: string;
 }
 
+export interface Conversation {
+  conversation_id: string;
+  title: string;
+  created_at: string;
+  updated_at: string;
+  is_pinned: boolean;
+}
+
+export interface ChatMessage {
+  message_id: string;
+  conversation_id: string;
+  sender: 'user' | 'ai';
+  content: string;
+  timestamp: string;
+  model_used?: string;
+}
+
 export interface AICardData {
   type: 'timetable' | 'map' | 'faculty' | 'event' | 'resource' | 'announcement' | 'first_day_plan' | 'club_recommendation';
   data: any;

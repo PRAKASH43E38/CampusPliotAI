@@ -6,6 +6,7 @@ import { NotificationProvider } from './context/NotificationContext';
 import { Navbar } from './components/common/Navbar';
 import { Sidebar } from './components/common/Sidebar';
 import { Footer } from './components/common/Footer';
+import { BottomNav } from './components/common/BottomNav';
 
 import { ProtectedRoute } from './components/common/ProtectedRoute';
 
@@ -32,11 +33,14 @@ const AppLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
       <Navbar />
       <div className="flex-1 flex max-w-full">
         <Sidebar />
-        <main className="flex-1 min-w-0 overflow-y-auto pb-12">
+        <main className="flex-1 min-w-0 overflow-y-auto pb-20 md:pb-12">
           {children}
         </main>
       </div>
-      <Footer />
+      <BottomNav />
+      <div className="hidden md:block">
+        <Footer />
+      </div>
     </div>
   );
 };
