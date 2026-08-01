@@ -334,8 +334,22 @@ export const AdminDashboard: React.FC = () => {
               : 'bg-[#F4F8F4] dark:bg-[#1E293B] text-[#1F2937] dark:text-[#F8FAFC] border border-[#DDE5DD] dark:border-[#334155]'
           }`}
         >
-          <Database className="w-4 h-4" /> All SQLite Raw Tables ({tablesList.length})
+          <Database className="w-4 h-4" /> Central Data Manager ({tablesList.length} Tables)
         </button>
+
+        <a
+          href="/resources"
+          className="px-4 py-2.5 rounded-xl font-bold text-xs flex items-center gap-2 bg-[#F4F8F4] dark:bg-[#1E293B] text-[#1F2937] dark:text-[#F8FAFC] border border-[#DDE5DD] dark:border-[#334155] hover:border-[#2E7D32] transition-colors no-underline min-h-[44px]"
+        >
+          <FolderKanban className="w-4 h-4 text-[#2E7D32]" /> Manage Resources
+        </a>
+
+        <a
+          href="/library"
+          className="px-4 py-2.5 rounded-xl font-bold text-xs flex items-center gap-2 bg-[#F4F8F4] dark:bg-[#1E293B] text-[#1F2937] dark:text-[#F8FAFC] border border-[#DDE5DD] dark:border-[#334155] hover:border-[#2E7D32] transition-colors no-underline min-h-[44px]"
+        >
+          <BookOpen className="w-4 h-4 text-[#2E7D32]" /> Digital Library
+        </a>
       </div>
 
       {/* VIEW 1: STUDENT DATABASE MANAGEMENT PORTAL */}

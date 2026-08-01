@@ -5,31 +5,70 @@ import { AICardRenderer } from './AICardRenderer';
 import { FirstDayPlanner } from './FirstDayPlanner';
 import { ClubMatcher } from './ClubMatcher';
 import { SmartQA } from './SmartQA';
-import { timetableSlots, samplePrompts } from '../../data/staticData';
+import { timetableSlots, facultyScheduleSlots, samplePrompts } from '../../data/staticData';
 import apiService from '../../services/apiService';
 import { useAuth } from '../../context/AuthContext';
 
 export const CopilotChat: React.FC = () => {
-  const { role } = useAuth();
+  const { user, role } = useAuth();
   const [activeTab, setActiveTab] = useState<'chat' | 'planner' | 'matcher' | 'qa'>('chat');
   const [selectedModel, setSelectedModel] = useState<'gemini' | 'glm'>('gemini');
-  const [messages, setMessages] = useState<AIMessage[]>([
-    {
-      id: 'msg_1',
-      sender: 'ai',
-      text: "Hello! I'm CampusPilot AI — your official intelligent assistant for Saranathan College of Engineering. Connected with Google Gemini 1.5 Flash & GLM 4.7 Flash APIs. Ask me about departments, faculty cabins, placement drives, timetables, or campus rules!",
-      timestamp: 'Just now',
-      suggestedActions: [
-        'What departments are available at Saranathan College?',
-        'Show upcoming campus placement drives',
-        'Where is the CSE department block?',
-        'How do I contact HODs or Senior Faculty?'
-      ]
+
+  // Dynamic initial message based on authenticated user role
+  const getInitialMessage = (): AIMessage => {
+    if (role === 'faculty') {
+      return {
+        id: 'msg_1',
+        sender: 'ai',
+        text: `Welcome ${user?.name || 'Faculty Member'}! I am your dedicated Faculty AI Assistant. Ask me about your teaching timetable, today's schedule, handled subjects, or next classroom assignments.`,
+        timestamp: 'Just now',
+        suggestedActions: [
+          "Which classes do I have today?",
+          "What is my timetable?",
+          "Which hour is DSA today?",
+          "Which classroom should I teach next?",
+          "What subjects am I handling?",
+          "Show today's schedule."
+        ]
+      };
+    } else if (role === 'admin') {
+      return {
+        id: 'msg_1',
+        sender: 'ai',
+        text: `Greetings ${user?.name || 'Administrator'}! I am CampusPilot Admin AI. I can assist with platform data management, student database queries, faculty rosters, resource hub auditing, and system broadcasts.`,
+        timestamp: 'Just now',
+        suggestedActions: [
+          "Summarize total student database statistics",
+          "Show department-wise student intake",
+          "List active announcements and emergency broadcasts",
+          "Auditing uploaded academic resources count"
+        ]
+      };
+    } else {
+      return {
+        id: 'msg_1',
+        sender: 'ai',
+        text: "Hello! I'm CampusPilot AI for Students. Ask me about campus navigation, timetables, course notes, events, or digital library!",
+        timestamp: 'Just now',
+        suggestedActions: [
+          "Where is my next class right now?",
+          "Show upcoming campus placement drives",
+          "Where is the CSE department block?",
+          "Find PYQs for Data Structures"
+        ]
+      };
     }
-  ]);
+  };
+
+  const [messages, setMessages] = useState<AIMessage[]>([getInitialMessage()]);
   const [inputValue, setInputValue] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const chatEndRef = useRef<HTMLDivElement>(null);
+
+  // Update initial message when role changes
+  useEffect(() => {
+    setMessages([getInitialMessage()]);
+  }, [role, user?.name]);
 
   const scrollToBottom = () => {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -54,70 +93,96 @@ export const CopilotChat: React.FC = () => {
     if (!textToSend) setInputValue('');
     setIsTyping(true);
 
-    // Call live AI API with Role-Based Access Control (RBAC) & Automatic Fallback
-    const result = await apiService.sendCopilotMessage(text, selectedModel, role);
+    try {
+      const lower = text.toLowerCase();
+      let responseText = '';
+      let cards: AICardData[] = [];
 
-    let cards: AICardData[] = [];
-    const lower = text.toLowerCase();
+      // FACULTY ROLE CUSTOM QUERY HANDLER
+      if (role === 'faculty') {
+        if (
+          lower.includes('class') || lower.includes('timetable') || lower.includes('schedule') || 
+          lower.includes('dsa') || lower.includes('teach') || lower.includes('subject') || lower.includes('hour')
+        ) {
+          if (lower.includes('dsa') || lower.includes('data structure')) {
+            responseText = `📍 **DSA (Data Structures & Algorithms - CS301) Schedule**:
+- **Day**: Monday & Tuesday
+- **Hour 1 (09:00 AM - 10:00 AM)**: Lecture in **LH-101** (Alan Turing CSE Block) for **CSE 2nd Year - Sec A**.
+- **Hour 2 (10:15 AM - 11:15 AM)**: Tutorial Session in **LH-101**.`;
+          } else if (lower.includes('subject') || lower.includes('handling')) {
+            responseText = `📚 **Subjects Handled by Dr. Rajesh Sharma**:
+1. **CS301**: Data Structures & Algorithms (CSE 2nd Year - Sec A)
+2. **CS601**: Artificial Intelligence & Neural Nets (CSE 3rd Year - Sec B)
+3. **CS601L**: AI & Agentic Systems Lab (CSE 3rd Year - Sec B)`;
+          } else {
+            responseText = `🗓️ **Today's Teaching Schedule for Dr. Rajesh Sharma**:
+1. **Hour 1 (09:00 AM - 10:00 AM)**: Data Structures & Algorithms (CS301) → **LH-101** (CSE 2nd Year - Sec A)
+2. **Hour 3 (11:30 AM - 12:30 PM)**: Artificial Intelligence & Neural Nets (CS601) → **LH-201** (CSE 3rd Year - Sec B)
+3. **Hour 5 (02:45 PM - 04:45 PM)**: AI & Agentic Systems Lab (CS601L) → **AI-304** (Neural Networks Lab)`;
+          }
+          cards = [{ type: 'timetable', data: facultyScheduleSlots[0] }];
+        }
+      }
 
-    if (lower.includes('class') || lower.includes('next') || lower.includes('schedule') || lower.includes('timetable')) {
-      cards = [{ type: 'timetable', data: timetableSlots[0] }];
-    } else if (lower.includes('map') || lower.includes('where is') || lower.includes('location') || lower.includes('building')) {
-      try {
-        const buildings = await apiService.getCampusBuildings();
-        if (buildings && buildings.length > 0) {
-          const b = buildings[0];
-          cards = [{
-            type: 'map',
-            data: {
-              id: `bldg_${b.building_id}`,
-              name: b.building_name,
-              code: `BLDG-${b.building_id}`,
-              category: b.building_type.toLowerCase() as any,
-              description: b.description || 'Campus building',
-              floors: 3,
-              image: 'https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&q=80&w=800',
-              coordinates: { x: 50, y: 50 },
-              departments: [b.location || 'All Departments'],
-              facilities: ['WiFi Enabled'],
-              openingHours: '08:30 AM - 05:30 PM',
-              status: 'Open'
+      // If response text was not handled locally, call backend API
+      if (!responseText) {
+        const result = await apiService.sendCopilotMessage(text, selectedModel, role);
+        responseText = result.response || "Here is the information from CampusPilot AI.";
+      }
+
+      if (cards.length === 0) {
+        if (lower.includes('class') || lower.includes('next') || lower.includes('schedule') || lower.includes('timetable')) {
+          cards = [{ type: 'timetable', data: timetableSlots[0] }];
+        } else if (lower.includes('map') || lower.includes('where is') || lower.includes('location') || lower.includes('building')) {
+          try {
+            const buildings = await apiService.getCampusBuildings();
+            if (buildings && buildings.length > 0) {
+              const b = buildings[0];
+              cards = [{
+                type: 'map',
+                data: {
+                  id: `bldg_${b.building_id}`,
+                  name: b.building_name,
+                  code: `BLDG-${b.building_id}`,
+                  category: b.building_type.toLowerCase() as any,
+                  description: b.description || 'Campus building',
+                  floors: 3,
+                  image: 'https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&q=80&w=800',
+                  coordinates: { x: 50, y: 50 },
+                  departments: [b.location || 'All Departments'],
+                  facilities: ['WiFi Enabled'],
+                  openingHours: '08:30 AM - 05:30 PM',
+                  status: 'Open'
+                }
+              }];
             }
-          }];
+          } catch (err) {
+            console.error(err);
+          }
         }
-      } catch (err) {
-        console.error(err);
       }
-    } else if (lower.includes('faculty') || lower.includes('professor') || lower.includes('hod')) {
-      try {
-        const faculties = await apiService.getFaculty();
-        if (faculties && faculties.length > 0) {
-          cards = [{ type: 'faculty', data: faculties[0] }];
-        }
-      } catch (err) {
-        console.error(err);
-      }
-    } else if (lower.includes('event') || lower.includes('placement') || lower.includes('drive')) {
-      try {
-        const events = await apiService.getEvents();
-        if (events && events.length > 0) {
-          cards = [{ type: 'event', data: events[0] }];
-        }
-      } catch (err) {
-        console.error(err);
-      }
+
+      const aiMsg: AIMessage = {
+        id: `ai_${Date.now()}`,
+        sender: 'ai',
+        text: responseText,
+        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        cards: cards.length > 0 ? cards : undefined
+      };
+
+      setMessages((prev) => [...prev, aiMsg]);
+    } catch (err: any) {
+      console.error("Chat error:", err);
+      const errorMsg: AIMessage = {
+        id: `ai_err_${Date.now()}`,
+        sender: 'ai',
+        text: `⚠️ Unable to process query: ${err?.message || 'Server connection timeout. Please try again.'}`,
+        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      };
+      setMessages((prev) => [...prev, errorMsg]);
+    } finally {
+      setIsTyping(false);
     }
-
-    const aiMsg: AIMessage = {
-      id: `ai_${Date.now()}`,
-      sender: 'ai',
-      text: result.response,
-      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-      cards: cards.length > 0 ? cards : undefined
-    };
-
-    setMessages((prev) => [...prev, aiMsg]);
-    setIsTyping(false);
   };
 
   return (

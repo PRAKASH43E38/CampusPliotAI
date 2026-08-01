@@ -1,18 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Sparkles, Calendar, Clock, GraduationCap, Award, BookOpen, ArrowUpRight, Bell, UserPlus } from 'lucide-react';
+import { Sparkles, Calendar, Clock, GraduationCap, Award, BookOpen, ArrowUpRight, Bell } from 'lucide-react';
 import { StatCard } from '../components/common/StatCard';
 import { timetableSlots, academicResources } from '../data/staticData';
 import { Announcement } from '../types';
 import { apiService } from '../services/apiService';
-import { StudentOnboardingModal } from '../components/common/StudentOnboardingModal';
 import { useAuth } from '../context/AuthContext';
 import freshersBanner from '../assets/welcome-freshers-banner.jpeg';
 
 export const StudentDashboard: React.FC = () => {
-  const { profileCompleted, user } = useAuth();
+  const { user } = useAuth();
   const [announcements, setAnnouncements] = useState<Announcement[]>([]);
-  const [showOnboardingModal, setShowOnboardingModal] = useState<boolean>(false);
   const nextClass = timetableSlots[0];
 
   useEffect(() => {
@@ -25,38 +23,10 @@ export const StudentDashboard: React.FC = () => {
       }
     }
     loadData();
-
-    if (user?.role === 'student' && !profileCompleted) {
-      setShowOnboardingModal(true);
-    }
-  }, [profileCompleted, user]);
+  }, [user]);
 
   return (
     <div className="max-w-7xl mx-auto p-4 sm:p-6 space-y-6">
-      
-      {/* Onboarding Callout Banner */}
-      <div className="p-4 sm:p-6 rounded-2xl bg-[#F8FAF8] dark:bg-[#162033] border border-[#DDE5DD] dark:border-[#334155] text-[#1F2937] dark:text-[#F8FAFC] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-[#E8F5E9] dark:bg-[#162033] text-[#2E7D32] dark:text-[#4CAF50] flex items-center justify-center font-bold text-lg shrink-0 border border-[#DDE5DD] dark:border-[#334155]">
-            🎓
-          </div>
-          <div>
-            <h3 className="font-bold text-sm text-[#1F2937] dark:text-[#F8FAFC] flex items-center gap-2">
-              Student Profile Onboarding Registration
-            </h3>
-            <p className="text-xs text-[#6B7280] dark:text-[#CBD5E1]">
-              Complete your student profile to store academic details, skills, and preferences permanently.
-            </p>
-          </div>
-        </div>
-
-        <button
-          onClick={() => setShowOnboardingModal(true)}
-          className="px-4 py-2 rounded-xl bg-[#2E7D32] hover:bg-[#1B5E20] dark:bg-[#4CAF50] dark:hover:bg-[#43A047] text-white font-bold text-xs shrink-0 flex items-center gap-2 transition-colors border-none cursor-pointer"
-        >
-          <UserPlus className="w-4 h-4" /> Complete Onboarding Form
-        </button>
-      </div>
       
       {/* Freshers Banner */}
       <div className="relative overflow-hidden rounded-2xl border border-[#DDE5DD] dark:border-[#334155] bg-white dark:bg-[#162033] flex justify-center p-2">
@@ -281,11 +251,6 @@ export const StudentDashboard: React.FC = () => {
         </div>
 
       </div>
-
-      {/* Onboarding Modal */}
-      {showOnboardingModal && (
-        <StudentOnboardingModal isOpen={showOnboardingModal} onClose={() => setShowOnboardingModal(false)} />
-      )}
 
     </div>
   );

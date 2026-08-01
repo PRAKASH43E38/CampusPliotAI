@@ -3,6 +3,26 @@ import { FacultyMember, Building, Announcement, CampusEvent, AcademicResource, C
 
 const API_BASE_URL = '/api';
 
+// Attach Session Token and X-User-Role headers to all backend API calls for strict RBAC
+axios.interceptors.request.use((config) => {
+  const token = localStorage.getItem('session_token');
+  const savedUser = localStorage.getItem('auth_user');
+  if (token) {
+    config.headers['Authorization'] = `Bearer ${token}`;
+  }
+  if (savedUser) {
+    try {
+      const u = JSON.parse(savedUser);
+      if (u.role) {
+        config.headers['X-User-Role'] = u.role;
+      }
+    } catch (e) {
+      // ignore
+    }
+  }
+  return config;
+});
+
 export interface DBDepartment {
   dept_id: number;
   dept_code: string;
@@ -305,15 +325,73 @@ export const apiService = {
 
   async sendCopilotMessage(prompt: string, model: 'gemini' | 'glm' = 'gemini', role: string = 'student'): Promise<{ response: string; model_used?: string; key_missing?: boolean }> {
     try {
-      const response = await axios.post(`${API_BASE_URL}/copilot/chat`, { prompt, model, role });
+      const response = await axios.post(`${API_BASE_URL}/chat`, { prompt, message: prompt, model, role });
       return response.data;
     } catch (err: any) {
-      console.error("Error calling Copilot AI API:", err);
+      console.error("Error calling AI Chat API:", err);
       return {
-        response: `⚠️ AI Backend connection error: ${err.message || 'Unable to connect to AI server'}`,
+        response: `⚠️ AI Backend connection error: ${err?.response?.data?.error || err.message || 'Unable to connect to Flask AI server'}`,
         model_used: 'error'
       };
     }
+  },
+
+  async sendChatMessage(message: string, model: 'gemini' | 'glm' = 'gemini', role: string = 'student'): Promise<{ response: string; model_used?: string }> {
+    return this.sendCopilotMessage(message, model, role);
+  },
+
+  // ============================================================================
+  // GOOGLE OAUTH & SESSION AUTHENTICATION API
+  // ============================================================================
+  async loginWithGoogle(payload: {
+    credential?: string;
+    email?: string;
+    name?: string;
+    picture?: string;
+    role?: 'student' | 'faculty' | 'admin';
+  }): Promise<{ success: boolean; user: any; session_token: string; profile_completed: boolean }> {
+    const response = await axios.post(`${API_BASE_URL}/auth/google`, payload);
+    if (response.data?.session_token) {
+      localStorage.setItem('session_token', response.data.session_token);
+      localStorage.setItem('auth_user', JSON.stringify(response.data.user));
+    }
+    return response.data;
+  },
+
+  async getCurrentUser(): Promise<{ authenticated: boolean; user?: any; profile_completed?: boolean }> {
+    try {
+      const token = localStorage.getItem('session_token');
+      const response = await axios.get(`${API_BASE_URL}/auth/me`, {
+        headers: token ? { Authorization: `Bearer ${token}` } : {}
+      });
+      return response.data;
+    } catch (err) {
+      const saved = localStorage.getItem('auth_user');
+      if (saved) {
+        try {
+          const user = JSON.parse(saved);
+          return { authenticated: true, user, profile_completed: true };
+        } catch (e) {
+          // ignore error
+        }
+      }
+      return { authenticated: false };
+    }
+  },
+
+  async logoutUser(): Promise<{ success: boolean }> {
+    try {
+      const token = localStorage.getItem('session_token');
+      await axios.post(`${API_BASE_URL}/auth/logout`, {}, {
+        headers: token ? { Authorization: `Bearer ${token}` } : {}
+      });
+    } catch (err) {
+      console.error("Logout request error:", err);
+    } finally {
+      localStorage.removeItem('session_token');
+      localStorage.removeItem('auth_user');
+    }
+    return { success: true };
   }
 };
 

@@ -11,6 +11,7 @@ import {
   Compass,
   Settings,
   Send,
+  BookOpen,
   LucideIcon
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
@@ -33,20 +34,29 @@ export const Sidebar: React.FC = () => {
     { to: '/faculty', label: 'Faculty Directory', icon: Users },
     { to: '/resources', label: 'Resource Hub', icon: FolderKanban },
     { to: '/events', label: 'Events & News', icon: Calendar },
-    { to: '/freshers-guide', label: 'Freshers Guide', icon: Compass, badge: 'Guide' },
+  ];
+
+  const facultyLinks: SidebarLink[] = [
+    { to: '/faculty-dashboard', label: 'Faculty Dashboard', icon: LayoutDashboard },
+    { to: '/copilot', label: 'Faculty AI Copilot', icon: Sparkles, badge: 'Teaching' },
+    { to: '/academics', label: 'Teaching Schedule', icon: GraduationCap },
+    { to: '/faculty', label: 'Faculty Directory', icon: Users },
+    { to: '/resources', label: 'Resource Management', icon: FolderKanban },
+    { to: '/library', label: 'Digital Library', icon: BookOpen },
+    { to: '/events', label: 'Events & News', icon: Calendar },
   ];
 
   const adminLinks: SidebarLink[] = [
     { to: '/admin', label: 'Admin Overview', icon: LayoutDashboard },
-    { to: '/copilot', label: 'AI Copilot', icon: Sparkles },
+    { to: '/copilot', label: 'Admin AI Copilot', icon: Sparkles },
     { to: '/map', label: 'Campus Map', icon: MapPin },
     { to: '/faculty', label: 'Faculty Directory', icon: Users },
-    { to: '/resources', label: 'Resource Hub', icon: FolderKanban },
+    { to: '/resources', label: 'Manage Resources', icon: FolderKanban },
+    { to: '/library', label: 'Digital Library', icon: BookOpen },
     { to: '/events', label: 'Manage Events', icon: Calendar },
-    { to: '/freshers-guide', label: 'Freshers Onboarding', icon: Compass },
   ];
 
-  const links = role === 'admin' ? adminLinks : studentLinks;
+  const links = role === 'admin' ? adminLinks : role === 'faculty' ? facultyLinks : studentLinks;
 
   return (
     <aside className="w-64 shrink-0 hidden md:block border-r border-[#DDE5DD] dark:border-[#334155] bg-[#F7FAF7] dark:bg-[#172235] min-h-[calc(100vh-4rem)] p-4 transition-colors">

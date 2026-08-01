@@ -7,19 +7,23 @@ import { Navbar } from './components/common/Navbar';
 import { Sidebar } from './components/common/Sidebar';
 import { Footer } from './components/common/Footer';
 
+import { ProtectedRoute } from './components/common/ProtectedRoute';
+
 import { LandingPage } from './pages/LandingPage';
 import { LoginPage } from './pages/LoginPage';
 import { StudentDashboard } from './pages/StudentDashboard';
+import { FacultyDashboardPage } from './pages/FacultyDashboardPage';
 import { AdminDashboard } from './pages/AdminDashboard';
 import { CopilotChat } from './components/copilot/CopilotChat';
 import { CampusMapViewer } from './components/map/CampusMapViewer';
 import { AcademicsPage } from './pages/AcademicsPage';
 import { FacultyPage } from './pages/FacultyPage';
 import { ResourcesPage } from './pages/ResourcesPage';
+import { LibraryPage } from './pages/LibraryPage';
 import { EventsPage } from './pages/EventsPage';
-import { FreshersGuidePage } from './pages/FreshersGuidePage';
 import { ProfilePage } from './pages/ProfilePage';
 import { SettingsPage } from './pages/SettingsPage';
+import { UnauthorizedPage } from './pages/UnauthorizedPage';
 import { NotFoundPage } from './pages/NotFoundPage';
 
 const AppLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -47,92 +51,133 @@ export const AppRoutes: React.FC = () => {
       <Route
         path="/student"
         element={
-          <AppLayout>
-            <StudentDashboard />
-          </AppLayout>
+          <ProtectedRoute allowedRoles={['student']}>
+            <AppLayout>
+              <StudentDashboard />
+            </AppLayout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/faculty-dashboard"
+        element={
+          <ProtectedRoute allowedRoles={['faculty']}>
+            <AppLayout>
+              <FacultyDashboardPage />
+            </AppLayout>
+          </ProtectedRoute>
         }
       />
       <Route
         path="/admin"
         element={
-          <AppLayout>
-            <AdminDashboard />
-          </AppLayout>
+          <ProtectedRoute allowedRoles={['admin']}>
+            <AppLayout>
+              <AdminDashboard />
+            </AppLayout>
+          </ProtectedRoute>
         }
       />
       <Route
         path="/copilot"
         element={
-          <AppLayout>
-            <CopilotChat />
-          </AppLayout>
+          <ProtectedRoute>
+            <AppLayout>
+              <CopilotChat />
+            </AppLayout>
+          </ProtectedRoute>
         }
       />
       <Route
         path="/map"
         element={
-          <AppLayout>
-            <CampusMapViewer />
-          </AppLayout>
+          <ProtectedRoute allowedRoles={['student', 'admin']}>
+            <AppLayout>
+              <CampusMapViewer />
+            </AppLayout>
+          </ProtectedRoute>
         }
       />
       <Route
         path="/academics"
         element={
-          <AppLayout>
-            <AcademicsPage />
-          </AppLayout>
+          <ProtectedRoute>
+            <AppLayout>
+              <AcademicsPage />
+            </AppLayout>
+          </ProtectedRoute>
         }
       />
       <Route
         path="/faculty"
         element={
-          <AppLayout>
-            <FacultyPage />
-          </AppLayout>
+          <ProtectedRoute>
+            <AppLayout>
+              <FacultyPage />
+            </AppLayout>
+          </ProtectedRoute>
         }
       />
       <Route
         path="/resources"
         element={
-          <AppLayout>
-            <ResourcesPage />
-          </AppLayout>
+          <ProtectedRoute>
+            <AppLayout>
+              <ResourcesPage />
+            </AppLayout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/library"
+        element={
+          <ProtectedRoute>
+            <AppLayout>
+              <LibraryPage />
+            </AppLayout>
+          </ProtectedRoute>
         }
       />
       <Route
         path="/events"
         element={
-          <AppLayout>
-            <EventsPage />
-          </AppLayout>
+          <ProtectedRoute>
+            <AppLayout>
+              <EventsPage />
+            </AppLayout>
+          </ProtectedRoute>
         }
       />
-      <Route
-        path="/freshers-guide"
-        element={
-          <AppLayout>
-            <FreshersGuidePage />
-          </AppLayout>
-        }
-      />
+
       <Route
         path="/profile"
         element={
-          <AppLayout>
-            <ProfilePage />
-          </AppLayout>
+          <ProtectedRoute>
+            <AppLayout>
+              <ProfilePage />
+            </AppLayout>
+          </ProtectedRoute>
         }
       />
       <Route
         path="/settings"
         element={
-          <AppLayout>
-            <SettingsPage />
-          </AppLayout>
+          <ProtectedRoute>
+            <AppLayout>
+              <SettingsPage />
+            </AppLayout>
+          </ProtectedRoute>
         }
       />
 
+      <Route
+        path="/unauthorized"
+        element={
+          <AppLayout>
+            <UnauthorizedPage />
+          </AppLayout>
+        }
+      />
       <Route path="/404" element={<NotFoundPage />} />
       <Route path="*" element={<NotFoundPage />} />
     </Routes>

@@ -23,7 +23,7 @@ export const Footer: React.FC = () => {
             <Link to="/map" className="hover:text-[#2E7D32] dark:hover:text-[#81C784] transition-colors">Campus Map</Link>
             <Link to="/academics" className="hover:text-[#2E7D32] dark:hover:text-[#81C784] transition-colors">Academics</Link>
             <Link to="/faculty" className="hover:text-[#2E7D32] dark:hover:text-[#81C784] transition-colors">Faculty Directory</Link>
-            <Link to="/freshers-guide" className="hover:text-[#2E7D32] dark:hover:text-[#81C784] transition-colors">Freshers Guide</Link>
+            <Link to="/library" className="hover:text-[#2E7D32] dark:hover:text-[#81C784] transition-colors">Digital Library</Link>
           </div>
 
           <div className="flex items-center gap-4 text-xs">

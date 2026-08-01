@@ -1,4 +1,4 @@
-import { Classroom, CourseSubject, TimetableSlot, AcademicResource, FreshersItem } from '../types';
+import { Classroom, CourseSubject, TimetableSlot, AcademicResource, FreshersItem, LibraryBook, FacultyScheduleSlot } from '../types';
 
 export const OFFICIAL_DEPARTMENTS = [
   'All Departments',
@@ -279,4 +279,197 @@ export const samplePrompts = [
   "Find me technical clubs and upcoming hackathons in CSE & AI depts.",
   "What is the procedure to apply for hostel leave or bonafide certificate?",
   "Show me my current CGPA breakdown and attendance risk report."
+];
+
+export const initialLibraryBooks: LibraryBook[] = [
+  {
+    id: 'lib_1',
+    title: 'Designing Data-Intensive Applications',
+    author: 'Martin Kleppmann',
+    category: 'Programming',
+    isbn: '978-1449373320',
+    publishYear: 2017,
+    availableCopies: 8,
+    totalCopies: 10,
+    coverImage: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&q=80&w=400',
+    pdfUrl: '#',
+    description: 'The definitive guide to system architecture, distributed databases, streaming data, and reliable scalable systems.',
+    tags: ['System Design', 'Distributed Systems', 'Databases', 'Backend']
+  },
+  {
+    id: 'lib_2',
+    title: 'Artificial Intelligence: A Modern Approach (4th Edition)',
+    author: 'Stuart Russell & Peter Norvig',
+    category: 'AI',
+    isbn: '978-0134610993',
+    publishYear: 2020,
+    availableCopies: 5,
+    totalCopies: 6,
+    coverImage: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=400',
+    pdfUrl: '#',
+    description: 'Comprehensive foundational textbook covering classical AI, probabilistic reasoning, machine learning, and multi-agent systems.',
+    tags: ['Artificial Intelligence', 'Machine Learning', 'Search Algorithms', 'Robotics']
+  },
+  {
+    id: 'lib_3',
+    title: 'Cracking the Coding Interview (6th Edition)',
+    author: 'Gayle Laakmann McDowell',
+    category: 'Career',
+    isbn: '978-0984782857',
+    publishYear: 2015,
+    availableCopies: 12,
+    totalCopies: 15,
+    coverImage: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&q=80&w=400',
+    pdfUrl: '#',
+    description: '189 programming questions and solutions for software engineering placement drives and technical interviews.',
+    tags: ['Placements', 'Algorithms', 'Data Structures', 'Career']
+  },
+  {
+    id: 'lib_4',
+    title: 'Deep Learning with Python',
+    author: 'François Chollet',
+    category: 'AI',
+    isbn: '978-1617296864',
+    publishYear: 2021,
+    availableCopies: 6,
+    totalCopies: 8,
+    coverImage: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&q=80&w=400',
+    pdfUrl: '#',
+    description: 'Hands-on practical introduction to neural networks, Keras, PyTorch, and deep computer vision models.',
+    tags: ['Deep Learning', 'Python', 'Neural Networks', 'AI']
+  },
+  {
+    id: 'lib_5',
+    title: 'Soft Skills for Engineering Professionals',
+    author: 'Dr. Alex Pattakos',
+    category: 'Soft Skills',
+    isbn: '978-0128492011',
+    publishYear: 2022,
+    availableCopies: 9,
+    totalCopies: 10,
+    coverImage: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=400',
+    pdfUrl: '#',
+    description: 'Mastering effective technical communication, team leadership, negotiation, and workplace emotional intelligence.',
+    tags: ['Communication', 'Leadership', 'Management', 'Interpersonal']
+  },
+  {
+    id: 'lib_6',
+    title: 'Quantitative Aptitude for Competitive Examinations',
+    author: 'R.S. Aggarwal',
+    category: 'Aptitude',
+    isbn: '978-9352534029',
+    publishYear: 2023,
+    availableCopies: 14,
+    totalCopies: 20,
+    coverImage: 'https://images.unsplash.com/photo-1509228468518-180dd4864904?auto=format&fit=crop&q=80&w=400',
+    pdfUrl: '#',
+    description: 'Essential guide for campus recruitment quantitative screening tests, GATE exam, and competitive evaluations.',
+    tags: ['Aptitude', 'Maths', 'Placements', 'GATE']
+  },
+  {
+    id: 'lib_7',
+    title: 'Research Methodology: Methods and Techniques',
+    author: 'C.R. Kothari',
+    category: 'Research',
+    isbn: '978-8122424881',
+    publishYear: 2019,
+    availableCopies: 4,
+    totalCopies: 5,
+    coverImage: 'https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?auto=format&fit=crop&q=80&w=400',
+    pdfUrl: '#',
+    description: 'Guide to academic paper writing, statistical analysis, hypothesis formulation, and research ethics.',
+    tags: ['Research', 'Publication', 'Statistics', 'PhD']
+  },
+  {
+    id: 'lib_8',
+    title: 'Clean Code: A Handbook of Agile Software Craftsmanship',
+    author: 'Robert C. Martin',
+    category: 'Programming',
+    isbn: '978-0132350884',
+    publishYear: 2008,
+    availableCopies: 7,
+    totalCopies: 10,
+    coverImage: 'https://images.unsplash.com/photo-1531403009284-440f080d1e12?auto=format&fit=crop&q=80&w=400',
+    pdfUrl: '#',
+    description: 'Best practices for writing readable, maintainable, modular, and testable code in production environments.',
+    tags: ['Clean Code', 'Refactoring', 'Software Engineering', 'Best Practices']
+  }
+];
+
+export const facultyScheduleSlots: FacultyScheduleSlot[] = [
+  {
+    id: 'f_sched_1',
+    facultyEmail: 'dr.sharma@campuspilot.edu',
+    facultyName: 'Dr. Rajesh Sharma',
+    day: 'Monday',
+    time: '09:00 AM - 10:00 AM',
+    hour: 1,
+    subjectCode: 'CS301',
+    subjectName: 'Data Structures & Algorithms',
+    department: 'Computer Science & Engineering',
+    yearSection: 'CSE 2nd Year - Sec A',
+    building: 'Alan Turing CSE Block',
+    room: 'LH-101',
+    type: 'Lecture'
+  },
+  {
+    id: 'f_sched_2',
+    facultyEmail: 'dr.sharma@campuspilot.edu',
+    facultyName: 'Dr. Rajesh Sharma',
+    day: 'Monday',
+    time: '11:30 AM - 12:30 PM',
+    hour: 3,
+    subjectCode: 'CS601',
+    subjectName: 'Artificial Intelligence & Neural Nets',
+    department: 'Computer Science & Engineering',
+    yearSection: 'CSE 3rd Year - Sec B',
+    building: 'Alan Turing CSE Block',
+    room: 'LH-201',
+    type: 'Lecture'
+  },
+  {
+    id: 'f_sched_3',
+    facultyEmail: 'dr.sharma@campuspilot.edu',
+    facultyName: 'Dr. Rajesh Sharma',
+    day: 'Monday',
+    time: '02:45 PM - 04:45 PM',
+    hour: 5,
+    subjectCode: 'CS601L',
+    subjectName: 'AI & Agentic Systems Lab',
+    department: 'Computer Science & Engineering',
+    yearSection: 'CSE 3rd Year - Sec B',
+    building: 'Alan Turing CSE Block',
+    room: 'AI-304 (Agentic AI Lab)',
+    type: 'Lab'
+  },
+  {
+    id: 'f_sched_4',
+    facultyEmail: 'dr.sharma@campuspilot.edu',
+    facultyName: 'Dr. Rajesh Sharma',
+    day: 'Tuesday',
+    time: '10:15 AM - 11:15 AM',
+    hour: 2,
+    subjectCode: 'CS301',
+    subjectName: 'Data Structures & Algorithms',
+    department: 'Computer Science & Engineering',
+    yearSection: 'CSE 2nd Year - Sec A',
+    building: 'Alan Turing CSE Block',
+    room: 'LH-101',
+    type: 'Lecture'
+  },
+  {
+    id: 'f_sched_5',
+    facultyEmail: 'dr.sharma@campuspilot.edu',
+    facultyName: 'Dr. Rajesh Sharma',
+    day: 'Wednesday',
+    time: '09:00 AM - 10:00 AM',
+    hour: 1,
+    subjectCode: 'CS601',
+    subjectName: 'Artificial Intelligence & Neural Nets',
+    department: 'Computer Science & Engineering',
+    yearSection: 'CSE 3rd Year - Sec B',
+    building: 'Alan Turing CSE Block',
+    room: 'LH-201',
+    type: 'Lecture'
+  }
 ];

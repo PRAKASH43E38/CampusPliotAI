@@ -1,4 +1,4 @@
-export type Role = 'student' | 'admin' | 'guest';
+export type Role = 'student' | 'faculty' | 'admin' | 'guest';
 
 export interface UserProfile {
   id: string;
@@ -14,6 +14,40 @@ export interface UserProfile {
   attendancePct?: number;
   bio?: string;
   profileCompleted?: boolean;
+  designation?: string;
+  cabin?: string;
+}
+
+export interface LibraryBook {
+  id: string;
+  title: string;
+  author: string;
+  category: 'Programming' | 'AI' | 'Career' | 'Soft Skills' | 'Aptitude' | 'Research' | 'Reference';
+  isbn?: string;
+  publishYear?: number;
+  availableCopies: number;
+  totalCopies: number;
+  coverImage?: string;
+  pdfUrl?: string;
+  description: string;
+  tags?: string[];
+  department?: string;
+}
+
+export interface FacultyScheduleSlot {
+  id: string;
+  facultyEmail: string;
+  facultyName: string;
+  day: 'Monday' | 'Tuesday' | 'Wednesday' | 'Thursday' | 'Friday' | 'Saturday';
+  time: string;
+  hour: number;
+  subjectCode: string;
+  subjectName: string;
+  department: string;
+  yearSection: string;
+  building: string;
+  room: string;
+  type: 'Lecture' | 'Lab' | 'Tutorial';
 }
 
 export interface Classroom {

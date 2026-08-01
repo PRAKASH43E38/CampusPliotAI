@@ -82,10 +82,10 @@ export const Navbar: React.FC = () => {
         {/* Right: Actions */}
         <div className="flex items-center gap-3">
           
-          {/* Role badge */}
-          <div className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#E8F5E9] dark:bg-[#1E293B] border border-[#DDE5DD] dark:border-[#334155] text-xs font-semibold text-[#2E7D32] dark:text-[#81C784] capitalize">
-            <span className="w-2 h-2 rounded-full bg-[#2E7D32] dark:bg-[#4CAF50]" />
-            {role} Mode
+          {/* Static Role Indicator Badge (No role switching inside application) */}
+          <div className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#E8F5E9] dark:bg-[#1E293B] border border-[#DDE5DD] dark:border-[#334155] text-xs font-bold text-[#2E7D32] dark:text-[#81C784]">
+            <span className="w-2 h-2 rounded-full bg-[#2E7D32] dark:bg-[#4CAF50] shrink-0" />
+            <span className="uppercase tracking-wider">{role} Portal</span>
           </div>
 
           {/* Theme Toggle Button */}
